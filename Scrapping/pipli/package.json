@@ -1,0 +1,13 @@
+{
+  "name": "pipli-scraper",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "scrape": "node --env-file=../../.env scrape.mjs",
+    "scrape:dry": "node --env-file=../../.env scrape.mjs --dry"
+  },
+  "dependencies": {
+    "mongodb": "^6.10.0"
+  }
+}

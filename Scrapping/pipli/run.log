@@ -1,0 +1,267 @@
+
+> pipli-scraper@1.0.0 scrape
+> node --env-file=../../.env scrape.mjs
+
+Output folder: E:\Personal\Ecommerce\web\public\products
+Fetching collections...
+Found 21 collections
+  bathroom-organizer: 4
+  coaster-set: 4
+  customized-gifts: 0
+  desk-organizer: 48
+  elegant-planters: 15
+  featured-products: 67
+  fridge-magnet: 7
+  games: 8
+  gifting-products: 16
+  incense-holder: 1
+  jewellery-box: 7
+  keychains: 6
+  minimalist-vases: 4
+  moss-pole: 1
+  pendant-light: 0
+  sculpture: 10
+  lamps: 20
+  table-top: 8
+  wall-lamps: 1
+  water-bottles: 4
+  wind-chimes: 3
+Fetching product list...
+Found 117 products
+[1/117] Pumpkin Bowl - Fruit, Vegetable Storage Container & Organizer with Removable Lid
+[2/117] Pistachio Cup with Hidden Waste Compartment (Pista Cup)
+[3/117] Pistachio Bowl with Hidden Waste Compartment (Pista Bowl)
+  12 images, 0 videos, 3 variants, collections: desk-organizer, featured-products
+[4/117] Nimbus Desk Planter Vase With Drip Tray (Manual)
+  10 images, 0 videos, 1 variants, collections: desk-organizer
+[5/117] Lotus Om Incense Holder – Mess-Free Pooja
+  11 images, 0 videos, 1 variants, collections: desk-organizer
+[6/117] Bonsai MagSafe Dock for Apple iPhone, iWatch, & Airpods
+  8 images, 0 videos, 3 variants, collections: elegant-planters
+[7/117] Old Tree Wall Decor Picture Frame (With One Miniature Toy)
+  12 images, 0 videos, 1 variants, collections: desk-organizer
+[8/117] Ganesh Ji & Mushak Ji Incense Holder with Ash Tray – Divine Home Décor & Pooja Accessory
+  8 images, 0 videos, 2 variants, collections: incense-holder
+[9/117] Crocodile Catch-All Tray – Stylish Entryway Organizer
+  14 images, 0 videos, 1 variants, collections: desk-organizer, table-top
+[10/117] Cactus Coaster Vase – Stylish Space-Saving Decor
+  15 images, 0 videos, 4 variants, collections: desk-organizer, featured-products, gifting-products, jewellery-box, keychains
+[11/117] Tree Bark Planter with Hidden Drip Tray
+  12 images, 0 videos, 12 variants, collections: featured-products
+[12/117] Bamboo Themed Portable Chess Set – Travel Ready
+  10 images, 0 videos, 6 variants, collections: elegant-planters
+[13/117] Buddha Incense Holder for Calming Spaces (Single Colour)
+  7 images, 0 videos, 2 variants, collections: coaster-set
+[14/117] Tyre Stack Pen Holder – Stylish Desk Organisation
+  10 images, 0 videos, 1 variants, collections: games
+[15/117] GOT Themed Dragon Flame LED Lamp – Cinematic Fantasy Glow
+  9 images, 0 videos, 1 variants, collections: -
+[16/117] Personalized Kids Room/Home Sign – Custom Name Decor
+  16 images, 0 videos, 1 variants, collections: desk-organizer
+[17/117] Modular Self-Watering Planter Set | Easy Plant Care (Pack of 2)
+  14 images, 0 videos, 9 variants, collections: featured-products, lamps, table-top
+[18/117] Katana Warrior Incense Holder with Ash Catcher
+  16 images, 0 videos, 1 variants, collections: -
+[19/117] Copper Spiral 3D Wall Art – Bold Modern Statement
+  13 images, 0 videos, 1 variants, collections: elegant-planters
+[20/117] Bubble 4x6 Photo Frame – Tabletop & Wall-Mount
+  13 images, 0 videos, 1 variants, collections: table-top
+[21/117] Sushi Roll Cat House Table – Cozy 2-in-1 Furniture
+  16 images, 0 videos, 1 variants, collections: featured-products, sculpture
+[22/117] Wobble Penguin Toy – Self-Righting Desk Decor (Pack of 2)
+  13 images, 0 videos, 1 variants, collections: -
+[23/117] David Bust Planter with Drainage Base
+  15 images, 0 videos, 3 variants, collections: -
+[24/117] Whimsical Corner Staircase Wall Decor – Space-Saving Art
+  15 images, 0 videos, 3 variants, collections: table-top
+[25/117] Vino Grace - Kintsugi Wine holder
+  12 images, 0 videos, 3 variants, collections: -
+[26/117] Retro Pleated Heart Jewelry Box
+  14 images, 0 videos, 1 variants, collections: -
+[27/117] Round Cake Container - Jewelry Box
+  12 images, 0 videos, 3 variants, collections: desk-organizer, gifting-products, table-top
+[28/117] Pineapple Coaster Set (8 Pcs In One Set)
+  11 images, 0 videos, 1 variants, collections: jewellery-box
+[29/117] Tiramisu Tissue Box Holder
+  10 images, 0 videos, 6 variants, collections: jewellery-box
+[30/117] Garlic Night Light Lamp - Cute Cozy Glow (14cmx10cm)
+  11 images, 0 videos, 1 variants, collections: coaster-set, desk-organizer, featured-products
+[31/117] Tree Trunk Trash Can with Swing Lid (Wastebasket, Dustbin)
+  14 images, 0 videos, 1 variants, collections: bathroom-organizer, desk-organizer, featured-products
+[32/117] Mushroom Lamp – Amanita Muscaria Design
+  13 images, 0 videos, 4 variants, collections: bathroom-organizer, desk-organizer, featured-products
+[33/117] Modern Herb Planter Set with Drainage & Legs (set of 2)
+  13 images, 0 videos, 2 variants, collections: desk-organizer, featured-products, lamps
+[34/117] Modular Self-Watering Moss Pole for Climbers
+  16 images, 0 videos, 1 variants, collections: featured-products, lamps
+[35/117] Banana Fridge Magnets – Fun Kitchen & Home Decor
+  16 images, 0 videos, 2 variants, collections: desk-organizer, elegant-planters
+[36/117] Wrap Tube Propagation Vase Holder for Wall & Table (Set Of 6)
+  14 images, 1 videos, 4 variants, collections: moss-pole
+[37/117] Aromatic Orchid Oil Diffusor and Incense Holder - with Spinning Leaves
+  10 images, 1 videos, 3 variants, collections: featured-products, fridge-magnet
+[38/117] Enchanted Fairy Door Wall Shelf Decor
+  15 images, 1 videos, 1 variants, collections: elegant-planters
+[39/117] Gelato Ice Cream Cone Desk Lamp for Cozy Ambient Light
+  6 images, 0 videos, 8 variants, collections: desk-organizer, featured-products
+[40/117] Stag Red Deer Wall Lamp for Cozy Rustic Decor
+  9 images, 1 videos, 3 variants, collections: gifting-products, sculpture
+[41/117] Bamblock Knife Blocks & Holder
+  11 images, 0 videos, 2 variants, collections: lamps
+[42/117] Luma Desk Vase Lamp for Soft Ambient Glow
+  15 images, 1 videos, 1 variants, collections: wall-lamps
+[43/117] Cloud XL Self-Watering Desk Planter Vase with Drip Tray
+  13 images, 1 videos, 1 variants, collections: desk-organizer
+[44/117] Spiral Desk Vase with Drip Tray (Manual)
+  6 images, 1 videos, 1 variants, collections: elegant-planters, lamps
+[45/117] Retro Cake Jewelry Box with Hidden Storage
+  7 images, 1 videos, 1 variants, collections: desk-organizer, elegant-planters
+[46/117] NOBody Love's Embracep - A Minimalist Sculpture
+  7 images, 1 videos, 1 variants, collections: elegant-planters
+[47/117] Watermelon Bowl - Fruit, Vegetable Storage Container & Organizer
+  8 images, 1 videos, 6 variants, collections: jewellery-box
+[48/117] Tom Cat Rose Vase Decor | Fun 3D Printed Accent
+  8 images, 0 videos, 3 variants, collections: desk-organizer, featured-products, gifting-products, sculpture
+[49/117] Life-Size Macaw 3D Wall/Table Top Decor
+  8 images, 0 videos, 1 variants, collections: desk-organizer, featured-products, table-top
+[50/117] WaveGlow Ambient Table Lamp
+  15 images, 1 videos, 4 variants, collections: -
+[51/117] North Indian Temple - Office/Home Table Top Temple with Light (Golden Kalashas & Gate)
+  13 images, 1 videos, 12 variants, collections: featured-products, table-top
+[52/117] Sky Hunter Flying Toruk Avatar Creature Wind Chime – Hanging Decor for Home & Kids Room (Copy)
+  11 images, 2 videos, 2 variants, collections: desk-organizer, featured-products, lamps, table-top
+[53/117] Onyx Shadow Dragon : A Kinetic Sculpture &  Wind Chime – Hanging Decor for Home & Kids Room
+  5 images, 1 videos, 4 variants, collections: lamps
+[54/117] Dress-Shaped Pen Holder (Single Colour)
+  5 images, 1 videos, 1 variants, collections: featured-products, wind-chimes
+[55/117] Sky Hunter Flying Ikran Avatar Creature Wind Chime – Hanging Decor for Home & Kids Room
+  1 images, 2 videos, 1 variants, collections: wind-chimes
+[56/117] Pencil Case - Multipurpose Pencil Box
+  20 images, 1 videos, 6 variants, collections: desk-organizer, featured-products
+[57/117] Rainbow Cloud Piggy Bank
+  15 images, 2 videos, 1 variants, collections: featured-products, wind-chimes
+[58/117] Magnetic Fridge Calendar
+  10 images, 0 videos, 3 variants, collections: desk-organizer, featured-products, gifting-products
+[59/117] Love Keychains - Valentines Day Gift (Set Of 7)
+  6 images, 1 videos, 1 variants, collections: desk-organizer, featured-products
+[60/117] Cup Cake Container - Two Part Storage
+  6 images, 1 videos, 1 variants, collections: featured-products, fridge-magnet
+[61/117] Love You Heart String Art With Customised Name - Best Valentine Gift
+  4 images, 1 videos, 1 variants, collections: gifting-products, keychains
+[62/117] Forever In Love Articulated Heart - Valentine Gift Item
+  8 images, 1 videos, 12 variants, collections: desk-organizer, featured-products, gifting-products
+[63/117] Corgi Ice Cream Pint Holder with Spoon Slots
+  9 images, 1 videos, 20 variants, collections: desk-organizer, featured-products, gifting-products, jewellery-box
+[64/117] Dinosaur Piggy Bank
+  7 images, 1 videos, 1 variants, collections: desk-organizer, featured-products, gifting-products, sculpture
+[65/117] Polar Bear Ice Cream Pint Holder with Spoon Slots
+  8 images, 1 videos, 1 variants, collections: featured-products, gifting-products, sculpture, water-bottles
+[66/117] Owl Ice Cream Pint Holder with Spoon Slots
+  11 images, 1 videos, 6 variants, collections: desk-organizer, featured-products, gifting-products
+[67/117] Ice Cream Pint Holder with Spoon Slots (Penguin, Highland Cow, Bat, Cat)
+  7 images, 1 videos, 8 variants, collections: featured-products, sculpture, water-bottles
+[68/117] Knitted Love Heart Cactus Smiley Pot (Threaded Design) – Valentine Gift
+  8 images, 1 videos, 1 variants, collections: featured-products, sculpture, water-bottles
+[69/117] Love Knitted Cactus Décor Set (Threaded Design) – Valentine Gift Item
+  6 images, 1 videos, 7 variants, collections: featured-products, gifting-products
+[70/117] Vanilla Creamy Cake Container - Jewelry Box and Gift Holder
+  10 images, 1 videos, 4 variants, collections: featured-products, water-bottles
+[71/117] Vintage Victorian Cake Container: Decor, Keepsake, Gift, Jewellery Box
+  6 images, 1 videos, 16 variants, collections: featured-products, gifting-products
+[72/117] Eggshell Pen Holder (Set Of 2)
+  5 images, 1 videos, 6 variants, collections: gifting-products, jewellery-box
+[73/117] Pencil Shaped Pen Holder
+  21 images, 1 videos, 6 variants, collections: gifting-products, jewellery-box
+[74/117] PS5 Slim Digital Horizontal Stand
+  5 images, 1 videos, 1 variants, collections: desk-organizer, featured-products
+[75/117] Xbox Series X - Horizontal Stand
+  8 images, 1 videos, 7 variants, collections: desk-organizer, featured-products
+[76/117] Hoodie Desk Organiser - Pen Pot
+  3 images, 1 videos, 1 variants, collections: desk-organizer, games
+[77/117] Cacti Keys - Cactus Blooming Wall Mounted Keyholder
+  2 images, 1 videos, 3 variants, collections: desk-organizer, games
+[78/117] PlayBook'd Four in a Row Book Game - Board Game Gift
+  19 images, 1 videos, 10 variants, collections: desk-organizer, featured-products
+[79/117] NOBody Shelf Sitters - A Minimalist Sculpture
+  10 images, 0 videos, 1 variants, collections: featured-products, keychains
+[80/117] Aerofume Incense Holder
+  6 images, 1 videos, 1 variants, collections: featured-products, games
+[81/117] Flower Vases & Planters (Vero, Hollo, Kova, Silva)
+  3 images, 1 videos, 1 variants, collections: desk-organizer, featured-products, gifting-products, sculpture
+[82/117] TubeShade Incense Holder
+  17 images, 1 videos, 8 variants, collections: desk-organizer, featured-products
+[83/117] Neo Shade Carmen Smart Table Lamp - App Controlled (16M Colours)
+  11 images, 1 videos, 30 variants, collections: desk-organizer, elegant-planters, featured-products, minimalist-vases
+[84/117] Pagoda LED Night Lamp
+  7 images, 1 videos, 4 variants, collections: bathroom-organizer, desk-organizer, featured-products
+[85/117] Monstera Fridge Magnets
+  7 images, 1 videos, 8 variants, collections: featured-products, lamps
+[86/117] SunFlower Fridge Magnets
+  6 images, 1 videos, 6 variants, collections: featured-products, lamps
+[87/117] Banana Bowl – Fruit, Vegetable Storage Container & Organizer
+  1 images, 0 videos, 1 variants, collections: featured-products, fridge-magnet
+[88/117] Ribbora Smart Table Lamp - App Controlled (16M Colours)
+  17 images, 0 videos, 1 variants, collections: desk-organizer, featured-products
+[89/117] Parametric Smart Table Lamp – App Controlled (16M Colours)
+  1 images, 1 videos, 1 variants, collections: featured-products, fridge-magnet
+[90/117] Hexa Smart Table Lamp - App Controlled (16M Colours)
+  7 images, 1 videos, 1 variants, collections: desk-organizer, featured-products, lamps
+[91/117] Kumiko Smart Table Lamp - App Controlled (16M Colours)
+  7 images, 1 videos, 1 variants, collections: desk-organizer, featured-products, lamps
+[92/117] Honeycomb Smart Table Lamp - App Controlled (16M Colours)
+  9 images, 1 videos, 1 variants, collections: desk-organizer, featured-products, lamps
+[93/117] Wastebasket In The Shape Of A Sharpener
+  8 images, 1 videos, 1 variants, collections: featured-products, lamps
+[94/117] Butterfly Fridge Magnets (Set Of 3)
+  10 images, 1 videos, 1 variants, collections: featured-products, lamps
+[95/117] Leafix Classic Monstera Coaster Set With Magnetic Leaves & Pot
+  11 images, 1 videos, 5 variants, collections: desk-organizer, featured-products
+[96/117] Forest Chess Set - Log and Mushroom Chess Board Set With Checkers
+  13 images, 1 videos, 4 variants, collections: coaster-set, desk-organizer, featured-products
+[97/117] Leafy Keys - Houseplant Keychains For Car Key Ring and House Keys (Set Of 6)
+  6 images, 1 videos, 1 variants, collections: featured-products, games
+[98/117] TATA Cat House
+  11 images, 1 videos, 2 variants, collections: featured-products, fridge-magnet
+[99/117] Cacti Chess - Roll up Cactus Chess Set (Foldable)
+  5 images, 1 videos, 3 variants, collections: featured-products, keychains
+[100/117] Cactus Toothpick Holder For Dining Table
+  6 images, 1 videos, 5 variants, collections: desk-organizer, featured-products
+[101/117] Leafix Mirror Monstera Bathroom Organizer (Mounts to the Mirror)
+  8 images, 1 videos, 1 variants, collections: featured-products, games
+[102/117] Leafix Monstera Coaster Set With Magnetic Leaves & Pot
+  6 images, 1 videos, 1 variants, collections: desk-organizer, featured-products
+[103/117] MagLeaf Magnetic Vine With Articulating Stems, Fridge Magnet (Morning Glory, Ivy Leaf & Boston Ivy Leaf)
+  14 images, 1 videos, 6 variants, collections: coaster-set, desk-organizer, elegant-planters, featured-products, fridge-magnet
+[104/117] LiftBloom Indoor Planter with Legs - Desk Showpiece (Set Of 2)
+  12 images, 0 videos, 1 variants, collections: bathroom-organizer, elegant-planters
+[105/117] LoopRoot Plant Propagation Vases, Test Tube Holder, Planter (Set Of 2)
+  14 images, 1 videos, 12 variants, collections: featured-products, fridge-magnet
+[106/117] RootNest Plant Propagation Tube Vases, Test Tube Holder, Planter (Set Of 3)
+  6 images, 1 videos, 1 variants, collections: desk-organizer, elegant-planters, minimalist-vases
+[107/117] Minions Desk Pen Holder, Modular Desk Organizer, Boy & Girl Characters
+  9 images, 1 videos, 5 variants, collections: desk-organizer, elegant-planters, minimalist-vases
+[108/117] ORGANIS Minimalist Organic Table Lamp, Sculptural Shade
+  4 images, 1 videos, 5 variants, collections: desk-organizer, elegant-planters, minimalist-vases
+[109/117] Lunair Table Lamp With Legs, App-Controlled (16M Colours)
+  9 images, 1 videos, 48 variants, collections: desk-organizer, featured-products, sculpture
+[110/117] “Do You Even Lift Bro?” – Weight Plate Gym Keychain for Fitness Lovers (Pack of 2)
+  7 images, 1 videos, 1 variants, collections: lamps
+[111/117] Smooth Marble Run/Gravity Spiral Ball Run – Kinetic Desktop Toy for Kids & Adults
+  7 images, 1 videos, 1 variants, collections: featured-products, sculpture, lamps
+[112/117] Miniature Car Garage Key Holder with 1:64 Scale Model – Wall Mount with Opening Garage Door (With Hot Wheels Car)
+  8 images, 1 videos, 8 variants, collections: featured-products, keychains
+[113/117] Premium Moon Lamp | Lithophane Night Light - Ideal Home Decor
+  6 images, 0 videos, 16 variants, collections: featured-products, keychains
+[114/117] Twist Smart Glow Table Lamp, Sculptural Shade, App-Controlled (16M Colours)
+  8 images, 1 videos, 1 variants, collections: lamps
+[115/117] Elowen Table Lamp, Sculptural Shade, App-Controlled (16M Colours)
+  5 images, 1 videos, 4 variants, collections: games
+[116/117] Balance Table Game "BONSAI" for two – Bonsai Tree Design – Board Game – Plant Game – Gift for Plant Lovers
+  7 images, 1 videos, 4 variants, collections: featured-products, lamps
+[117/117] Lantern, Desk Vase With Grow Light And Drip Tray (Manual)
+  4 images, 1 videos, 1 variants, collections: featured-products, lamps
+  7 images, 1 videos, 20 variants, collections: games
+  13 images, 1 videos, 2 variants, collections: elegant-planters, lamps
+MongoDB: 117 inserted, 0 updated, 0 matched
+Database "3DPrinting", collection "pipli_products" now has 117 documents
+Done. 117 products saved, 0 failed.

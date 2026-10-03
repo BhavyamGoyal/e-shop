@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+}
+
+.pdp {
+  --pp-bone: #efe9df;
+  --pp-bone-d: #e6ded1;
+  --pp-card: #fffdf9;
+  --pp-ink: #1a1a14;
+  --pp-muted: #6f6a5f;
+  --pp-green: #2d5016;
+  --pp-green-d: #23400f;
+  --pp-green-l: #5f8a2c;
+  --pp-amber: #e0a93f;
+  --pp-line: rgba(45, 80, 22, 0.16);
+  --pp-line-soft: rgba(45, 80, 22, 0.1);
+  --pp-shadow: 0 12px 30px -14px rgba(45, 40, 20, 0.22);
+  --pp-shadow-sm: 0 2px 8px rgba(45, 40, 20, 0.06);
+  --pp-ease: cubic-bezier(0.16, 0.84, 0.44, 1);
+}
+
+.pdp-prose h2,
+.pdp-prose h3,
+.pdp-prose h4 {
+  margin: 1.6em 0 0.5em;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--pp-ink);
+}
+
+.pdp-prose h2 {
+  font-size: 1.6rem;
+}
+
+.pdp-prose h3 {
+  font-size: 1.3rem;
+}
+
+.pdp-prose p {
+  margin: 0 0 1em;
+  color: var(--pp-muted);
+}
+
+.pdp-prose img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1.2em 0 1.4em;
+  border-radius: 24px;
+  box-shadow: var(--pp-shadow);
+}
+
+.pdp-prose ul,
+.pdp-prose ol {
+  margin: 0 0 1em;
+  padding-left: 1.3em;
+  color: var(--pp-muted);
+  list-style: revert;
+}
+
+.pdp-prose table {
+  width: 100%;
+  margin: 1em 0 1.4em;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.pdp-prose th,
+.pdp-prose td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--pp-line-soft);
+  text-align: left;
+  vertical-align: top;
+}
+
+.pdp-prose th {
+  width: 34%;
+  background: rgba(45, 80, 22, 0.05);
+  font-weight: 600;
+  color: var(--pp-ink);
+}
