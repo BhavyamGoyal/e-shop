@@ -1,3 +1,4 @@
+import { InlineScript } from "./InlineScript";
 import { buildThemesCss, THEME_ATTRIBUTE } from "./css";
 import { DEFAULT_THEME_ID, themes } from "./registry";
 import { THEME_STORAGE_KEY } from "./storage";
@@ -16,7 +17,7 @@ export function ThemeHead() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: themesCss }} />
-      <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+      <InlineScript code={bootScript} />
     </>
   );
 }

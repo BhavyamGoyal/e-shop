@@ -1,6 +1,10 @@
+import type { Metadata } from "next";
 import { Heading, Text } from "@/components/atoms";
+import { NOT_INDEXED } from "@/lib/seo/metadata";
 import { ComponentShowcase, TokenPalette } from "@/components/organisms";
 import { PageTemplate } from "@/components/templates";
+
+export const metadata: Metadata = { title: "Showcase", robots: NOT_INDEXED };
 
 export default function Home() {
   return (

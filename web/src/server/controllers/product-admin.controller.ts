@@ -25,6 +25,7 @@ function revalidateStorefront(handle: string, previousHandle?: string): void {
   revalidatePath(`/product/${handle}`);
   if (previousHandle && previousHandle !== handle) revalidatePath(`/product/${previousHandle}`);
   revalidatePath("/", "layout");
+  revalidatePath("/sitemap.xml");
 }
 
 export const productAdminController = {

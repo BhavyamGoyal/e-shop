@@ -3,6 +3,7 @@ export { Badge, type BadgeProps } from "./Badge";
 export { Button, type ButtonProps } from "./Button";
 export { Heading, type HeadingProps } from "./Heading";
 export { Input } from "./Input";
+export { JsonLd } from "./JsonLd";
 export { Label } from "./Label";
 export { Swatch, type SwatchProps } from "./Swatch";
 export { Text, type TextProps } from "./Text";

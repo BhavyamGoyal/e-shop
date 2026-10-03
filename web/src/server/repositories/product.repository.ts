@@ -8,6 +8,11 @@ export interface ProductSearchResult {
   total: number;
 }
 
+export interface ProductSitemapEntry {
+  handle: string;
+  lastModified: Date | null;
+}
+
 export interface CollectionStat {
   handle: string;
   count: number;
@@ -103,6 +108,20 @@ export const productRepository = {
   async findByHandle(handle: string): Promise<ProductDocument | null> {
     await connectDb();
     return ProductModel.findOne({ handle }).lean<ProductDocument>();
+  },
+
+  async sitemapEntries(): Promise<ProductSitemapEntry[]> {
+    await connectDb();
+    const rows: { handle: string; sourceUpdatedAt?: Date | null; publishedAt?: Date | null }[] =
+      await ProductModel.find({}, { handle: 1, sourceUpdatedAt: 1, publishedAt: 1 })
+        .sort({ handle: 1 })
+        .lean<{ handle: string; sourceUpdatedAt?: Date | null; publishedAt?: Date | null }[]>();
+    return rows.map(
+      (row): ProductSitemapEntry => ({
+        handle: row.handle,
+        lastModified: row.sourceUpdatedAt ?? row.publishedAt ?? null,
+      }),
+    );
   },
 
   async facets(collections: string[]): Promise<CatalogFacets> {

@@ -1,16 +1,22 @@
-import { notFound } from "next/navigation";
-import { connection } from "next/server";
-import { CatalogTemplate } from "@/components/templates";
-import { buildCatalogData } from "@/lib/catalog";
-import { buildSiteHeader } from "@/lib/home";
+import type { Metadata } from "next";
+import { CatalogPage, loadCatalog } from "@/lib/seo/catalog-page";
+import { catalogMetadata } from "@/lib/seo/metadata";
+import { collectionController } from "@/server/controllers/collection.controller";
+import type { CollectionSummary } from "@/server/types/product.types";
+
+export const revalidate = 172800;
+
+export async function generateStaticParams(): Promise<{ handle: string }[]> {
+  const collections: CollectionSummary[] = await collectionController.all();
+  return collections.map((collection: CollectionSummary): { handle: string } => ({ handle: collection.handle }));
+}
+
+export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
+  const { handle } = await props.params;
+  return catalogMetadata(await loadCatalog(handle, {}), false);
+}
 
 export default async function CollectionPage(props: PageProps<"/[handle]">) {
-  await connection();
   const { handle } = await props.params;
-  const [header, catalog] = await Promise.all([
-    buildSiteHeader(),
-    buildCatalogData(handle, await props.searchParams),
-  ]);
-  if (!catalog) notFound();
-  return <CatalogTemplate header={header} catalog={catalog} />;
+  return <CatalogPage catalog={await loadCatalog(handle, {})} handle={handle} />;
 }

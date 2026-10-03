@@ -5,3 +5,4 @@ export { ProductTemplate } from "./ProductTemplate";
 export { AuthTemplate, type AuthTemplateProps } from "./AuthTemplate";
 export { AdminTemplate, type AdminTemplateProps } from "./AdminTemplate";
 export { AdminPage } from "./AdminPage";
+export { ContentTemplate } from "./ContentTemplate";

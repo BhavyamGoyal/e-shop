@@ -10,8 +10,7 @@ export function SiteHeader({ header }: SiteHeaderProps) {
     <div className="sticky top-0 z-50 w-full bg-white">
       <header className="flex items-center justify-between gap-5 border-b border-neutral-100 px-6 py-3 md:px-10">
         <a href={logo.href} className="shrink-0">
-          <span className="block text-2xl leading-none font-extrabold tracking-tight text-[#191a0b]">{logo.text}</span>
-          <span className="block text-[11px] font-medium tracking-wide text-neutral-500">{logo.tagline}</span>
+          <img src="/logo_v1.svg" alt={logo.text} className="block h-12 w-auto" />
         </a>
         <span className="hidden h-10 border-r border-neutral-200 lg:block" />
         <div className="hidden min-w-[170px] cursor-pointer items-center gap-2 lg:flex">

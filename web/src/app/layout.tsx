@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { DEFAULT_THEME_ID, ThemeHead, ThemeProvider, THEME_ATTRIBUTE } from "@/theme";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,8 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tinglet | Crafted for you",
-  description: "Tinglet: 3D printed lamps, planters, desk organisers and gifts, crafted for you.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: "Tinglet | Crafted for you", template: `%s | ${SITE_NAME}` },
+  description: SITE_DESCRIPTION,
+  icons: { icon: [{ url: "/fevicon.svg", type: "image/svg+xml" }], shortcut: "/fevicon.svg" },
+  openGraph: { type: "website", siteName: SITE_NAME, locale: "en_IN" },
 };
 
 const themeAttribute = { [THEME_ATTRIBUTE]: DEFAULT_THEME_ID };

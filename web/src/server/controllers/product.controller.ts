@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NotFoundError } from "../http/errors";
 import { handleRequest } from "../http/handler";
 import { toDetail, toSummary } from "../mappers/product.mapper";
-import { productRepository, type ProductRepository } from "../repositories/product.repository";
+import { productRepository, type ProductRepository, type ProductSitemapEntry } from "../repositories/product.repository";
 import type { CatalogFacets, ProductDetail, ProductPage, ProductQuery } from "../types/product.types";
 import { parseProductQuery } from "../validators/product-query";
 
@@ -27,6 +27,8 @@ export class ProductController {
   };
 
   facets = (collections: string[]): Promise<CatalogFacets> => this.repository.facets(collections);
+
+  sitemapEntries = (): Promise<ProductSitemapEntry[]> => this.repository.sitemapEntries();
 
   findByHandle = async (handle: string): Promise<ProductDetail> => {
     const doc = await this.repository.findByHandle(handle);
