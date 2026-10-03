@@ -18,7 +18,7 @@ export function StickyBuyBar({ title, image, price, inStock }: StickyBuyBarProps
       <button
         type="button"
         disabled={!inStock}
-        className="min-h-12 shrink-0 rounded-full bg-linear-to-b from-[#386020] to-(--pp-green-d) px-6 text-[15px] font-semibold text-white shadow-[0_6px_16px_#2d50164d] disabled:opacity-50"
+        className="min-h-12 shrink-0 rounded-full bg-linear-to-b from-[#4d6a88] to-(--pp-green-d) px-6 text-[15px] font-semibold text-white shadow-[0_6px_16px_#4058704d] disabled:opacity-50"
       >
         {inStock ? "Buy now" : "Sold out"}
       </button>

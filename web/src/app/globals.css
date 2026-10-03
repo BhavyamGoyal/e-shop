@@ -40,14 +40,14 @@
 }
 
 .pdp {
-  --pp-bone: #efe9df;
+  --pp-bone: #ffffff;
   --pp-bone-d: #e6ded1;
   --pp-card: #fffdf9;
   --pp-ink: #1a1a14;
   --pp-muted: #6f6a5f;
-  --pp-green: #2d5016;
-  --pp-green-d: #23400f;
-  --pp-green-l: #5f8a2c;
+  --pp-green: #405870;
+  --pp-green-d: #33465a;
+  --pp-green-l: #5f7b99;
   --pp-amber: #e0a93f;
   --pp-line: rgba(45, 80, 22, 0.16);
   --pp-line-soft: rgba(45, 80, 22, 0.1);

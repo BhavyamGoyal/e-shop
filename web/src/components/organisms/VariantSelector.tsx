@@ -25,7 +25,7 @@ export function VariantSelector({ options, selected, onChange }: VariantSelector
                 className={cn(
                   "min-h-11 rounded-full border px-[17px] py-2.5 text-sm font-medium transition hover:-translate-y-px hover:border-(--pp-green-l)",
                   selected[optionIndex] === value
-                    ? "border-(--pp-green) bg-linear-to-b from-[#386020] to-(--pp-green-d) text-white shadow-(--pp-shadow-sm)"
+                    ? "border-(--pp-green) bg-linear-to-b from-[#4d6a88] to-(--pp-green-d) text-white shadow-(--pp-shadow-sm)"
                     : "border-(--pp-line) bg-(--pp-card) text-(--pp-ink)",
                 )}
               >
