@@ -39,6 +39,7 @@ const LIST_PROJECTION = {
   price: 1,
   available: 1,
   productType: 1,
+  tags: 1,
   images: { $slice: 1 },
 };
 

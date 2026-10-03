@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { PaginationState, SortState } from "@/components/organisms/Table/Table.types";
-import { deleteProductAction } from "@/server/actions/product.actions";
+import { deleteProductAction, setProductTagsAction } from "@/server/actions/product.actions";
 import type { ProductListRow } from "@/server/types/admin.types";
-import { fetchProducts } from "./admin-api";
+import { fetchProducts, fetchTags } from "./admin-api";
 
 export interface ProductsTableController {
   rows: ProductListRow[];
@@ -19,6 +19,8 @@ export interface ProductsTableController {
   error: string | null;
   isDeleting: boolean;
   remove: (row: ProductListRow) => Promise<void>;
+  tagOptions: string[];
+  setTags: (row: ProductListRow, tags: string[]) => Promise<void>;
 }
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -34,6 +36,13 @@ export function useProductsTable(): ProductsTableController {
   const [error, setError] = useState<string | null>(null);
   const [version, setVersion] = useState<number>(0);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [tagOptions, setTagOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetchTags()
+      .then((tags): void => setTagOptions(tags.map((tag): string => tag.name)))
+      .catch((): void => setTagOptions([]));
+  }, []);
 
   const sortParam: string | null = sort ? `${sort.columnKey}:${sort.direction}` : null;
   const key: string = JSON.stringify([page, pageSize, sortParam, filters, version]);
@@ -82,6 +91,20 @@ export function useProductsTable(): ProductsTableController {
     else setError(result.error ?? "Delete failed");
   }, []);
 
+  const setTags = useCallback(async (row: ProductListRow, tags: string[]): Promise<void> => {
+    const previous: string[] = row.tags;
+    const apply = (next: string[]): void =>
+      setRows((current: ProductListRow[]): ProductListRow[] =>
+        current.map((item: ProductListRow): ProductListRow => (item.id === row.id ? { ...item, tags: next } : item)),
+      );
+    apply(tags);
+    const result = await setProductTagsAction(row.id, tags);
+    if (!result.ok) {
+      apply(previous);
+      setError(result.error ?? "Could not update tags");
+    }
+  }, []);
+
   return {
     rows,
     sort,
@@ -95,5 +118,7 @@ export function useProductsTable(): ProductsTableController {
     error,
     isDeleting,
     remove,
+    tagOptions,
+    setTags,
   };
 }

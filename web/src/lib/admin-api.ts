@@ -1,4 +1,4 @@
-import type { ImageListPage, ImageRecord, ProductListPage } from "@/server/types/admin.types";
+import type { ImageListPage, ImageRecord, ProductListPage, TagRecord } from "@/server/types/admin.types";
 
 interface ErrorBody {
   error?: string;
@@ -43,4 +43,27 @@ export function fetchProducts(request: ProductsRequest): Promise<ProductListPage
     if (value.trim()) params.set(key, value.trim());
   });
   return fetch(`/api/admin/products?${params.toString()}`).then(parse<ProductListPage>);
+}
+
+const JSON_HEADERS: HeadersInit = { "Content-Type": "application/json" };
+
+export async function fetchTags(): Promise<TagRecord[]> {
+  const body = await fetch("/api/admin/tags").then(parse<{ data: TagRecord[] }>);
+  return body.data;
+}
+
+export async function createTag(name: string): Promise<void> {
+  await fetch("/api/admin/tags", { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ name }) }).then(
+    parse<{ data: TagRecord }>,
+  );
+}
+
+export async function renameTag(id: string, name: string): Promise<void> {
+  await fetch(`/api/admin/tags/${id}`, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify({ name }) }).then(
+    parse<{ ok: boolean }>,
+  );
+}
+
+export async function deleteTag(id: string): Promise<void> {
+  await fetch(`/api/admin/tags/${id}`, { method: "DELETE" }).then(parse<{ ok: boolean }>);
 }

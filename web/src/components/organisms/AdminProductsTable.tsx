@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useProductsTable } from "@/lib/use-products-table";
 import type { ProductListRow } from "@/server/types/admin.types";
 import { Button } from "@/components/atoms/Button";
+import { TagPicker } from "@/components/organisms/TagPicker";
 import { Table } from "@/components/organisms/Table/Table";
 import type { ColumnConfig } from "@/components/organisms/Table/Table.types";
 
@@ -46,6 +47,19 @@ export function AdminProductsTable() {
       filterable: true,
       filterValue: (row) => row.productType ?? "",
       render: (row) => row.productType || "-",
+    },
+    {
+      key: "tags",
+      header: "tags",
+      width: 260,
+      render: (row) => (
+        <TagPicker
+          compact
+          options={table.tagOptions}
+          selected={row.tags}
+          onChange={(tags: string[]) => void table.setTags(row, tags)}
+        />
+      ),
     },
     {
       key: "price",

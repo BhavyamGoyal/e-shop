@@ -18,6 +18,12 @@ export interface ImageListPage {
   meta: PageMeta;
 }
 
+export interface TagRecord {
+  id: string;
+  name: string;
+  productCount: number;
+}
+
 export interface ImageInput {
   url: string;
   alt: string;
@@ -65,6 +71,7 @@ export interface ProductListRow {
   available: boolean;
   image: string | null;
   productType: string | null;
+  tags: string[];
 }
 
 export interface ProductListPage {

@@ -5,6 +5,7 @@ import { Button, Text } from "../atoms";
 const LINKS: { href: string; label: string }[] = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/products", label: "Products" },
+  { href: "/admin/tags", label: "Tags" },
   { href: "/admin/images", label: "Images" },
 ];
 

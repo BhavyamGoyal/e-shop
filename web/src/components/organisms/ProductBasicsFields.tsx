@@ -1,8 +1,11 @@
 "use client";
 
 import type { ProductInput } from "@/server/types/admin.types";
-import { Heading } from "../atoms";
+import { useEffect, useState } from "react";
+import { fetchTags } from "@/lib/admin-api";
+import { Heading, Label } from "../atoms";
 import { CheckField, FormField, ListField, TextAreaField } from "../molecules";
+import { TagPicker } from "./TagPicker";
 
 export interface ProductBasicsFieldsProps {
   input: ProductInput;
@@ -10,6 +13,14 @@ export interface ProductBasicsFieldsProps {
 }
 
 export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProps) {
+  const [tagOptions, setTagOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetchTags()
+      .then((tags): void => setTagOptions(tags.map((tag): string => tag.name)))
+      .catch((): void => setTagOptions([]));
+  }, []);
+
   return (
     <section className="flex flex-col gap-4">
       <Heading level={3}>Details</Heading>
@@ -41,7 +52,10 @@ export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProp
           value={input.compareAtPrice ?? ""}
           onChange={(e) => onChange({ compareAtPrice: e.target.value === "" ? null : Number(e.target.value) })}
         />
-        <ListField id="tags" label="Tags" values={input.tags} onCommit={(tags: string[]) => onChange({ tags })} />
+        <div className="flex flex-col gap-1.5">
+          <Label>Tags</Label>
+          <TagPicker options={tagOptions} selected={input.tags} onChange={(tags: string[]) => onChange({ tags })} />
+        </div>
         <ListField
           id="collections"
           label="Collections"

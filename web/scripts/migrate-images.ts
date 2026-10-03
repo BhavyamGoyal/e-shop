@@ -1,14 +1,13 @@
-import { readdir, readFile, stat } from "node:fs/promises";
+import { copyFile, mkdir, readdir, rename, stat } from "node:fs/promises";
 import path from "node:path";
-import { put } from "@vercel/blob";
 import mongoose from "mongoose";
+import sharp from "sharp";
 
 interface LocalImage {
   folder: string;
   filename: string;
   file: string;
-  localUrl: string;
-  pathname: string;
+  stem: string;
 }
 
 interface ImageRow {
@@ -21,16 +20,17 @@ interface ImageRow {
 }
 
 const ROOT: string = path.resolve("public", "products");
-const CONCURRENCY = 6;
-const MIME: Record<string, string> = {
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".png": "image/png",
-  ".webp": "image/webp",
-  ".gif": "image/gif",
-  ".avif": "image/avif",
-  ".svg": "image/svg+xml",
-};
+const BACKUP: string = path.resolve("..", "original-images");
+const CONCURRENCY = 4;
+const EXTENSIONS: string[] = [
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".webp",
+  ".gif",
+  ".avif",
+  ".heic",
+];
 
 async function scan(): Promise<LocalImage[]> {
   const found: LocalImage[] = [];
@@ -43,95 +43,147 @@ async function scan(): Promise<LocalImage[]> {
       continue;
     }
     for (const filename of names) {
-      if (!MIME[path.extname(filename).toLowerCase()]) continue;
+      const extension: string = path.extname(filename).toLowerCase();
+      if (!EXTENSIONS.includes(extension)) continue;
       found.push({
         folder,
         filename,
         file: path.join(dir, filename),
-        localUrl: `/products/${folder}/images/${filename}`,
-        pathname: `products/${folder}/${filename}`,
+        stem: path.basename(filename, path.extname(filename)),
       });
     }
   }
   return found;
 }
 
-async function pool<T>(items: T[], size: number, work: (item: T, index: number) => Promise<void>): Promise<void> {
+async function pool<T>(
+  items: T[],
+  size: number,
+  work: (item: T) => Promise<void>,
+): Promise<void> {
   let cursor = 0;
-  const runners: Promise<void>[] = Array.from({ length: size }, async (): Promise<void> => {
-    while (cursor < items.length) {
-      const index: number = cursor++;
-      await work(items[index], index);
-    }
-  });
+  const runners: Promise<void>[] = Array.from(
+    { length: size },
+    async (): Promise<void> => {
+      while (cursor < items.length) await work(items[cursor++]);
+    },
+  );
   await Promise.all(runners);
 }
 
+async function toWebp(item: LocalImage): Promise<string> {
+  if (path.extname(item.filename).toLowerCase() === ".webp") return item.file;
+  const target: string = path.join(
+    path.dirname(item.file),
+    `${item.stem}.webp`,
+  );
+  await sharp(item.file, { animated: true })
+    .webp({ quality: 82 })
+    .toFile(target);
+  const backupDir: string = path.join(BACKUP, item.folder);
+  await mkdir(backupDir, { recursive: true });
+  await rename(item.file, path.join(backupDir, item.filename)).catch(
+    (): Promise<void> =>
+      copyFile(item.file, path.join(backupDir, item.filename)),
+  );
+  return target;
+}
+
 async function main(): Promise<void> {
-  if (!process.env.DATABASE_URI) throw new Error("DATABASE_URI is not set");
-  await mongoose.connect(process.env.DATABASE_URI);
+  if (!process.env.MONGODB_URI) throw new Error("MONGODB_URI is not set");
+  await mongoose.connect(process.env.MONGODB_URI);
   const images = mongoose.connection.collection<ImageRow>("images");
-  await images.createIndex({ pathname: 1 }, { unique: true });
   const products = mongoose.connection.collection("products");
+  await images.createIndex({ pathname: 1 }, { unique: true });
+
+  const oldRows = await images.find({ url: /^https?:/ }).toArray();
+  const oldByPathname = new Map<string, string>(
+    oldRows.map((row): [string, string] => [row.pathname, row.url]),
+  );
 
   const local: LocalImage[] = await scan();
-  const existing = new Map<string, string>();
-  for await (const row of images.find({}, { projection: { pathname: 1, url: 1 } })) {
-    existing.set(row.pathname, row.url);
-  }
-  console.log(`${local.length} local images, ${existing.size} already uploaded`);
+  console.log(`${local.length} local images, ${oldRows.length} blob rows`);
 
   const urlMap = new Map<string, string>();
   let done = 0;
   let failed = 0;
   await pool(local, CONCURRENCY, async (item: LocalImage): Promise<void> => {
     try {
-      let url: string | undefined = existing.get(item.pathname);
-      if (!url) {
-        const buffer: Buffer = await readFile(item.file);
-        const contentType: string = MIME[path.extname(item.filename).toLowerCase()];
-        const result = await put(item.pathname, buffer, {
-          access: "public",
-          contentType,
-          addRandomSuffix: false,
-          allowOverwrite: true,
-        });
-        url = result.url;
-        await images.updateOne(
-          { pathname: item.pathname },
-          {
-            $set: { url, filename: item.filename, size: (await stat(item.file)).size, contentType },
-            $setOnInsert: { createdAt: new Date() },
+      const target: string = await toWebp(item);
+      const name: string = path.basename(target);
+      const pathname = `products/${item.folder}/${name}`;
+      const url = `/products/${item.folder}/images/${name}`;
+      await images.updateOne(
+        { pathname },
+        {
+          $set: {
+            url,
+            filename: name,
+            size: (await stat(target)).size,
+            contentType: "image/webp",
           },
-          { upsert: true },
-        );
-      }
-      urlMap.set(item.localUrl, url);
+          $setOnInsert: { createdAt: new Date() },
+        },
+        { upsert: true },
+      );
+      const oldUrl: string | undefined = oldByPathname.get(
+        `products/${item.folder}/${item.filename}`,
+      );
+      if (oldUrl) urlMap.set(oldUrl, url);
     } catch (error: unknown) {
       failed++;
-      console.error(`FAILED ${item.pathname}`, error instanceof Error ? error.message : error);
+      console.error(
+        `FAILED ${item.file}`,
+        error instanceof Error ? error.message : error,
+      );
     }
-    done++;
-    if (done % 25 === 0) console.log(`${done}/${local.length}`);
+    if (++done % 50 === 0) console.log(`${done}/${local.length}`);
   });
 
   const swap = (value: unknown): unknown =>
     typeof value === "string" && urlMap.has(value) ? urlMap.get(value) : value;
+  const baseName = (value: unknown): string | undefined =>
+    typeof value === "string" ? value.split("/").pop() : undefined;
 
   let updated = 0;
-  for await (const doc of products.find({}, { projection: { images: 1, featuredImage: 1, variants: 1 } })) {
-    const nextImages = (doc.images ?? []).map((image: { url: string }) => ({ ...image, url: swap(image.url) }));
-    const nextVariants = (doc.variants ?? []).map((variant: { image?: string }) => ({
-      ...variant,
-      image: swap(variant.image),
-    }));
+  for await (const doc of products.find(
+    {},
+    { projection: { images: 1, featuredImage: 1, variants: 1 } },
+  )) {
+    const nextImages = (doc.images ?? []).map(
+      (image: { url: string; filename?: string }) => {
+        const url = swap(image.url);
+        return url === image.url
+          ? image
+          : { ...image, url, filename: baseName(url) };
+      },
+    );
+    const nextVariants = (doc.variants ?? []).map(
+      (variant: { image?: string }) => ({
+        ...variant,
+        image: swap(variant.image),
+      }),
+    );
     await products.updateOne(
       { _id: doc._id },
-      { $set: { images: nextImages, variants: nextVariants, featuredImage: swap(doc.featuredImage) } },
+      {
+        $set: {
+          images: nextImages,
+          variants: nextVariants,
+          featuredImage: swap(doc.featuredImage),
+        },
+      },
     );
     updated++;
   }
-  console.log(`uploaded ${urlMap.size}, failed ${failed}, products rewritten ${updated}`);
+
+  const stale = await images.deleteMany({
+    url: /^https?:/,
+    pathname: { $in: oldRows.map((row): string => row.pathname) },
+  });
+  console.log(
+    `mapped ${urlMap.size}, failed ${failed}, products rewritten ${updated}, blob rows removed ${stale.deletedCount}`,
+  );
   await mongoose.disconnect();
 }
 

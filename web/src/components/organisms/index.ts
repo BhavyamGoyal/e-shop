@@ -31,3 +31,5 @@ export { ProductEditor } from "./ProductEditor";
 export { AdminProductsTable } from "./AdminProductsTable";
 export { Table } from "./Table/Table";
 export type { ColumnConfig, TableProps, SortState, PaginationState } from "./Table/Table.types";
+export { TagsManager } from "./TagsManager";
+export { TagPicker, type TagPickerProps } from "./TagPicker";

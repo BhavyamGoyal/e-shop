@@ -1,6 +1,7 @@
 "use server";
 
 import { ApiError } from "../http/errors";
+import { tagController } from "../controllers/tag.controller";
 import { productAdminController } from "../controllers/product-admin.controller";
 import type { ActionResult } from "../types/admin.types";
 
@@ -24,6 +25,13 @@ export async function saveProductAction(id: string | null, payload: unknown): Pr
 export async function deleteProductAction(id: string): Promise<ActionResult> {
   return run(async (): Promise<ActionResult> => {
     await productAdminController.remove(id);
+    return { ok: true };
+  });
+}
+
+export async function setProductTagsAction(id: string, tags: string[]): Promise<ActionResult> {
+  return run(async (): Promise<ActionResult> => {
+    await tagController.setProductTags(id, tags);
     return { ok: true };
   });
 }

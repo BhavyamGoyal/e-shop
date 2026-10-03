@@ -5,6 +5,7 @@ import { AdminPage } from "@/components/templates";
 
 const SECTIONS: { href: string; title: string; text: string }[] = [
   { href: "/admin/products", title: "Products", text: "View, add, edit and delete products and their details." },
+  { href: "/admin/tags", title: "Tags", text: "Create, rename and delete tags shared by products." },
   { href: "/admin/images", title: "Images", text: "Upload and delete images stored in Vercel Blob." },
 ];
 

@@ -99,4 +99,5 @@ export const toListRow = (doc: AdminProduct): ProductListRow => ({
   available: doc.available ?? true,
   image: doc.images?.[0]?.url ?? null,
   productType: doc.productType ?? null,
+  tags: doc.tags ?? [],
 });

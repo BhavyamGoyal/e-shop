@@ -5,15 +5,20 @@ interface ConnectionCache {
   promise: Promise<typeof mongoose> | null;
 }
 
-const globalScope = globalThis as unknown as { mongooseCache?: ConnectionCache };
+const globalScope = globalThis as unknown as {
+  mongooseCache?: ConnectionCache;
+};
 
-const cache: ConnectionCache = (globalScope.mongooseCache ??= { connection: null, promise: null });
+const cache: ConnectionCache = (globalScope.mongooseCache ??= {
+  connection: null,
+  promise: null,
+});
 
 export async function connectDb(): Promise<typeof mongoose> {
   if (cache.connection) return cache.connection;
 
-  const uri: string | undefined = process.env.DATABASE_URI;
-  if (!uri) throw new Error("DATABASE_URI is not set");
+  const uri: string | undefined = process.env.MONGODB_URI;
+  if (!uri) throw new Error("MONGODB_URI is not set");
 
   cache.promise ??= mongoose.connect(uri, { bufferCommands: false });
   try {

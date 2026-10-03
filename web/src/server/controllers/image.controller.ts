@@ -46,7 +46,7 @@ export const imageController = {
     await requireAdmin();
     const image: StoredImage | null = await imageRepository.findById(id);
     if (!image) throw new NotFoundError("Image not found");
-    await deleteBlob(image.url);
+    if (/^https?:/.test(image.url)) await deleteBlob(image.url);
     await imageRepository.remove(id);
   },
 };

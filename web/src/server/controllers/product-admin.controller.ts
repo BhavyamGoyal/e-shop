@@ -13,6 +13,7 @@ import {
   type AdminProductPage,
 } from "../repositories/product-admin.repository";
 import type { ProductEditorData, ProductInput, ProductListPage, ProductListQuery } from "../types/admin.types";
+import { tagRepository } from "../repositories/tag.repository";
 import { parseProductInput } from "../validators/product-input";
 
 export interface SavedProduct {
@@ -50,7 +51,10 @@ export const productAdminController = {
     if (await productAdminRepository.handleTaken(input.handle, id)) {
       throw new ValidationError(`Handle "${input.handle}" is already used by another product`);
     }
-    const fields: Record<string, unknown> = toDocumentFields(input);
+    const fields: Record<string, unknown> = toDocumentFields({
+      ...input,
+      tags: await tagRepository.existingNames(input.tags),
+    });
     if (!id) {
       const created: AdminProduct = await productAdminRepository.create(fields);
       revalidateStorefront(created.handle);
