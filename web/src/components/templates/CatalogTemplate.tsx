@@ -1,5 +1,5 @@
 import { AutoSubmitForm, SortSelect } from "../molecules";
-import { CatalogFilters, Pagination, ProductGrid, SiteHeader } from "../organisms";
+import { CatalogFilters, Pagination, ProductGrid, SiteFooter, SiteHeader } from "../organisms";
 import type { CatalogData } from "@/lib/catalog";
 import type { HeaderData } from "@/lib/website-data";
 
@@ -32,6 +32,7 @@ export function CatalogTemplate({ header, catalog }: CatalogTemplateProps) {
           </div>
         </AutoSubmitForm>
       </main>
+      <SiteFooter />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 export const SITE_NAME: string = "Tinglet";
 export const SITE_DESCRIPTION: string =
-  "Tinglet: 3D printed lamps, planters, desk organisers and gifts, crafted for you.";
+  "Tinglet: Lamps, planters, desk organisers and gifts, crafted for you.";
 
 const resolveSiteUrl = (): string => {
   const explicit: string | undefined = process.env.SITE_URL;
@@ -12,7 +12,9 @@ const resolveSiteUrl = (): string => {
 export const SITE_URL: string = resolveSiteUrl();
 
 export const absoluteUrl = (path: string): string =>
-  /^https?:\/\//i.test(path) ? path : `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+  /^https?:\/\//i.test(path)
+    ? path
+    : `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 
 export const RESERVED_HANDLES: readonly string[] = [
   "admin",
@@ -23,6 +25,12 @@ export const RESERVED_HANDLES: readonly string[] = [
   "product",
   "blog",
   "faq",
+  "about",
+  "contact",
+  "privacy-policy",
+  "refund-policy",
+  "shipping-policy",
+  "terms",
   "catalog-query",
   "robots.txt",
   "sitemap.xml",

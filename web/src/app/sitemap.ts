@@ -22,6 +22,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: absoluteUrl("/product"), changeFrequency: "daily", priority: 0.9 },
     { url: absoluteUrl("/blog"), changeFrequency: "weekly", priority: 0.6 },
     { url: absoluteUrl("/faq"), changeFrequency: "monthly", priority: 0.5 },
+    { url: absoluteUrl("/about"), changeFrequency: "yearly", priority: 0.3 },
+    { url: absoluteUrl("/contact"), changeFrequency: "yearly", priority: 0.3 },
+    { url: absoluteUrl("/privacy-policy"), changeFrequency: "yearly", priority: 0.3 },
+    { url: absoluteUrl("/refund-policy"), changeFrequency: "yearly", priority: 0.3 },
+    { url: absoluteUrl("/shipping-policy"), changeFrequency: "yearly", priority: 0.3 },
+    { url: absoluteUrl("/terms"), changeFrequency: "yearly", priority: 0.3 },
     ...posts.map(
       (post: BlogSitemapEntry): Entry => ({
         url: absoluteUrl(`/blog/${post.slug}`),

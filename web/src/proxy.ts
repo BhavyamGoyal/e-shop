@@ -7,6 +7,7 @@ export function proxy(request: NextRequest): NextResponse {
   const isListing: boolean = segment === "product";
   if (
     searchParams.size === 0 ||
+    segment.includes("/") ||
     (!isListing && RESERVED_HANDLES.includes(segment))
   )
     return NextResponse.next();

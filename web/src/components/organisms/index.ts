@@ -7,6 +7,8 @@ export { HomeSection } from "./HomeSection";
 export { ProductRail } from "./ProductRail";
 export { ProfileMenu } from "./ProfileMenu";
 export { SiteHeader } from "./SiteHeader";
+export { SiteFooter } from "./SiteFooter";
+export { StaticPageBody } from "./StaticPageBody";
 export { TabbedProductShowcase } from "./TabbedProductShowcase";
 export { TileGrid } from "./TileGrid";
 export { TileScroller } from "./TileScroller";

@@ -1,5 +1,5 @@
 import type { PublicFaq } from "@/server/types/content.types";
-import { FaqAccordion, HomeSection, SiteHeader } from "../organisms";
+import { FaqAccordion, HomeSection, SiteFooter, SiteHeader } from "../organisms";
 import type { WebsiteData } from "@/lib/website-data";
 
 interface HomeTemplateProps {
@@ -22,6 +22,7 @@ export function HomeTemplate({ data, faqs }: HomeTemplateProps) {
           </section>
         )}
       </main>
+      <SiteFooter />
     </div>
   );
 }

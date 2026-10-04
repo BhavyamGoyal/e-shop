@@ -1,5 +1,5 @@
 import { Breadcrumbs, type Crumb } from "../molecules";
-import { ProductRail, ProductStory, ProductView, SiteHeader } from "../organisms";
+import { ProductRail, ProductStory, ProductView, SiteFooter, SiteHeader } from "../organisms";
 import { outfit } from "@/lib/fonts";
 import type { ProductDetail } from "@/server/types/product.types";
 import type { HeaderData, Product } from "@/lib/website-data";
@@ -53,6 +53,7 @@ export function ProductTemplate({ header, product, related, collection }: Produc
           </section>
         )}
       </main>
+      <SiteFooter />
     </div>
   );
 }
