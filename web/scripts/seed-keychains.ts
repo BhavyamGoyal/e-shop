@@ -2,7 +2,7 @@ import { mkdir, rename, stat } from "node:fs/promises";
 import path from "node:path";
 import mongoose from "mongoose";
 import sharp from "sharp";
-import { KEYCHAINS, type KeychainSeed } from "./data/keychains.ts";
+import { KEYCHAINS, type KeychainSeed } from "./data/keychains";
 
 const ROOT: string = path.resolve("public", "products");
 const SOURCE_DIR: string = path.join(ROOT, "keychains");

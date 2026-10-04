@@ -7,7 +7,7 @@ import type {
   UserRecord,
   UserRoleName,
 } from "@/server/types/admin.types";
-import type { BlogInput, BlogRow, FaqInput, FaqListData } from "@/server/types/content.types";
+import type { BlogInput, BlogRow, FaqInput, FaqListData, PageInput, PageRecord } from "@/server/types/content.types";
 
 interface ErrorBody {
   error?: string;
@@ -110,6 +110,23 @@ export async function saveFaq(id: string | null, input: FaqInput): Promise<void>
 
 export async function deleteFaq(id: string): Promise<void> {
   await fetch(`/api/admin/faqs/${id}`, { method: "DELETE" }).then(parse<{ ok: boolean }>);
+}
+
+export async function fetchPages(): Promise<PageRecord[]> {
+  const body = await fetch("/api/admin/pages").then(parse<{ data: PageRecord[] }>);
+  return body.data;
+}
+
+export async function savePage(id: string | null, input: PageInput): Promise<void> {
+  await fetch(id ? `/api/admin/pages/${id}` : "/api/admin/pages", {
+    method: id ? "PUT" : "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify(input),
+  }).then(parse<{ ok: boolean }>);
+}
+
+export async function deletePage(id: string): Promise<void> {
+  await fetch(`/api/admin/pages/${id}`, { method: "DELETE" }).then(parse<{ ok: boolean }>);
 }
 
 export async function fetchUsers(): Promise<UserRecord[]> {

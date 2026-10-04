@@ -74,3 +74,25 @@ export interface BlogSitemapEntry {
   slug: string;
   lastModified: Date | null;
 }
+
+export interface PageInput {
+  url: string;
+  content: string;
+}
+
+export interface PageRecord extends PageInput {
+  id: string;
+  title: string;
+  updatedAt: string;
+}
+
+export interface PublicPage extends PageInput {
+  title: string;
+  description: string;
+  updatedAt: string;
+}
+
+export interface PageSitemapEntry {
+  url: string;
+  lastModified: Date | null;
+}
