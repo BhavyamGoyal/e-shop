@@ -15,12 +15,12 @@ interface SortSelectProps {
 
 export function SortSelect({ value }: SortSelectProps) {
   return (
-    <label className="flex items-center gap-2 text-sm text-neutral-600">
+    <label className="flex items-center gap-2 text-sm text-muted-foreground">
       Sort by
       <select
         name="sort"
         defaultValue={value}
-        className="rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm font-medium text-[#191a0b] outline-none focus:border-[#191a0b]"
+        className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground outline-none focus:border-ring"
       >
         {SORT_OPTIONS.map((option) => (
           <option key={option} value={option}>

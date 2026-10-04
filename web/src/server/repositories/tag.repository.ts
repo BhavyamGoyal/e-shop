@@ -1,5 +1,6 @@
 import { connectDb } from "../db/connect";
 import { ProductModel } from "../models/product.model";
+import type { TagFields } from "../types/admin.types";
 import { TagModel, type TagDocument } from "../models/tag.model";
 
 export type StoredTag = TagDocument & { _id: { toString(): string } };
@@ -62,6 +63,18 @@ export const tagRepository = {
     await connectDb();
     await TagModel.updateOne({ _id: id }, { $set: { name: to } });
     await ProductModel.updateMany({ tags: from }, { $set: { "tags.$[match]": to } }, { arrayFilters: [{ match: from }] });
+  },
+
+  async updateFields(id: string, fields: Partial<TagFields>): Promise<void> {
+    await connectDb();
+    await TagModel.updateOne({ _id: id }, { $set: fields });
+  },
+
+  async listFlagged(): Promise<StoredTag[]> {
+    await connectDb();
+    return TagModel.find({ $or: [{ header: true }, { collection: true }] })
+      .sort({ name: 1 })
+      .lean<StoredTag[]>();
   },
 
   async remove(id: string, name: string): Promise<void> {

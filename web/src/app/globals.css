@@ -40,19 +40,19 @@
 }
 
 .pdp {
-  --pp-bone: #ffffff;
-  --pp-bone-d: #e6ded1;
-  --pp-card: #fffdf9;
-  --pp-ink: #1a1a14;
-  --pp-muted: #6f6a5f;
-  --pp-green: #405870;
-  --pp-green-d: #33465a;
-  --pp-green-l: #5f7b99;
-  --pp-amber: #e0a93f;
-  --pp-line: rgba(45, 80, 22, 0.16);
-  --pp-line-soft: rgba(45, 80, 22, 0.1);
-  --pp-shadow: 0 12px 30px -14px rgba(45, 40, 20, 0.22);
-  --pp-shadow-sm: 0 2px 8px rgba(45, 40, 20, 0.06);
+  --pp-bone: var(--background);
+  --pp-bone-d: var(--muted);
+  --pp-card: var(--surface);
+  --pp-ink: var(--foreground);
+  --pp-muted: var(--muted-foreground);
+  --pp-green: var(--primary);
+  --pp-green-d: color-mix(in srgb, var(--primary) 80%, var(--foreground));
+  --pp-green-l: color-mix(in srgb, var(--primary) 70%, var(--background));
+  --pp-amber: var(--warning);
+  --pp-line: var(--border);
+  --pp-line-soft: var(--border);
+  --pp-shadow: 0 12px 30px -14px rgb(0 0 0 / 0.22);
+  --pp-shadow-sm: 0 2px 8px rgb(0 0 0 / 0.06);
   --pp-ease: cubic-bezier(0.16, 0.84, 0.44, 1);
 }
 
@@ -113,7 +113,7 @@
 
 .pdp-prose th {
   width: 34%;
-  background: rgba(45, 80, 22, 0.05);
+  background: var(--muted);
   font-weight: 600;
   color: var(--pp-ink);
 }

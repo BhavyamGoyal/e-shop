@@ -24,8 +24,8 @@ export function TabbedProductShowcase({ block }: TabbedProductShowcaseProps) {
             className={cn(
               "shrink-0 cursor-pointer rounded-full border px-5 py-2.5 text-sm font-semibold",
               index === active
-                ? "border-[#191a0b] bg-[#191a0b] text-white"
-                : "border-neutral-200 bg-white text-[#191a0b]",
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border bg-background text-foreground",
             )}
           >
             {item.label}

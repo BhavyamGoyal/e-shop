@@ -15,7 +15,7 @@ interface PriceFieldProps {
 }
 
 const priceInput =
-  "w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-[#191a0b]";
+  "w-full rounded-lg border border-border px-3 py-2 text-sm outline-none focus:border-ring";
 
 function PriceField({ name, label, placeholder, value }: PriceFieldProps) {
   return (
@@ -50,7 +50,7 @@ export function CatalogFilters({ facets, query, basePath }: CatalogFiltersProps)
   const active: number = availability + price + query.productTypes.length + query.tags.length;
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <span className="text-sm text-neutral-500">Filter:</span>
+      <span className="text-sm text-muted-foreground">Filter:</span>
       <FilterGroup title="Availability" selected={availability}>
         <FilterOption name="available" value="true" label="In stock only" checked={query.available === true} />
         <FilterOption name="onSale" value="true" label="On sale" checked={query.onSale === true} />
@@ -58,7 +58,7 @@ export function CatalogFilters({ facets, query, basePath }: CatalogFiltersProps)
       <FilterGroup title="Price" selected={price}>
         <div className="flex items-center gap-2">
           <PriceField name="minPrice" label="Minimum price" placeholder={facets.minPrice} value={query.minPrice} />
-          <span className="text-neutral-400">–</span>
+          <span className="text-muted-foreground">–</span>
           <PriceField name="maxPrice" label="Maximum price" placeholder={facets.maxPrice} value={query.maxPrice} />
         </div>
       </FilterGroup>
@@ -73,7 +73,7 @@ export function CatalogFilters({ facets, query, basePath }: CatalogFiltersProps)
         </FilterGroup>
       )}
       {active > 0 && (
-        <a href={basePath} className="text-sm text-neutral-500 underline hover:text-[#191a0b]">
+        <a href={basePath} className="text-sm text-muted-foreground underline hover:text-foreground">
           Remove all
         </a>
       )}

@@ -22,10 +22,10 @@ export function FilterGroup({ title, children, selected = 0 }: FilterGroupProps)
 
   return (
     <details ref={ref} className="group relative">
-      <summary className="flex cursor-pointer list-none items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 text-sm font-medium text-[#191a0b] hover:border-[#191a0b] group-open:border-[#191a0b] [&::-webkit-details-marker]:hidden">
+      <summary className="flex cursor-pointer list-none items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary group-open:border-primary [&::-webkit-details-marker]:hidden">
         {title}
         {selected > 0 && (
-          <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#191a0b] px-1 text-xs text-white">
+          <span className="grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-xs text-primary-foreground">
             {selected}
           </span>
         )}
@@ -41,7 +41,7 @@ export function FilterGroup({ title, children, selected = 0 }: FilterGroupProps)
           <path d="M6 9l6 6 6-6" />
         </svg>
       </summary>
-      <div className="absolute left-0 top-full z-20 mt-2 flex max-h-80 w-64 flex-col gap-2.5 overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4 shadow-lg">
+      <div className="absolute left-0 top-full z-20 mt-2 flex max-h-80 w-64 flex-col gap-2.5 overflow-y-auto rounded-xl border border-border bg-background p-4 shadow-lg">
         {children}
       </div>
     </details>

@@ -1,5 +1,5 @@
 import { revalidatePath } from "next/cache";
-import { requireAdmin } from "../auth/guard";
+import { requireAdmin, requireStaff } from "../auth/guard";
 import { NotFoundError, ValidationError } from "../http/errors";
 import {
   EMPTY_INPUT,
@@ -30,7 +30,7 @@ function revalidateStorefront(handle: string, previousHandle?: string): void {
 
 export const productAdminController = {
   async list(query: ProductListQuery): Promise<ProductListPage> {
-    await requireAdmin();
+    await requireStaff();
     const { items, total }: AdminProductPage = await productAdminRepository.list(query);
     return {
       data: items.map(toListRow),
@@ -39,7 +39,7 @@ export const productAdminController = {
   },
 
   async editor(id: string | null): Promise<ProductEditorData> {
-    await requireAdmin();
+    await requireStaff();
     if (!id) return { id: null, input: EMPTY_INPUT };
     const doc: AdminProduct | null = await productAdminRepository.findById(id);
     if (!doc) throw new NotFoundError("Product not found");

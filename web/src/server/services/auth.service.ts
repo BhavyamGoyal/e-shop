@@ -1,3 +1,4 @@
+import { verifyGoogleToken, type GoogleProfile } from "../auth/google";
 import { hashPassword, verifyPassword } from "../auth/password";
 import type { Session } from "../auth/session";
 import { ValidationError } from "../http/errors";
@@ -30,6 +31,19 @@ export async function ensureAdminUser(): Promise<void> {
   globalScope.adminSeeded = true;
 }
 
+export interface Profile {
+  name: string;
+  email: string;
+  image: string;
+}
+
+export async function currentProfile(session: Session | null): Promise<Profile | null> {
+  if (!session) return null;
+  const user: StoredUser | null = await userRepository.findById(session.userId);
+  if (!user) return null;
+  return { name: user.name ?? "", email: user.email, image: user.image ?? "" };
+}
+
 export async function loginUser(email: string, password: string): Promise<Session> {
   await ensureAdminUser();
   const user: StoredUser | null = await userRepository.findByEmail(email);
@@ -51,6 +65,27 @@ export async function registerUser(name: string, email: string, password: string
     name: name.trim(),
     email: email.toLowerCase().trim(),
     passwordHash: await hashPassword(password),
+    role: "customer",
+  });
+  return toSession(user);
+}
+
+export async function loginWithGoogle(idToken: string): Promise<Session> {
+  await ensureAdminUser();
+  const profile: GoogleProfile = await verifyGoogleToken(idToken);
+  const existing: StoredUser | null = await userRepository.findByEmail(profile.email);
+  if (existing) {
+    const updated: StoredUser | null = await userRepository.updateProfile(profile.email, {
+      name: existing.name || profile.name.trim(),
+      image: profile.image || existing.image || "",
+    });
+    return toSession(updated ?? existing);
+  }
+  const user: StoredUser = await userRepository.create({
+    name: profile.name.trim(),
+    image: profile.image,
+    email: profile.email.toLowerCase().trim(),
+    passwordHash: "",
     role: "customer",
   });
   return toSession(user);

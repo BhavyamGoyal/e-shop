@@ -18,10 +18,30 @@ export interface ImageListPage {
   meta: PageMeta;
 }
 
-export interface TagRecord {
+export interface TagFields {
+  icon: string;
+  image: string;
+  header: boolean;
+  collection: boolean;
+}
+
+export interface TagRecord extends TagFields {
   id: string;
   name: string;
   productCount: number;
+}
+
+export type TagPatch = Partial<TagFields> & { name?: string };
+
+export type UserRoleName = "admin" | "manager" | "customer";
+
+export interface UserRecord {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  role: UserRoleName;
+  createdAt: string;
 }
 
 export interface ImageInput {

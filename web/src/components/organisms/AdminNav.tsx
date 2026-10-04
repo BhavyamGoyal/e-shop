@@ -9,6 +9,7 @@ const LINKS: { href: string; label: string }[] = [
   { href: "/admin/blogs", label: "Blogs" },
   { href: "/admin/faqs", label: "FAQs" },
   { href: "/admin/images", label: "Images" },
+  { href: "/admin/users", label: "Users" },
 ];
 
 export function AdminNav({ email }: { email: string }) {

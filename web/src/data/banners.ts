@@ -1,7 +1,7 @@
 import type { HomeSectionData } from "@/lib/website-data";
 
 export const heroBannerSection: HomeSectionData = {
-  background: "#FFFFFF",
+  background: "var(--background)",
   padding: "24px 48px 0px 48px",
   margin: "0px 0px 0px 0px",
   header: null,
@@ -46,7 +46,7 @@ export const heroBannerSection: HomeSectionData = {
 };
 
 export const promoBannerSection: HomeSectionData = {
-  background: "#FFFFFF",
+  background: "var(--background)",
   padding: "0px 48px 0px 48px",
   margin: "0px 0px 0px 0px",
   header: null,

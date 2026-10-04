@@ -9,16 +9,16 @@ interface BreadcrumbsProps {
 
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
-    <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm text-neutral-500">
+    <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
       {items.map((item, index) => (
         <span key={item.label} className="flex items-center gap-2">
           {index > 0 && <span>/</span>}
           {item.href ? (
-            <a href={item.href} className="hover:text-[#191a0b]">
+            <a href={item.href} className="hover:text-foreground">
               {item.label}
             </a>
           ) : (
-            <span className="max-w-[26ch] truncate text-[#191a0b]">{item.label}</span>
+            <span className="max-w-[26ch] truncate text-foreground">{item.label}</span>
           )}
         </span>
       ))}

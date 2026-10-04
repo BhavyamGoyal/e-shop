@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import { loginAction, registerAction, type AuthState } from "@/server/actions/auth.actions";
 import { Button, Heading, Text } from "../atoms";
 import { AlertMessage, FormField } from "../molecules";
+import { GoogleSignInButton } from "./GoogleSignInButton";
 
 export type AuthMode = "login" | "register";
 
@@ -56,6 +57,10 @@ export function AuthForm({ mode, next }: AuthFormProps) {
       <Button type="submit" disabled={pending}>
         {pending ? "Please wait..." : copy.submit}
       </Button>
+      <Text tone="muted" className="text-center text-sm">
+        or
+      </Text>
+      <GoogleSignInButton next={next} />
       <Text tone="muted" className="text-sm">
         {copy.alt}{" "}
         <Link href={altHref} className="font-medium text-primary underline">

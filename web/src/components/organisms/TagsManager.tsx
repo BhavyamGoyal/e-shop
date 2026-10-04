@@ -2,28 +2,18 @@
 
 import { useState, type FormEvent } from "react";
 import { useTags } from "@/lib/use-tags";
-import type { TagRecord } from "@/server/types/admin.types";
+import type { TagPatch, TagRecord } from "@/server/types/admin.types";
 import { Button, Heading, Input, Text } from "../atoms";
 import { AlertMessage } from "../molecules";
+import { TagRow } from "./TagRow";
 
 export function TagsManager() {
   const tags = useTags();
   const [newName, setNewName] = useState<string>("");
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editName, setEditName] = useState<string>("");
 
   const submitNew = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
     if (await tags.create(newName)) setNewName("");
-  };
-
-  const startEdit = (tag: TagRecord): void => {
-    setEditingId(tag.id);
-    setEditName(tag.name);
-  };
-
-  const saveEdit = async (tag: TagRecord): Promise<void> => {
-    if (await tags.rename(tag.id, editName)) setEditingId(null);
   };
 
   const confirmDelete = (tag: TagRecord): void => {
@@ -53,45 +43,22 @@ export function TagsManager() {
           <thead className="bg-muted text-muted-foreground">
             <tr>
               <th className="px-4 py-2 font-medium">Name</th>
+              <th className="px-4 py-2 font-medium">Icon</th>
+              <th className="px-4 py-2 font-medium">Image</th>
+              <th className="px-4 py-2 font-medium">Header</th>
+              <th className="px-4 py-2 font-medium">Collection</th>
               <th className="px-4 py-2 font-medium">Products</th>
               <th className="px-4 py-2" />
             </tr>
           </thead>
           <tbody>
             {tags.tags.map((tag: TagRecord) => (
-              <tr key={tag.id} className="border-t">
-                <td className="px-4 py-2">
-                  {editingId === tag.id ? (
-                    <Input value={editName} onChange={(event) => setEditName(event.target.value)} className="h-8 w-64" autoFocus />
-                  ) : (
-                    tag.name
-                  )}
-                </td>
-                <td className="px-4 py-2">{tag.productCount}</td>
-                <td className="px-4 py-2">
-                  <div className="flex justify-end gap-2">
-                    {editingId === tag.id ? (
-                      <>
-                        <Button size="sm" disabled={!editName.trim()} onClick={() => void saveEdit(tag)}>
-                          Save
-                        </Button>
-                        <Button size="sm" variant="outline" tone="secondary" onClick={() => setEditingId(null)}>
-                          Cancel
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button size="sm" variant="outline" tone="secondary" onClick={() => startEdit(tag)}>
-                          Edit
-                        </Button>
-                        <Button size="sm" variant="outline" tone="danger" onClick={() => confirmDelete(tag)}>
-                          Delete
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </td>
-              </tr>
+              <TagRow
+                key={`${tag.id}:${tag.name}`}
+                tag={tag}
+                onUpdate={(patch: TagPatch) => tags.update(tag.id, patch)}
+                onDelete={() => confirmDelete(tag)}
+              />
             ))}
           </tbody>
         </table>

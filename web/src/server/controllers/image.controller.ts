@@ -1,4 +1,4 @@
-import { requireAdmin } from "../auth/guard";
+import { requireAdmin, requireStaff } from "../auth/guard";
 import { NotFoundError, ValidationError } from "../http/errors";
 import { imageRepository, type StoredImage } from "../repositories/image.repository";
 import { deleteBlob, uploadBlob } from "../storage/blob";
@@ -18,7 +18,7 @@ const safeName = (name: string): string => name.replace(/[^a-zA-Z0-9._-]+/g, "-"
 
 export const imageController = {
   async list(page: number, limit: number, search: string): Promise<ImageListPage> {
-    await requireAdmin();
+    await requireStaff();
     const { items, total } = await imageRepository.list(page, limit, search);
     return {
       data: items.map(toImageRecord),

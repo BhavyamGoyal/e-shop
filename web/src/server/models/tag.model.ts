@@ -3,6 +3,10 @@ import { model, models, Schema, type InferSchemaType, type Model } from "mongoos
 const tagSchema = new Schema(
   {
     name: { type: String, required: true, unique: true },
+    icon: { type: String, default: "" },
+    image: { type: String, default: "" },
+    header: { type: Boolean, default: false },
+    collection: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
   },
   { collection: "tags", versionKey: false },

@@ -9,7 +9,7 @@ export function TileCard({ tile }: TileCardProps) {
   return (
     <a href={tile.href} className="group block">
       <div
-        className="relative overflow-hidden bg-neutral-100"
+        className="relative overflow-hidden bg-muted"
         style={{ aspectRatio: tile.aspectRatio, borderRadius: tile.radius }}
       >
         <img

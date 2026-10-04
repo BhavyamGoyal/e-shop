@@ -1,5 +1,5 @@
 import { revalidatePath } from "next/cache";
-import { requireAdmin } from "../auth/guard";
+import { requireAdmin, requireStaff } from "../auth/guard";
 import { NotFoundError, ValidationError } from "../http/errors";
 import { blogRepository, type StoredBlog } from "../repositories/blog.repository";
 import { faqRepository, type StoredFaq } from "../repositories/faq.repository";
@@ -91,7 +91,7 @@ async function assertSlugFree(slug: string, ownId: string | null): Promise<void>
 
 export const blogController = {
   async adminList(): Promise<BlogRow[]> {
-    await requireAdmin();
+    await requireStaff();
     const [blogs, counts] = await Promise.all([blogRepository.list(), faqRepository.countByBlog()]);
     return blogs.map(
       (blog: StoredBlog): BlogRow => ({
@@ -107,7 +107,7 @@ export const blogController = {
   },
 
   async editor(id: string | null): Promise<BlogEditorData> {
-    await requireAdmin();
+    await requireStaff();
     if (!id) return { id: null, input: EMPTY_INPUT };
     const blog: StoredBlog | null = await blogRepository.findById(id);
     if (!blog) throw new NotFoundError("Blog post not found");

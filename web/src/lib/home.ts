@@ -1,13 +1,13 @@
 import { collectionController } from "@/server/controllers/collection.controller";
+import { storefrontTagController } from "@/server/controllers/storefront-tag.controller";
 import { productController } from "@/server/controllers/product.controller";
-import type { CollectionSummary, ProductQuery, ProductSummary } from "@/server/types/product.types";
+import type { CollectionSummary, ProductQuery, ProductSummary, StorefrontTag } from "@/server/types/product.types";
 import { heroBannerSection, promoBannerSection } from "@/data/banners";
 import type { HeaderData, HomeSectionData, Product, Tile, WebsiteData } from "@/lib/website-data";
 
 const BRAND = "Tinglet";
 const TAGLINE = "Crafted for you";
 const FEATURED_HANDLE = "featured-products";
-const NAV_LIMIT = 11;
 const TAB_COLLECTIONS = 4;
 const RAIL_SIZE = 12;
 const TAB_SIZE = 10;
@@ -32,16 +32,16 @@ export const toProduct = (product: ProductSummary): Product => ({
   discountLabel: product.discountPercent ? `${product.discountPercent}% OFF` : undefined,
 });
 
-const toTile = (collection: CollectionSummary): Tile => ({
-  href: `/${collection.handle}`,
-  image: collection.image ?? "",
-  alt: collection.title,
+const toTile = (tag: StorefrontTag): Tile => ({
+  href: tag.href,
+  image: tag.image,
+  alt: tag.name,
   aspectRatio: 1,
   radius: 16,
   caption: {
-    text: `${collection.title} (${collection.count})`,
+    text: `${tag.name} (${tag.count})`,
     placement: "below",
-    color: "#191a0b",
+    color: "var(--foreground)",
     weight: 600,
     size: 15,
   },
@@ -51,7 +51,7 @@ const fetchProducts = async (overrides: Partial<ProductQuery>) =>
   (await productController.search({ ...baseQuery, ...overrides })).data.map(toProduct);
 
 const sectionBase = {
-  background: "#FFFFFF",
+  background: "var(--background)",
   padding: "0px 48px 24px 48px",
   margin: "24px 0px 0px 0px",
 };
@@ -60,15 +60,15 @@ const heading = (title: string, subtitle?: string, actionHref?: string): HomeSec
   title,
   subtitle,
   align: "left",
-  color: "#191a0b",
+  color: "var(--foreground)",
   size: 32,
   weight: 600,
   action: actionHref
-    ? { href: actionHref, label: "View All →", background: "#ffffff", color: "#191a0b", borderColor: "#e0e0e0" }
+    ? { href: actionHref, label: "View All →", background: "var(--background)", color: "var(--foreground)", borderColor: "var(--border)" }
     : undefined,
 });
 
-export function buildHeader(categories: CollectionSummary[]): HeaderData {
+export function buildHeader(tags: StorefrontTag[]): HeaderData {
   return {
     logo: { href: "/", text: BRAND, tagline: TAGLINE },
     location: {
@@ -86,18 +86,14 @@ export function buildHeader(categories: CollectionSummary[]): HeaderData {
       { href: "/cart", icon: `${ICON_BASE}/cart.svg`, label: "Cart" },
       { href: "/login", icon: `${ICON_BASE}/user-square-desktop.svg`, label: "Hi Guest" },
     ],
-    nav: categories.slice(0, NAV_LIMIT).map((category) => ({
-      href: `/${category.handle}`,
-      icon: category.image ?? "",
-      label: category.title,
-    })),
+    nav: tags.map((tag: StorefrontTag) => ({ href: tag.href, icon: tag.icon, label: tag.name })),
   };
 }
 
 export const buildSiteHeader = (): HeaderData => buildHeader([]);
 
 export async function buildHomeData(): Promise<WebsiteData> {
-  const collections = await collectionController.all();
+  const [collections, flagged] = await Promise.all([collectionController.all(), storefrontTagController.flagged()]);
   const categories = collections.filter((collection) => collection.handle !== FEATURED_HANDLE);
   const featured = collections.find((collection) => collection.handle === FEATURED_HANDLE);
   const tabSources = [...(featured ? [featured] : []), ...categories.slice(0, TAB_COLLECTIONS)];
@@ -123,14 +119,14 @@ export async function buildHomeData(): Promise<WebsiteData> {
         "Shop by Category",
         "Lamps, planters, desk organisers and more, designed and 3D printed to order.",
       ),
-      blocks: [{ type: "tileScroller", gap: 20, visible: 6, tiles: categories.map(toTile) }],
+      blocks: [{ type: "tileScroller", gap: 20, visible: 6, tiles: flagged.collection.map(toTile) }],
     },
     promoBannerSection,
     {
       ...sectionBase,
       key: "featuredCollections",
       id: "featuredCollections",
-      background: "linear-gradient(180deg, #f2f3e8 0%, #ffffff 100%)",
+      background: "linear-gradient(180deg, var(--muted) 0%, var(--background) 100%)",
       padding: "40px 48px 0px 48px",
       header: heading(
         "Our Collections",
@@ -159,5 +155,5 @@ export async function buildHomeData(): Promise<WebsiteData> {
     },
   ];
 
-  return { header: buildHeader(categories), sections };
+  return { header: buildHeader(flagged.header), sections };
 }

@@ -18,7 +18,7 @@ export function ArrowButton({ direction, onClick, className }: ArrowButtonProps)
       aria-label={label[direction]}
       onClick={onClick}
       className={cn(
-        "flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white/90 text-[#191a0b] shadow transition hover:bg-white",
+        "flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-background/90 text-foreground shadow transition hover:bg-background",
         className,
       )}
     >

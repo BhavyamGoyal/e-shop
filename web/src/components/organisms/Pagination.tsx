@@ -21,7 +21,7 @@ const pageList = (current: number, total: number): number[] => {
 const linkClass = (active: boolean): string =>
   cn(
     "grid h-10 min-w-10 place-items-center rounded-lg border px-3 text-sm font-medium",
-    active ? "border-[#191a0b] bg-[#191a0b] text-white" : "border-neutral-200 text-[#191a0b] hover:border-[#191a0b]",
+    active ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground hover:border-primary",
   );
 
 export function Pagination({ meta, query, basePath }: PaginationProps) {
@@ -37,7 +37,7 @@ export function Pagination({ meta, query, basePath }: PaginationProps) {
       )}
       {pages.map((page: number, index: number) => (
         <span key={page} className="flex items-center gap-2">
-          {index > 0 && page - pages[index - 1] > 1 && <span className="text-neutral-400">…</span>}
+          {index > 0 && page - pages[index - 1] > 1 && <span className="text-muted-foreground">…</span>}
           <a
             href={href(page)}
             aria-current={page === meta.page ? "page" : undefined}

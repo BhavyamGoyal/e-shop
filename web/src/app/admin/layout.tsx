@@ -7,5 +7,5 @@ export const metadata: Metadata = { title: "Admin", robots: NOT_INDEXED };
 
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   const session = await requireAdminPage();
-  return <AdminTemplate email={session.email}>{children}</AdminTemplate>;
+  return <AdminTemplate email={session.email} readOnly={session.role !== "admin"}>{children}</AdminTemplate>;
 }

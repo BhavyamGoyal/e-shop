@@ -9,6 +9,7 @@ const SECTIONS: { href: string; title: string; text: string }[] = [
   { href: "/admin/blogs", title: "Blogs", text: "Write, edit, publish and delete blog posts." },
   { href: "/admin/faqs", title: "FAQs", text: "Add, edit and remove FAQs, optionally linked to a blog post." },
   { href: "/admin/images", title: "Images", text: "Upload and delete images stored in Vercel Blob." },
+  { href: "/admin/users", title: "Users", text: "See registered users and manage their roles." },
 ];
 
 export default function AdminDashboardPage() {

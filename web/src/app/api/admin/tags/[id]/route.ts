@@ -5,7 +5,7 @@ import { handleRequest } from "@/server/http/handler";
 export function PATCH(request: NextRequest, context: RouteContext<"/api/admin/tags/[id]">): Promise<Response> {
   return handleRequest(async (): Promise<Response> => {
     const { id } = await context.params;
-    await tagController.rename(id, await request.json());
+    await tagController.update(id, await request.json());
     return Response.json({ ok: true });
   });
 }

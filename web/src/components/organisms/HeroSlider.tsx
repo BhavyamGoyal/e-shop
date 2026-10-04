@@ -56,7 +56,7 @@ export function HeroSlider({ block }: HeroSliderProps) {
             onClick={() => setIndex(i)}
             className={cn(
               "h-2 cursor-pointer rounded-full transition-all",
-              i === index ? "w-5 bg-white" : "w-2 bg-white/60",
+              i === index ? "w-5 bg-background" : "w-2 bg-background/60",
             )}
           />
         ))}

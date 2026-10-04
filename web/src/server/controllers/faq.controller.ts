@@ -1,6 +1,6 @@
 import { isValidObjectId } from "mongoose";
 import { revalidatePath } from "next/cache";
-import { requireAdmin } from "../auth/guard";
+import { requireAdmin, requireStaff } from "../auth/guard";
 import { NotFoundError, ValidationError } from "../http/errors";
 import { blogRepository, type StoredBlog } from "../repositories/blog.repository";
 import { faqRepository, type StoredFaq } from "../repositories/faq.repository";
@@ -37,7 +37,7 @@ async function assertExists(id: string): Promise<void> {
 
 export const faqController = {
   async list(): Promise<FaqListData> {
-    await requireAdmin();
+    await requireStaff();
     const [faqs, blogs] = await Promise.all([faqRepository.list(), blogRepository.list()]);
     const titles: Map<string, string> = new Map(
       blogs.map((blog: StoredBlog): [string, string] => [blog._id.toString(), blog.title]),

@@ -53,6 +53,19 @@ export interface ProductPage {
   meta: Pagination;
 }
 
+export interface StorefrontTag {
+  name: string;
+  href: string;
+  icon: string;
+  image: string;
+  count: number;
+}
+
+export interface StorefrontTags {
+  header: StorefrontTag[];
+  collection: StorefrontTag[];
+}
+
 export interface CollectionSummary {
   handle: string;
   title: string;

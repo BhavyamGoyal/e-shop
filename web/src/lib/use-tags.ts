@@ -1,15 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { TagRecord } from "@/server/types/admin.types";
-import { createTag, deleteTag, fetchTags, renameTag } from "./admin-api";
+import type { TagPatch, TagRecord } from "@/server/types/admin.types";
+import { createTag, deleteTag, fetchTags, updateTag } from "./admin-api";
 
 export interface TagsController {
   tags: TagRecord[];
   loading: boolean;
   error: string | null;
   create: (name: string) => Promise<boolean>;
-  rename: (id: string, name: string) => Promise<boolean>;
+  update: (id: string, patch: TagPatch) => Promise<boolean>;
   remove: (id: string) => Promise<void>;
 }
 
@@ -52,7 +52,7 @@ export function useTags(): TagsController {
   }, []);
 
   const create = useCallback((name: string): Promise<boolean> => mutate(() => createTag(name)), [mutate]);
-  const rename = useCallback((id: string, name: string): Promise<boolean> => mutate(() => renameTag(id, name)), [mutate]);
+  const update = useCallback((id: string, patch: TagPatch): Promise<boolean> => mutate(() => updateTag(id, patch)), [mutate]);
   const remove = useCallback(
     async (id: string): Promise<void> => {
       await mutate(() => deleteTag(id));
@@ -60,5 +60,5 @@ export function useTags(): TagsController {
     [mutate],
   );
 
-  return { tags, loading, error, create, rename, remove };
+  return { tags, loading, error, create, update, remove };
 }

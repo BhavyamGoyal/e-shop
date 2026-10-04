@@ -9,7 +9,7 @@ interface HomeTemplateProps {
 
 export function HomeTemplate({ data, faqs }: HomeTemplateProps) {
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#191a0b]">
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
       <SiteHeader header={data.header} />
       <main className="flex-1 pb-16">
         {data.sections.map((section) => (

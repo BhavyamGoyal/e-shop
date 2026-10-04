@@ -7,7 +7,7 @@ interface StickyBuyBarProps {
 
 export function StickyBuyBar({ title, image, price, inStock }: StickyBuyBarProps) {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t border-(--pp-line) bg-[#fffdf9f0] px-3.5 py-2.5 shadow-[0_-8px_24px_-12px_#2d281447] backdrop-blur-md lg:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t border-(--pp-line) bg-surface/95 px-3.5 py-2.5 shadow-lg backdrop-blur-md lg:hidden">
       {image && (
         <img src={image} alt="" className="h-11 w-11 shrink-0 rounded-[10px] border border-(--pp-line-soft) object-cover" />
       )}
@@ -18,7 +18,7 @@ export function StickyBuyBar({ title, image, price, inStock }: StickyBuyBarProps
       <button
         type="button"
         disabled={!inStock}
-        className="min-h-12 shrink-0 rounded-full bg-linear-to-b from-[#4d6a88] to-(--pp-green-d) px-6 text-[15px] font-semibold text-white shadow-[0_6px_16px_#4058704d] disabled:opacity-50"
+        className="min-h-12 shrink-0 rounded-full bg-linear-to-b from-primary to-(--pp-green-d) px-6 text-[15px] font-semibold text-primary-foreground shadow-md disabled:opacity-50"
       >
         {inStock ? "Buy now" : "Sold out"}
       </button>

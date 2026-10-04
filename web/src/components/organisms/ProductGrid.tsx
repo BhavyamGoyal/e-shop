@@ -8,7 +8,7 @@ interface ProductGridProps {
 export function ProductGrid({ products }: ProductGridProps) {
   if (!products.length) {
     return (
-      <div className="rounded-xl border border-dashed border-neutral-300 py-20 text-center text-neutral-500">
+      <div className="rounded-xl border border-dashed border-border py-20 text-center text-muted-foreground">
         No products match these filters.
       </div>
     );

@@ -14,7 +14,7 @@ export function ProductPrice({ price, compareAtPrice }: ProductPriceProps) {
         {onSale && compareAtPrice !== null && (
           <>
             <s className="text-lg text-(--pp-muted)">{formatPrice(compareAtPrice)}</s>
-            <span className="rounded-full bg-[#e0a93f38] px-2.5 py-0.5 text-[13px] font-bold text-[#7a5410]">
+            <span className="rounded-full bg-warning/20 px-2.5 py-0.5 text-[13px] font-bold text-warning">
               {Math.round(((compareAtPrice - price) / compareAtPrice) * 100)}% OFF
             </span>
           </>

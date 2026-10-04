@@ -15,7 +15,7 @@ interface ArrowProps {
 }
 
 const arrowClass =
-  "absolute top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-(--pp-line-soft) bg-[#fffdf9e0] shadow-(--pp-shadow-sm) backdrop-blur transition hover:bg-white active:scale-95";
+  "absolute top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-(--pp-line-soft) bg-surface/90 shadow-(--pp-shadow-sm) backdrop-blur transition hover:bg-background active:scale-95";
 
 function Arrow({ direction, onClick }: ArrowProps) {
   return (
@@ -68,7 +68,7 @@ export function ProductGallery({ images, title, activeIndex, badge, onSelect }: 
           <>
             <Arrow direction="prev" onClick={(): void => step(-1)} />
             <Arrow direction="next" onClick={(): void => step(1)} />
-            <span className="absolute right-3.5 bottom-3.5 z-10 rounded-full bg-[#2328198c] px-2.5 py-1 text-xs font-semibold tracking-wide text-white backdrop-blur md:hidden">
+            <span className="absolute right-3.5 bottom-3.5 z-10 rounded-full bg-foreground/60 px-2.5 py-1 text-xs font-semibold tracking-wide text-background backdrop-blur md:hidden">
               {activeIndex + 1} / {total}
             </span>
           </>

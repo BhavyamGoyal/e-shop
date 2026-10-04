@@ -1,9 +1,10 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { isStaff } from "../auth/guard";
 import { endSession, startSession, type Session } from "../auth/session";
 import { ApiError } from "../http/errors";
-import { loginUser, registerUser } from "../services/auth.service";
+import { loginUser, loginWithGoogle, registerUser } from "../services/auth.service";
 
 export interface AuthState {
   error: string | null;
@@ -26,7 +27,7 @@ async function authenticate(action: () => Promise<Session>, next: string): Promi
     throw error;
   }
   await startSession(session);
-  redirect(session.role === "admin" ? safeNext(next, "/admin") : safeNext(next, "/"));
+  redirect(isStaff(session.role) ? safeNext(next, "/admin") : safeNext(next, "/"));
 }
 
 export async function loginAction(_state: AuthState, data: FormData): Promise<AuthState> {
@@ -38,6 +39,10 @@ export async function registerAction(_state: AuthState, data: FormData): Promise
     () => registerUser(field(data, "name"), field(data, "email"), field(data, "password")),
     field(data, "next"),
   );
+}
+
+export async function googleLoginAction(idToken: string, next: string): Promise<AuthState> {
+  return authenticate(() => loginWithGoogle(idToken), next);
 }
 
 export async function logoutAction(): Promise<void> {

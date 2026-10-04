@@ -1,4 +1,12 @@
-import type { ImageListPage, ImageRecord, ProductListPage, TagRecord } from "@/server/types/admin.types";
+import type {
+  ImageListPage,
+  ImageRecord,
+  ProductListPage,
+  TagPatch,
+  TagRecord,
+  UserRecord,
+  UserRoleName,
+} from "@/server/types/admin.types";
 import type { BlogInput, BlogRow, FaqInput, FaqListData } from "@/server/types/content.types";
 
 interface ErrorBody {
@@ -59,8 +67,8 @@ export async function createTag(name: string): Promise<void> {
   );
 }
 
-export async function renameTag(id: string, name: string): Promise<void> {
-  await fetch(`/api/admin/tags/${id}`, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify({ name }) }).then(
+export async function updateTag(id: string, patch: TagPatch): Promise<void> {
+  await fetch(`/api/admin/tags/${id}`, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify(patch) }).then(
     parse<{ ok: boolean }>,
   );
 }
@@ -102,4 +110,17 @@ export async function saveFaq(id: string | null, input: FaqInput): Promise<void>
 
 export async function deleteFaq(id: string): Promise<void> {
   await fetch(`/api/admin/faqs/${id}`, { method: "DELETE" }).then(parse<{ ok: boolean }>);
+}
+
+export async function fetchUsers(): Promise<UserRecord[]> {
+  const body = await fetch("/api/admin/users").then(parse<{ data: UserRecord[] }>);
+  return body.data;
+}
+
+export async function updateUserRole(id: string, role: UserRoleName): Promise<void> {
+  await fetch(`/api/admin/users/${id}`, {
+    method: "PATCH",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ role }),
+  }).then(parse<{ ok: boolean }>);
 }
