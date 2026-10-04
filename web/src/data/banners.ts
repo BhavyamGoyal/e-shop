@@ -11,6 +11,13 @@ export const heroBannerSection: HomeSectionData = {
       autoplay: 4000,
       slides: [
         {
+          href: "/",
+          image: "/banner1.jpg",
+          alt: "",
+          aspectRatio: 3,
+          radius: 24,
+        },
+        {
           href: "/gifts/birthday-lp?promo=desk_BAU_feed_banner_carousel_birthday",
           image: "https://static-assets-prod.fnp.com/media/images/eb5e29ee.jpg",
           alt: "",

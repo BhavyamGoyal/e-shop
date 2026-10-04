@@ -5,7 +5,7 @@ import { RESERVED_HANDLES } from "@/lib/site";
 import { requireAdmin, requireStaff } from "../auth/guard";
 import { NotFoundError, ValidationError } from "../http/errors";
 import { pageRepository, type StoredPage } from "../repositories/page.repository";
-import type { PageInput, PageRecord, PageSitemapEntry, PublicPage } from "../types/content.types";
+import type { PageEditorData, PageInput, PageRecord, PageSitemapEntry, PublicPage } from "../types/content.types";
 import { slugify } from "./blog.controller";
 
 function parseInput(payload: unknown): PageInput {
@@ -49,6 +49,14 @@ export const pageController = {
   async list(): Promise<PageRecord[]> {
     await requireStaff();
     return (await pageRepository.list()).map(toRecord);
+  },
+
+  async editor(id: string | null): Promise<PageEditorData> {
+    await requireStaff();
+    if (!id) return { id: null, input: { url: "", content: "" } };
+    const page: StoredPage | null = isValidObjectId(id) ? await pageRepository.findById(id) : null;
+    if (!page) throw new NotFoundError("Page not found");
+    return { id, input: { url: page.url, content: page.content } };
   },
 
   async create(payload: unknown): Promise<void> {

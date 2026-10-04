@@ -16,10 +16,12 @@ export function ContactSection() {
 
   const change = (patch: Partial<CustomerQueryInput>): void => {
     setSent(false);
-    setInput((current: CustomerQueryInput): CustomerQueryInput => ({
-      ...current,
-      ...patch,
-    }));
+    setInput(
+      (current: CustomerQueryInput): CustomerQueryInput => ({
+        ...current,
+        ...patch,
+      }),
+    );
   };
 
   const submit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -51,7 +53,9 @@ export function ContactSection() {
             Have a request or a query? Tell us about it.
           </Heading>
           <Text tone="muted">
-            Share your details and message and we will get back to you.
+            Say hello. Our workshop is busy, we aren't. Questions, custom
+            orders, a corporate gifting plan, or a garlic lamp you can't stop
+            thinking about? Write to us
           </Text>
         </div>
         <form

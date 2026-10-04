@@ -27,11 +27,15 @@ const loadShopGroup = async (): Promise<FooterGroup> => {
   };
 };
 
-export async function SiteFooter() {
+interface SiteFooterProps {
+  showContact?: boolean;
+}
+
+export async function SiteFooter({ showContact = false }: SiteFooterProps) {
   const groups: FooterGroup[] = [await loadShopGroup(), ...FOOTER_GROUPS];
   return (
     <div className="mt-auto w-full">
-      <ContactSection />
+      {showContact && <ContactSection />}
       <footer className="w-full border-t border-border bg-muted text-foreground">
         <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-6 py-12 md:grid-cols-[1.5fr_1fr_1fr_1fr] md:px-10">
           <div className="flex flex-col gap-4">

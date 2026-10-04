@@ -1,3 +1,4 @@
+import type { QueryRecord } from "@/server/types/contact.types";
 import type {
   ImageListPage,
   ImageRecord,
@@ -140,4 +141,9 @@ export async function updateUserRole(id: string, role: UserRoleName): Promise<vo
     headers: JSON_HEADERS,
     body: JSON.stringify({ role }),
   }).then(parse<{ ok: boolean }>);
+}
+
+export async function fetchQueries(): Promise<QueryRecord[]> {
+  const body = await fetch("/api/admin/queries").then(parse<{ data: QueryRecord[] }>);
+  return body.data;
 }

@@ -86,6 +86,11 @@ export interface PageRecord extends PageInput {
   updatedAt: string;
 }
 
+export interface PageEditorData {
+  id: string | null;
+  input: PageInput;
+}
+
 export interface PublicPage extends PageInput {
   title: string;
   description: string;

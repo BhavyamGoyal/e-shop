@@ -1,8 +1,9 @@
 import { isValidObjectId } from "mongoose";
+import { requireStaff } from "../auth/guard";
 import { readSession, type Session } from "../auth/session";
 import { ValidationError } from "../http/errors";
-import { queryRepository } from "../repositories/query.repository";
-import type { CustomerQueryInput, StoredQueryInput } from "../types/contact.types";
+import { queryRepository, type StoredQuery } from "../repositories/query.repository";
+import type { CustomerQueryInput, QueryRecord } from "../types/contact.types";
 
 const EMAIL_PATTERN: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN: RegExp = /^\+?\d{10,15}$/;
@@ -28,7 +29,21 @@ function parseInput(payload: unknown): CustomerQueryInput {
   return { name, contact, message };
 }
 
+const toRecord = (query: StoredQuery): QueryRecord => ({
+  id: query._id.toString(),
+  name: query.name,
+  contact: query.contact,
+  message: query.message,
+  userName: query.user?.name ?? "",
+  createdAt: new Date(query.createdAt).toISOString(),
+});
+
 export const queryController = {
+  async list(): Promise<QueryRecord[]> {
+    await requireStaff();
+    return (await queryRepository.list()).map(toRecord);
+  },
+
   async submit(payload: unknown): Promise<void> {
     const input: CustomerQueryInput = parseInput(payload);
     const session: Session | null = await readSession();

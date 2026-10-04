@@ -22,7 +22,7 @@ export function HomeTemplate({ data, faqs }: HomeTemplateProps) {
           </section>
         )}
       </main>
-      <SiteFooter />
+      <SiteFooter showContact />
     </div>
   );
 }

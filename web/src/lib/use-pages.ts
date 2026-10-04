@@ -1,14 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { PageInput, PageRecord } from "@/server/types/content.types";
-import { deletePage, fetchPages, savePage } from "./admin-api";
+import type { PageRecord } from "@/server/types/content.types";
+import { deletePage, fetchPages } from "./admin-api";
 
 export interface PagesController {
   pages: PageRecord[];
   loading: boolean;
   error: string | null;
-  save: (id: string | null, input: PageInput) => Promise<boolean>;
   remove: (id: string) => Promise<void>;
 }
 
@@ -50,7 +49,6 @@ export function usePages(): PagesController {
     }
   }, []);
 
-  const save = useCallback((id: string | null, input: PageInput): Promise<boolean> => mutate(() => savePage(id, input)), [mutate]);
   const remove = useCallback(
     async (id: string): Promise<void> => {
       await mutate(() => deletePage(id));
@@ -58,5 +56,5 @@ export function usePages(): PagesController {
     [mutate],
   );
 
-  return { pages, loading, error, save, remove };
+  return { pages, loading, error, remove };
 }

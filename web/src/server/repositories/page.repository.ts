@@ -10,6 +10,11 @@ export const pageRepository = {
     return PageModel.find().sort({ url: 1 }).lean<StoredPage[]>();
   },
 
+  async findById(id: string): Promise<StoredPage | null> {
+    await connectDb();
+    return PageModel.findById(id).lean<StoredPage>();
+  },
+
   async findByUrl(url: string): Promise<StoredPage | null> {
     await connectDb();
     return PageModel.findOne({ url }).lean<StoredPage>();

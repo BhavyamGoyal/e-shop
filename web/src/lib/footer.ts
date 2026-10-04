@@ -19,7 +19,7 @@ export const FOOTER_GROUPS: FooterGroup[] = [
     title: "Company",
     links: [
       { label: "About Us", href: "/about" },
-      { label: "Contact Us", href: "/contact" },
+      { label: "Contact Us", href: "/#contact-us" },
       { label: "Blog", href: "/blog" },
       { label: "FAQ", href: "/faq" },
     ],
