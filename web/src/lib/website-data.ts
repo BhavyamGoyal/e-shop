@@ -15,6 +15,7 @@ export interface HeroCopy {
 export interface Tile {
   href: string;
   image: string;
+  mobileImage?: string;
   alt: string;
   aspectRatio: number;
   radius: number;
@@ -68,6 +69,7 @@ export interface SliderBlock {
   type: "slider";
   autoplay: number;
   slides: Tile[];
+  mobileImages?: string[];
 }
 
 export interface TabbedProductsBlock {

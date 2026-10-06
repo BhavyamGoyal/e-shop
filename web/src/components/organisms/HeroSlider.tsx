@@ -2,12 +2,18 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/cn";
-import type { SliderBlock } from "@/lib/website-data";
+import type { SliderBlock, Tile } from "@/lib/website-data";
 import { ArrowButton } from "../atoms";
 import { TileCard } from "../molecules";
 
 interface HeroSliderProps {
   block: SliderBlock;
+}
+
+function withMobile(slide: Tile, block: SliderBlock, i: number): Tile {
+  const mobileImage = block.mobileImages?.[i];
+  if (!mobileImage) return slide;
+  return { ...slide, mobileImage };
 }
 
 export function HeroSlider({ block }: HeroSliderProps) {
@@ -31,9 +37,9 @@ export function HeroSlider({ block }: HeroSliderProps) {
         className="flex transition-transform duration-500 ease-out"
         style={{ width: `${count * 100}%`, transform: `translateX(-${index * (100 / count)}%)` }}
       >
-        {block.slides.map((slide) => (
+        {block.slides.map((slide, i) => (
           <div key={slide.href} className="shrink-0" style={{ width: `${100 / count}%` }}>
-            <TileCard tile={slide} />
+            <TileCard tile={withMobile(slide, block, i)} />
           </div>
         ))}
       </div>

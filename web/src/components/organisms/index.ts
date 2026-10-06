@@ -23,6 +23,7 @@ export { ProductStory } from "./ProductStory";
 export { StickyBuyBar } from "./StickyBuyBar";
 export { AuthForm, type AuthFormProps, type AuthMode } from "./AuthForm";
 export { GoogleOneTap } from "./GoogleOneTap";
+export { ClarityAnalytics } from "./ClarityAnalytics";
 export { ImageLibrary } from "./ImageLibrary";
 export { ImagePicker, type ImagePickerProps } from "./ImagePicker";
 export { AdminNav } from "./AdminNav";

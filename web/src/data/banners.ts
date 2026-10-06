@@ -9,6 +9,7 @@ export const heroBannerSection: HomeSectionData = {
     {
       type: "slider",
       autoplay: 4000,
+      mobileImages: ["/banner3-mobile.webp", "/banner1-mobile.webp", "/banner-keychains-mobile.webp"],
       slides: [
         {
           href: "/gifting-products?minPrice=&maxPrice=&tag=custom&sort=newest",
