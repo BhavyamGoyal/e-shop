@@ -2,6 +2,8 @@ export const SITE_NAME: string = "Tinglet";
 export const SITE_DESCRIPTION: string =
   "Tinglet: Lamps, planters, desk organisers and gifts, crafted for you.";
 
+export const SOCIAL_IMAGE: string = "/logo_v2.jpeg";
+
 const resolveSiteUrl = (): string => {
   const explicit: string | undefined = process.env.SITE_URL;
   if (explicit) return explicit.replace(/\/+$/, "");

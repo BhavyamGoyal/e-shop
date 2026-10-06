@@ -10,12 +10,15 @@ export interface HeroCopy {
   title: string;
   subtitle: string;
   cta: string;
+  tone?: "dark";
+  mobileAnchor?: "bottom";
 }
 
 export interface Tile {
   href: string;
   image: string;
   mobileImage?: string;
+  mobileHeight?: number;
   alt: string;
   aspectRatio: number;
   radius: number;

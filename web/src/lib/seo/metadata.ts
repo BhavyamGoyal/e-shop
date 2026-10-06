@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { CatalogData } from "@/lib/catalog";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME, SOCIAL_IMAGE } from "@/lib/site";
 import type { ProductDetail } from "@/server/types/product.types";
 
 const TITLE_LIMIT = 70;
@@ -17,7 +17,7 @@ export function productMetadata(product: ProductDetail): Metadata {
   const path: string = `/product/${product.handle}`;
   const title: string = clip(product.seo.title ?? product.title, TITLE_LIMIT);
   const description: string = clip(product.seo.description ?? product.descriptionText, DESCRIPTION_LIMIT);
-  const image: string | undefined = product.seo.ogImage ?? product.images[0]?.url;
+  const image: string = product.images[0]?.url ?? SOCIAL_IMAGE;
   return {
     title,
     description,
@@ -28,9 +28,9 @@ export function productMetadata(product: ProductDetail): Metadata {
       title,
       description,
       url: path,
-      images: image ? [{ url: image }] : undefined,
+      images: [{ url: image }],
     },
-    twitter: { card: "summary_large_image", title, description, images: image ? [image] : undefined },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
 
@@ -42,6 +42,14 @@ export function catalogMetadata(catalog: CatalogData, filtered: boolean): Metada
     description,
     alternates: { canonical: catalog.basePath },
     robots: filtered ? { index: false, follow: true } : undefined,
-    openGraph: { type: "website", siteName: SITE_NAME, title, description, url: catalog.basePath },
+    openGraph: {
+      type: "website",
+      siteName: SITE_NAME,
+      title,
+      description,
+      url: catalog.basePath,
+      images: [{ url: SOCIAL_IMAGE }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [SOCIAL_IMAGE] },
   };
 }
