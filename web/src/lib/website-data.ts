@@ -6,6 +6,12 @@ export interface Caption {
   size: number;
 }
 
+export interface HeroCopy {
+  title: string;
+  subtitle: string;
+  cta: string;
+}
+
 export interface Tile {
   href: string;
   image: string;
@@ -13,6 +19,7 @@ export interface Tile {
   aspectRatio: number;
   radius: number;
   caption?: Caption;
+  hero?: HeroCopy;
 }
 
 export interface Product {

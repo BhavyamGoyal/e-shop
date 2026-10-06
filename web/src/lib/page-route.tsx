@@ -14,7 +14,7 @@ export const pageMetadata = (page: PublicPage): Metadata => ({
 });
 
 export const renderPage = (page: PublicPage) => (
-  <ContentTemplate header={buildSiteHeader()}>
+  <ContentTemplate header={buildSiteHeader()} widthClass="max-w-[1100px]">
     <MarkdownContent content={page.content} />
   </ContentTemplate>
 );
