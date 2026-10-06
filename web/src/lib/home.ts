@@ -1,9 +1,20 @@
 import { collectionController } from "@/server/controllers/collection.controller";
 import { storefrontTagController } from "@/server/controllers/storefront-tag.controller";
 import { productController } from "@/server/controllers/product.controller";
-import type { CollectionSummary, ProductQuery, ProductSummary, StorefrontTag } from "@/server/types/product.types";
+import type {
+  CollectionSummary,
+  ProductQuery,
+  ProductSummary,
+  StorefrontTag,
+} from "@/server/types/product.types";
 import { heroBannerSection, promoBannerSection } from "@/data/banners";
-import type { HeaderData, HomeSectionData, Product, Tile, WebsiteData } from "@/lib/website-data";
+import type {
+  HeaderData,
+  HomeSectionData,
+  Product,
+  Tile,
+  WebsiteData,
+} from "@/lib/website-data";
 
 const BRAND = "Tinglet";
 const TAGLINE = "Crafted for you";
@@ -29,7 +40,9 @@ export const toProduct = (product: ProductSummary): Product => ({
   name: product.title,
   price: product.price,
   mrp: product.compareAtPrice ?? undefined,
-  discountLabel: product.discountPercent ? `${product.discountPercent}% OFF` : undefined,
+  discountLabel: product.discountPercent
+    ? `${product.discountPercent}% OFF`
+    : undefined,
 });
 
 const toTile = (tag: StorefrontTag): Tile => ({
@@ -48,7 +61,9 @@ const toTile = (tag: StorefrontTag): Tile => ({
 });
 
 const fetchProducts = async (overrides: Partial<ProductQuery>) =>
-  (await productController.search({ ...baseQuery, ...overrides })).data.map(toProduct);
+  (await productController.search({ ...baseQuery, ...overrides })).data.map(
+    toProduct,
+  );
 
 const sectionBase = {
   background: "var(--background)",
@@ -56,7 +71,11 @@ const sectionBase = {
   margin: "24px 0px 0px 0px",
 };
 
-const heading = (title: string, subtitle?: string, actionHref?: string): HomeSectionData["header"] => ({
+const heading = (
+  title: string,
+  subtitle?: string,
+  actionHref?: string,
+): HomeSectionData["header"] => ({
   title,
   subtitle,
   align: "left",
@@ -64,7 +83,13 @@ const heading = (title: string, subtitle?: string, actionHref?: string): HomeSec
   size: 32,
   weight: 600,
   action: actionHref
-    ? { href: actionHref, label: "View All →", background: "var(--background)", color: "var(--foreground)", borderColor: "var(--border)" }
+    ? {
+        href: actionHref,
+        label: "View All →",
+        background: "var(--background)",
+        color: "var(--foreground)",
+        borderColor: "var(--border)",
+      }
     : undefined,
 });
 
@@ -82,27 +107,53 @@ export function buildHeader(tags: StorefrontTag[]): HeaderData {
       placeholder: "Search for lamps, planters, desk organisers...",
     },
     actions: [
-      { href: "/corporate-gifts", icon: `${ICON_BASE}/corporate-gift.svg`, label: "Corporate Gifts" },
+      {
+        href: "/corporate-gifts",
+        icon: `${ICON_BASE}/corporate-gift.svg`,
+        label: "Corporate Gifts",
+      },
       { href: "/cart", icon: `${ICON_BASE}/cart.svg`, label: "Cart" },
-      { href: "/login", icon: `${ICON_BASE}/user-square-desktop.svg`, label: "Hi Guest" },
+      {
+        href: "/login",
+        icon: `${ICON_BASE}/user-square-desktop.svg`,
+        label: "Hi Guest",
+      },
     ],
-    nav: tags.map((tag: StorefrontTag) => ({ href: tag.href, icon: tag.icon, label: tag.name })),
+    nav: tags.map((tag: StorefrontTag) => ({
+      href: tag.href,
+      icon: tag.icon,
+      label: tag.name,
+    })),
   };
 }
 
 export const buildSiteHeader = (): HeaderData => buildHeader([]);
 
 export async function buildHomeData(): Promise<WebsiteData> {
-  const [collections, flagged] = await Promise.all([collectionController.all(), storefrontTagController.flagged()]);
-  const categories = collections.filter((collection) => collection.handle !== FEATURED_HANDLE);
-  const featured = collections.find((collection) => collection.handle === FEATURED_HANDLE);
-  const tabSources = [...(featured ? [featured] : []), ...categories.slice(0, TAB_COLLECTIONS)];
+  const [collections, flagged] = await Promise.all([
+    collectionController.all(),
+    storefrontTagController.flagged(),
+  ]);
+  const categories = collections.filter(
+    (collection) => collection.handle !== FEATURED_HANDLE,
+  );
+  const featured = collections.find(
+    (collection) => collection.handle === FEATURED_HANDLE,
+  );
+  const tabSources = [
+    ...(featured ? [featured] : []),
+    ...categories.slice(0, TAB_COLLECTIONS),
+  ];
 
   const [tabs, onSale, budget] = await Promise.all([
     Promise.all(
       tabSources.map(async (collection) => ({
-        label: collection.handle === FEATURED_HANDLE ? "Featured" : collection.title,
-        products: await fetchProducts({ collections: [collection.handle], limit: TAB_SIZE }),
+        label:
+          collection.handle === FEATURED_HANDLE ? "Featured" : collection.title,
+        products: await fetchProducts({
+          collections: [collection.handle],
+          limit: TAB_SIZE,
+        }),
       })),
     ),
     fetchProducts({ onSale: true, sort: "price-asc" }),
@@ -117,16 +168,24 @@ export async function buildHomeData(): Promise<WebsiteData> {
       id: "shopByCategory",
       header: heading(
         "Shop by Category",
-        "Lamps, planters, desk organisers and more, designed and 3D printed to order.",
+        "Lamps, planters, desk organisers and more, designed and 3D Printed to order.",
       ),
-      blocks: [{ type: "tileScroller", gap: 20, visible: 6, tiles: flagged.collection.map(toTile) }],
+      blocks: [
+        {
+          type: "tileScroller",
+          gap: 20,
+          visible: 6,
+          tiles: flagged.collection.map(toTile),
+        },
+      ],
     },
     promoBannerSection,
     {
       ...sectionBase,
       key: "featuredCollections",
       id: "featuredCollections",
-      background: "linear-gradient(180deg, var(--muted) 0%, var(--background) 100%)",
+      background:
+        "linear-gradient(180deg, var(--muted) 0%, var(--background) 100%)",
       padding: "40px 48px 0px 48px",
       header: heading(
         "Our Collections",
@@ -139,8 +198,14 @@ export async function buildHomeData(): Promise<WebsiteData> {
       ...sectionBase,
       key: "onSale",
       id: "onSale",
-      header: heading("On Sale Now", "Limited-time prices on popular prints.", "/product?onSale=true"),
-      blocks: [{ type: "productRail", gap: 24, visible: 4.4, products: onSale }],
+      header: heading(
+        "On Sale Now",
+        "Limited-time prices on popular prints.",
+        "/product?onSale=true",
+      ),
+      blocks: [
+        { type: "productRail", gap: 24, visible: 4.4, products: onSale },
+      ],
     },
     {
       ...sectionBase,
@@ -151,7 +216,9 @@ export async function buildHomeData(): Promise<WebsiteData> {
         "Small prints that make big impressions.",
         `/product?maxPrice=${BUDGET_PRICE}`,
       ),
-      blocks: [{ type: "productRail", gap: 24, visible: 4.4, products: budget }],
+      blocks: [
+        { type: "productRail", gap: 24, visible: 4.4, products: budget },
+      ],
     },
   ];
 

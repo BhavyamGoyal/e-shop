@@ -2,7 +2,11 @@ import { QueryError } from "@/server/http/errors";
 import { productController } from "@/server/controllers/product.controller";
 import { collectionController } from "@/server/controllers/collection.controller";
 import { parseProductQuery } from "@/server/validators/product-query";
-import type { CatalogFacets, Pagination, ProductQuery } from "@/server/types/product.types";
+import type {
+  CatalogFacets,
+  Pagination,
+  ProductQuery,
+} from "@/server/types/product.types";
 import { toSearchParams, type RawParams } from "@/lib/catalog-url";
 import { toProduct } from "@/lib/home";
 import type { Product } from "@/lib/website-data";
@@ -23,13 +27,19 @@ const parseQuery = (raw: RawParams): ProductQuery => {
   try {
     return parseProductQuery(toSearchParams(raw));
   } catch (error: unknown) {
-    if (error instanceof QueryError) return parseProductQuery(new URLSearchParams());
+    if (error instanceof QueryError)
+      return parseProductQuery(new URLSearchParams());
     throw error;
   }
 };
 
-export async function buildCatalogData(handle: string | null, raw: RawParams): Promise<CatalogData | null> {
-  const collection = handle ? await collectionController.findByHandle(handle) : null;
+export async function buildCatalogData(
+  handle: string | null,
+  raw: RawParams,
+): Promise<CatalogData | null> {
+  const collection = handle
+    ? await collectionController.findByHandle(handle)
+    : null;
   if (handle && !collection) return null;
 
   const parsed: ProductQuery = parseQuery(raw);
@@ -44,7 +54,7 @@ export async function buildCatalogData(handle: string | null, raw: RawParams): P
   return {
     title: collection ? collection.title : "All Products",
     description: collection
-      ? `${collection.count} designs in ${collection.title}, 3D printed to order.`
+      ? `${collection.count} designs in ${collection.title}, 3D Printed to order.`
       : "Every lamp, planter, organiser and gift in the studio.",
     basePath: collection ? `/${collection.handle}` : ALL_PATH,
     query,

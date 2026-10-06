@@ -1,10 +1,18 @@
-const ITEMS: string[] = ["3D printed to order", "Biodegradable PLA", "Designed in-house", "Made in India"];
+const ITEMS: string[] = [
+  "3D Printed to order",
+  "Biodegradable PLA",
+  "Designed in-house",
+  "Made in India",
+];
 
 export function TrustGrid() {
   return (
     <div className="grid grid-cols-2 gap-x-4 gap-y-3 rounded-[18px] border border-(--pp-line-soft) bg-(--pp-card) p-[18px]">
       {ITEMS.map((item: string) => (
-        <div key={item} className="flex items-center gap-2.5 text-[13.5px] font-medium text-(--pp-ink)">
+        <div
+          key={item}
+          className="flex items-center gap-2.5 text-[13.5px] font-medium text-(--pp-ink)"
+        >
           <svg
             width="20"
             height="20"

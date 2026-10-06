@@ -99,7 +99,7 @@ Prices are listed in Indian rupees. We may cancel an order if a product is unava
 
 ## Product variation
 
-3D printed products can vary slightly in colour and finish from the images shown.
+3D Printed products can vary slightly in colour and finish from the images shown.
 `,
   },
 ];

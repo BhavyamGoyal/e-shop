@@ -14,14 +14,20 @@ export interface KeychainSeed {
   grams: number;
 }
 
-const MATERIAL: [string, string] = ["Material", "Biodegradable PLA (plant-based bioplastic)"];
+const MATERIAL: [string, string] = [
+  "Material",
+  "Biodegradable PLA (plant-based bioplastic)",
+];
 const MADE: [string, string] = ["Made using", "3D-printing, layer by layer"];
-const CARE: [string, string] = ["Care", "Wipe clean with a dry cloth. Keep away from heat above 60°C"];
+const CARE: [string, string] = [
+  "Care",
+  "Wipe clean with a dry cloth. Keep away from heat above 60°C",
+];
 
 export const KEYCHAINS: KeychainSeed[] = [
   {
     source: "custom-name-keychain.webp",
-    title: "Custom Name Keychain - Personalised 3D Printed Name Tag",
+    title: "Custom Name Keychain - Personalised Name Tag",
     tagline: "Your name, your colours",
     intro:
       "A bold, raised-lettering name tag made just for you. Pick your style, tell us the name, and we print it layer by layer in contrasting colours with a sturdy clip and key ring.",
@@ -31,7 +37,12 @@ export const KEYCHAINS: KeychainSeed[] = [
       "Comes with a metal lobster clasp and split ring",
       "Light, durable and easy to wipe clean",
     ],
-    details: [MATERIAL, MADE, ["Customisation", "Share the name and colour preference in order notes"], CARE],
+    details: [
+      MATERIAL,
+      MADE,
+      ["Customisation", "Share the name and colour preference in order notes"],
+      CARE,
+    ],
     tags: ["keychain", "personalised", "custom name", "gift", "bag tag"],
     collections: ["keychains", "gifting-products"],
     optionName: "Style",
@@ -42,7 +53,7 @@ export const KEYCHAINS: KeychainSeed[] = [
   },
   {
     source: "dino-keychain.webp",
-    title: "Flexi Baby Dino Keychain - Articulated 3D Printed Dinosaur",
+    title: "Flexi Baby Dino Keychain - Articulated Dinosaur",
     tagline: "Tiny dino, big personality",
     intro:
       "A wiggly baby dinosaur with a fully articulated body. Bend the tail, tilt the head and pose it on your desk, or clip it to your keys and take it everywhere.",
@@ -73,7 +84,13 @@ export const KEYCHAINS: KeychainSeed[] = [
       "Lightweight and pocket-friendly",
       "A great little gift for anyone who loves quirky charms",
     ],
-    details: [MATERIAL, MADE, ["Size", "Approx. 4 cm tall"], ["Includes", "1 duck keychain with ball chain"], CARE],
+    details: [
+      MATERIAL,
+      MADE,
+      ["Size", "Approx. 4 cm tall"],
+      ["Includes", "1 duck keychain with ball chain"],
+      CARE,
+    ],
     tags: ["keychain", "duck", "cute", "bag charm", "gift"],
     collections: ["keychains", "gifting-products"],
     optionName: "Pack",

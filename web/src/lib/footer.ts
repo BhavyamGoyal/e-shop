@@ -10,9 +10,12 @@ export interface FooterGroup {
   links: FooterLink[];
 }
 
-export const FOOTER_ADDRESS: string[] = ["110029, Safdarjung Enclave", "New Delhi, India"];
+export const FOOTER_ADDRESS: string[] = [
+  "110029, Safdarjung Enclave",
+  "New Delhi, India",
+];
 
-export const FOOTER_TAGLINE: string = `${SITE_NAME}: 3D printed lamps, planters, desk organisers and gifts, crafted for you.`;
+export const FOOTER_TAGLINE: string = `${SITE_NAME}: 3D Printed lamps, planters, desk organisers and gifts, crafted for you.`;
 
 export const FOOTER_GROUPS: FooterGroup[] = [
   {

@@ -9,7 +9,11 @@ export const heroBannerSection: HomeSectionData = {
     {
       type: "slider",
       autoplay: 4000,
-      mobileImages: ["/banner3-mobile.webp", "/banner1-mobile.webp", "/banner-keychains-mobile.webp"],
+      mobileImages: [
+        "/banner3-mobile.webp",
+        "/banner1-mobile.webp",
+        "/banner-keychains-mobile.webp",
+      ],
       slides: [
         {
           href: "/gifting-products?minPrice=&maxPrice=&tag=custom&sort=newest",
@@ -19,7 +23,8 @@ export const heroBannerSection: HomeSectionData = {
           radius: 24,
           hero: {
             title: "Made Just For Them",
-            subtitle: "Personalised candles, resin art and 3D-printed keepsakes, crafted to order.",
+            subtitle:
+              "Personalised candles, resin art and 3D-printed keepsakes, crafted to order.",
             cta: "Create A Gift",
           },
         },
@@ -31,19 +36,21 @@ export const heroBannerSection: HomeSectionData = {
           radius: 24,
           hero: {
             title: "Light Up Every Corner",
-            subtitle: "Warm, handcrafted lamps and decor made to be gifted and loved.",
+            subtitle:
+              "Warm, handcrafted lamps and decor made to be gifted and loved.",
             cta: "Shop Decor",
           },
         },
         {
           href: "/gifting-products?minPrice=&maxPrice=&tag=keychain&sort=newest",
           image: "/banner-keychains.webp",
-          alt: "3D printed keychains",
+          alt: "3D Printed keychains",
           aspectRatio: 3,
           radius: 24,
           hero: {
             title: "Little Charms, Big Smiles",
-            subtitle: "Playful 3D-printed keychains and name tags for everyone you love.",
+            subtitle:
+              "Playful 3D-printed keychains and name tags for everyone you love.",
             cta: "Shop Keychains",
           },
         },
