@@ -1,5 +1,6 @@
 export { Card } from "./Card";
 export { FormField, type FormFieldProps } from "./FormField";
+export { IconField, type IconFieldProps } from "./IconField";
 export { ThemeOption } from "./ThemeOption";
 export { TokenSwatch } from "./TokenSwatch";
 export { ProductCard } from "./ProductCard";
