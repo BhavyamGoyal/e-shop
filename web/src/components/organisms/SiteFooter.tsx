@@ -4,7 +4,7 @@ import {
   FOOTER_TAGLINE,
   type FooterGroup,
 } from "@/lib/footer";
-import { SITE_NAME } from "@/lib/site";
+import { INSTAGRAM_URL, LOGO_PATH, SITE_NAME } from "@/lib/site";
 import { collectionController } from "@/server/controllers/collection.controller";
 import type { CollectionSummary } from "@/server/types/product.types";
 import { ContactSection } from "./ContactSection";
@@ -41,7 +41,7 @@ export async function SiteFooter({ showContact = false }: SiteFooterProps) {
           <div className="flex flex-col gap-4">
             <a href="/" className="w-fit">
               <img
-                src="/logo_v1.svg"
+                src={LOGO_PATH}
                 alt={SITE_NAME}
                 className="block h-12 w-auto"
               />
@@ -54,6 +54,19 @@ export async function SiteFooter({ showContact = false }: SiteFooterProps) {
                 <div key={line}>{line}</div>
               ))}
             </address>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer me"
+              aria-label="Instagram: @tinglet_gifts"
+              className="block w-fit transition-opacity hover:opacity-80"
+            >
+              <img
+                src="/instagram-logo.svg"
+                alt="Instagram"
+                className="block size-8"
+              />
+            </a>
           </div>
           {groups.map((group: FooterGroup) => (
             <nav key={group.title} aria-label={group.title}>

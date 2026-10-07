@@ -1,7 +1,9 @@
 import type { HeaderData } from "@/lib/website-data";
+import { CartLink } from "./CartLink";
 import { ProfileMenu } from "./ProfileMenu";
 
 const PROFILE_HREF = "/login";
+const CART_HREF = "/cart";
 
 interface SiteHeaderProps {
   header: HeaderData;
@@ -42,6 +44,8 @@ export function SiteHeader({ header }: SiteHeaderProps) {
           {actions.map((action) =>
             action.href === PROFILE_HREF ? (
               <ProfileMenu key={action.href} guestIcon={action.icon} />
+            ) : action.href === CART_HREF ? (
+              <CartLink key={action.href} href={action.href} icon={action.icon} label={action.label} />
             ) : (
             <a
               key={action.href}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClarityAnalytics, GoogleOneTap } from "@/components/organisms";
 import { DEFAULT_THEME_ID, ThemeHead, ThemeProvider, THEME_ATTRIBUTE } from "@/theme";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_IMAGE } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL, SOCIAL_IMAGE } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: "Tinglet | Crafted for you", template: `%s | ${SITE_NAME}` },
+  title: { default: SITE_TITLE, template: `%s | ${SITE_NAME}` },
   description: SITE_DESCRIPTION,
   icons: { icon: [{ url: "/fevicon.svg", type: "image/svg+xml" }], shortcut: "/fevicon.svg" },
   openGraph: { type: "website", siteName: SITE_NAME, locale: "en_IN", images: [{ url: SOCIAL_IMAGE }] },

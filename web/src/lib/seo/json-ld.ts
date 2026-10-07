@@ -1,4 +1,4 @@
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
+import { INSTAGRAM_URL, LOGO_PATH, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
 import type { Product } from "@/lib/website-data";
 import type { PublicBlog, PublicFaq } from "@/server/types/content.types";
 import type { ProductDetail, ProductVariant } from "@/server/types/product.types";
@@ -128,6 +128,9 @@ export const siteJsonLd =(): JsonLdNode[] => [
     name: SITE_NAME,
     url: SITE_URL,
     description: SITE_DESCRIPTION,
+    logo: absoluteUrl(LOGO_PATH),
+    image: absoluteUrl(LOGO_PATH),
+    sameAs: [INSTAGRAM_URL],
   },
   {
     "@context": CONTEXT,

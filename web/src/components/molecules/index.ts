@@ -14,6 +14,7 @@ export { FilterOption } from "./FilterOption";
 export { SortSelect } from "./SortSelect";
 export { ProductPrice } from "./ProductPrice";
 export { QuantityStepper } from "./QuantityStepper";
+export { CartLine } from "./CartLine";
 export { TrustGrid } from "./TrustGrid";
 export { TextAreaField, type TextAreaFieldProps } from "./TextAreaField";
 export { CheckField, type CheckFieldProps } from "./CheckField";

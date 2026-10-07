@@ -1,10 +1,9 @@
+import { MAX_QUANTITY, MIN_QUANTITY } from "@/stores/cart/Cart.store";
+
 interface QuantityStepperProps {
   value: number;
   onChange: (value: number) => void;
 }
-
-const MIN_QUANTITY = 1;
-const MAX_QUANTITY = 99;
 
 const buttonClass = "w-11 self-stretch text-xl text-(--pp-ink) transition-colors hover:text-(--pp-green)";
 

@@ -35,6 +35,7 @@ export function ProductTemplate({ header, product, related, collection }: Produc
       <SiteHeader header={header} />
       <main className="flex-1">
         <ProductView
+          handle={product.handle}
           title={product.title}
           summary={summarise(product.descriptionText)}
           breadcrumbs={<Breadcrumbs items={buildCrumbs(product, collection)} />}

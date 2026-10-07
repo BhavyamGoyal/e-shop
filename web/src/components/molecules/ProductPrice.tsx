@@ -1,9 +1,9 @@
+import { formatPrice } from "@/lib/format-price";
+
 interface ProductPriceProps {
   price: number;
   compareAtPrice: number | null;
 }
-
-const formatPrice = (value: number): string => `₹${value.toLocaleString("en-IN")}`;
 
 export function ProductPrice({ price, compareAtPrice }: ProductPriceProps) {
   const onSale: boolean = compareAtPrice !== null && compareAtPrice > price;

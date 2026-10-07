@@ -6,9 +6,11 @@ import { ProductActions } from "./ProductActions";
 import { ProductGallery } from "./ProductGallery";
 import { StickyBuyBar } from "./StickyBuyBar";
 import { VariantSelector } from "./VariantSelector";
+import type { CartItem } from "@/stores/cart/Cart.types";
 import type { MediaItem, ProductOption, ProductVariant } from "@/server/types/product.types";
 
 interface ProductViewProps {
+  handle: string;
   title: string;
   summary: string;
   breadcrumbs: ReactNode;
@@ -32,7 +34,7 @@ const isSingleDefault = (options: ProductOption[]): boolean =>
   options.length === 0 || (options.length === 1 && options[0].values.length === 1);
 
 export function ProductView(props: ProductViewProps) {
-  const { title, summary, breadcrumbs, images, options, variants, price, compareAtPrice, available } = props;
+  const { handle, title, summary, breadcrumbs, images, options, variants, price, compareAtPrice, available } = props;
   const [selected, setSelected] = useState<string[]>(() => initialSelection(options, variants));
   const [imageIndex, setImageIndex] = useState<number>(0);
 
@@ -44,6 +46,16 @@ export function ProductView(props: ProductViewProps) {
     currentMrp !== null && currentMrp > currentPrice
       ? Math.round(((currentMrp - currentPrice) / currentMrp) * 100)
       : null;
+
+  const cartItem: Omit<CartItem, "quantity"> = {
+    key: `${handle}:${variant?.id ?? "default"}`,
+    handle,
+    title,
+    variantTitle: variant && !isSingleDefault(options) ? variant.title : null,
+    image: variant?.image ?? images[0]?.url ?? null,
+    price: currentPrice,
+    compareAtPrice: currentMrp,
+  };
 
   const handleChange = (optionIndex: number, value: string): void => {
     const next: string[] = selected.map((current: string, index: number): string =>
@@ -83,7 +95,7 @@ export function ProductView(props: ProductViewProps) {
         {!isSingleDefault(options) && (
           <VariantSelector options={options} selected={selected} onChange={handleChange} />
         )}
-        <ProductActions inStock={inStock} />
+        <ProductActions inStock={inStock} item={cartItem} />
         <TrustGrid />
       </div>
       <StickyBuyBar title={title} image={images[0]?.url ?? null} price={currentPrice} inStock={inStock} />

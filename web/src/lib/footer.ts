@@ -1,4 +1,4 @@
-import { SITE_NAME } from "./site";
+import { SITE_DESCRIPTION, SITE_NAME } from "./site";
 
 export interface FooterLink {
   label: string;
@@ -11,11 +11,12 @@ export interface FooterGroup {
 }
 
 export const FOOTER_ADDRESS: string[] = [
-  "110029, Safdarjung Enclave",
+  "Safdarjung Enclave",
   "New Delhi, India",
 ];
 
-export const FOOTER_TAGLINE: string = `${SITE_NAME}: 3D Printed lamps, planters, desk organisers and gifts, crafted for you.`;
+export const FOOTER_TAGLINE: string =
+  "Thoughtful gifts, made personal. Find something special for every little moment.";
 
 export const FOOTER_GROUPS: FooterGroup[] = [
   {

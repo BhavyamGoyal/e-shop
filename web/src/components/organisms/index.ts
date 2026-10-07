@@ -5,6 +5,8 @@ export { TokenPalette } from "./TokenPalette";
 export { HeroSlider } from "./HeroSlider";
 export { HomeSection } from "./HomeSection";
 export { ProductRail } from "./ProductRail";
+export { CartLink } from "./CartLink";
+export { CartView } from "./CartView";
 export { ProfileMenu } from "./ProfileMenu";
 export { SiteHeader } from "./SiteHeader";
 export { SiteFooter } from "./SiteFooter";
