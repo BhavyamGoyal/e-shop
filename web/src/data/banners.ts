@@ -16,7 +16,7 @@ export const heroBannerSection: HomeSectionData = {
       ],
       slides: [
         {
-          href: "/gifting-products?minPrice=&maxPrice=&tag=custom&sort=newest",
+          href: "/products/custom",
           image: "/banner3.webp",
           alt: "Custom handcrafted gifts",
           aspectRatio: 3,
@@ -29,7 +29,7 @@ export const heroBannerSection: HomeSectionData = {
           },
         },
         {
-          href: "/gifting-products?minPrice=&maxPrice=&tag=decor&sort=newest",
+          href: "/products/decor",
           image: "/banner1.webp",
           alt: "Handcrafted lamps and home decor",
           aspectRatio: 3,
@@ -42,7 +42,7 @@ export const heroBannerSection: HomeSectionData = {
           },
         },
         {
-          href: "/gifting-products?minPrice=&maxPrice=&tag=keychain&sort=newest",
+          href: "/products/keychain",
           image: "/banner-keychains.webp",
           alt: "3D Printed keychains",
           aspectRatio: 3,

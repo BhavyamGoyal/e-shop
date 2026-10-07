@@ -3,6 +3,7 @@ import { absoluteUrl } from "@/lib/site";
 import { blogController } from "@/server/controllers/blog.controller";
 import { collectionController } from "@/server/controllers/collection.controller";
 import { pageController } from "@/server/controllers/page.controller";
+import { storefrontTagController } from "@/server/controllers/storefront-tag.controller";
 import type { BlogSitemapEntry, PageSitemapEntry } from "@/server/types/content.types";
 import { productController } from "@/server/controllers/product.controller";
 import type { ProductSitemapEntry } from "@/server/repositories/product.repository";
@@ -13,11 +14,12 @@ export const revalidate = 172800;
 type Entry = MetadataRoute.Sitemap[number];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [collections, products, posts, pages]: [CollectionSummary[], ProductSitemapEntry[], BlogSitemapEntry[], PageSitemapEntry[]] = await Promise.all([
+  const [collections, products, posts, pages, tags]: [CollectionSummary[], ProductSitemapEntry[], BlogSitemapEntry[], PageSitemapEntry[], string[]] = await Promise.all([
     collectionController.all(),
     productController.sitemapEntries(),
     blogController.sitemapEntries(),
     pageController.sitemapEntries(),
+    storefrontTagController.names(),
   ]);
   return [
     { url: absoluteUrl("/"), changeFrequency: "daily", priority: 1 },
@@ -45,6 +47,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: absoluteUrl(`/${collection.handle}`),
         changeFrequency: "weekly",
         priority: 0.8,
+      }),
+    ),
+    ...tags.map(
+      (tag: string): Entry => ({
+        url: absoluteUrl(`/products/${encodeURIComponent(tag)}`),
+        changeFrequency: "weekly",
+        priority: 0.6,
       }),
     ),
     ...products.map(

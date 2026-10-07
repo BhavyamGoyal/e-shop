@@ -1,6 +1,7 @@
 import { QueryError } from "@/server/http/errors";
 import { productController } from "@/server/controllers/product.controller";
 import { collectionController } from "@/server/controllers/collection.controller";
+import { storefrontTagController } from "@/server/controllers/storefront-tag.controller";
 import { parseProductQuery } from "@/server/validators/product-query";
 import type {
   CatalogFacets,
@@ -32,6 +33,26 @@ const parseQuery = (raw: RawParams): ProductQuery => {
     throw error;
   }
 };
+
+export async function buildTagCatalogData(tag: string): Promise<CatalogData | null> {
+  if (!(await storefrontTagController.exists(tag))) return null;
+
+  const query: ProductQuery = { ...parseQuery({}), tags: [tag], collections: [] };
+  const [page, facets] = await Promise.all([
+    productController.search(query),
+    productController.facets([]),
+  ]);
+
+  return {
+    title: tag,
+    description: `${page.meta.total} designs tagged ${tag}, 3D Printed to order.`,
+    basePath: `/products/${encodeURIComponent(tag)}`,
+    query,
+    facets,
+    meta: page.meta,
+    products: page.data.map(toProduct),
+  };
+}
 
 export async function buildCatalogData(
   handle: string | null,

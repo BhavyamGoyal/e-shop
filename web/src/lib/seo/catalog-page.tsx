@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/atoms";
 import { CatalogTemplate } from "@/components/templates";
-import { buildCatalogData, type CatalogData } from "@/lib/catalog";
+import { buildCatalogData, buildTagCatalogData, type CatalogData } from "@/lib/catalog";
 import type { RawParams } from "@/lib/catalog-url";
 import { buildSiteHeader } from "@/lib/home";
 import { breadcrumbJsonLd, collectionJsonLd, type Trail } from "@/lib/seo/json-ld";
@@ -12,7 +12,13 @@ export const loadCatalog = async (handle: string | null, raw: RawParams): Promis
   return catalog;
 };
 
-const trailFor = (catalog: CatalogData, handle: string | null): Trail[] => [
+export const loadTagCatalog = async (tag: string): Promise<CatalogData> => {
+  const catalog: CatalogData | null = await buildTagCatalogData(tag);
+  if (!catalog) notFound();
+  return catalog;
+};
+
+const trailFor =(catalog: CatalogData, handle: string | null): Trail[] => [
   { name: "Home", path: "/" },
   ...(handle ? [{ name: "All Products", path: "/product" }] : []),
   { name: catalog.title, path: catalog.basePath },
