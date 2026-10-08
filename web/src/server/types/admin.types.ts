@@ -33,6 +33,24 @@ export interface TagRecord extends TagFields {
 
 export type TagPatch = Partial<TagFields> & { name?: string };
 
+export interface CategoryFields {
+  image: string;
+  icon: string;
+  description: string;
+  position: number;
+  showOnHome: boolean;
+  active: boolean;
+}
+
+export interface CategoryRecord extends CategoryFields {
+  id: string;
+  name: string;
+  slug: string;
+  productCount: number;
+}
+
+export type CategoryPatch = Partial<CategoryFields> & { name?: string };
+
 export type UserRoleName = "admin" | "manager" | "customer";
 
 export interface UserRecord {
@@ -71,6 +89,7 @@ export interface ProductInput {
   vendor: string;
   productType: string;
   tags: string[];
+  categories: string[];
   collections: string[];
   descriptionHtml: string;
   price: number;

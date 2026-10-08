@@ -45,6 +45,7 @@ export function parseProductQuery(params: URLSearchParams): ProductQuery {
   const query: ProductQuery = {
     q: params.get("q")?.trim() || undefined,
     collections: list(params, "collection"),
+    categories: list(params, "category"),
     tags: list(params, "tag"),
     productTypes: list(params, "productType"),
     minPrice: decimal(params, "minPrice"),

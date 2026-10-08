@@ -77,6 +77,7 @@ function buildFilter(query: ProductQuery): FilterQuery<ProductDocument> {
     });
   }
   if (query.collections.length) clauses.push({ collections: { $in: query.collections } });
+  if (query.categories.length) clauses.push({ categories: { $in: query.categories } });
   if (query.tags.length) clauses.push({ tags: { $in: query.tags } });
   if (query.productTypes.length) clauses.push({ productType: { $in: query.productTypes } });
   if (query.minPrice !== undefined) clauses.push({ price: { $gte: query.minPrice } });

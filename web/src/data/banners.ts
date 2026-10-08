@@ -16,7 +16,7 @@ export const heroBannerSection: HomeSectionData = {
       ],
       slides: [
         {
-          href: "/products/custom",
+          href: "/product",
           image: "/banner3.webp",
           alt: "Custom handcrafted gifts",
           aspectRatio: 3,
@@ -29,7 +29,7 @@ export const heroBannerSection: HomeSectionData = {
           },
         },
         {
-          href: "/products/decor",
+          href: "/products/lamps",
           image: "/banner1.webp",
           alt: "Handcrafted lamps and home decor",
           aspectRatio: 3,
@@ -42,7 +42,7 @@ export const heroBannerSection: HomeSectionData = {
           },
         },
         {
-          href: "/products/keychain",
+          href: "/products/keychains",
           image: "/banner-keychains.webp",
           alt: "3D Printed keychains",
           aspectRatio: 3,

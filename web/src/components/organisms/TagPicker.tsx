@@ -9,6 +9,8 @@ export interface TagPickerProps {
   onChange: (next: string[]) => void;
   disabled?: boolean;
   compact?: boolean;
+  addLabel?: string;
+  emptyText?: string;
 }
 
 interface Anchor {
@@ -18,7 +20,15 @@ interface Anchor {
 
 const MENU_WIDTH = 224;
 
-export function TagPicker({ options, selected, onChange, disabled, compact }: TagPickerProps) {
+export function TagPicker({
+  options,
+  selected,
+  onChange,
+  disabled,
+  compact,
+  addLabel = "Add tags",
+  emptyText = "No tags yet. Create some in the Tags page.",
+}: TagPickerProps) {
   const [anchor, setAnchor] = useState<Anchor | null>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -62,7 +72,7 @@ export function TagPicker({ options, selected, onChange, disabled, compact }: Ta
         selected.map((name: string) => <Badge key={name}>{name}</Badge>)
       )}
       <Button size="sm" variant="outline" tone="secondary" disabled={disabled} onClick={toggleMenu}>
-        {selected.length ? "Edit" : "Add tags"}
+        {selected.length ? "Edit" : addLabel}
       </Button>
       {anchor ? (
         <div
@@ -78,7 +88,7 @@ export function TagPicker({ options, selected, onChange, disabled, compact }: Ta
               </label>
             ))
           ) : (
-            <span className="px-2 text-muted-foreground">No tags yet. Create some in the Tags page.</span>
+            <span className="px-2 text-muted-foreground">{emptyText}</span>
           )}
         </div>
       ) : null}

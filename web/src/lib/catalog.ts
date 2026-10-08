@@ -1,12 +1,13 @@
 import { QueryError } from "@/server/http/errors";
 import { productController } from "@/server/controllers/product.controller";
 import { collectionController } from "@/server/controllers/collection.controller";
-import { storefrontTagController } from "@/server/controllers/storefront-tag.controller";
+import { storefrontCategoryController } from "@/server/controllers/storefront-category.controller";
 import { parseProductQuery } from "@/server/validators/product-query";
 import type {
   CatalogFacets,
   Pagination,
   ProductQuery,
+  StorefrontCategory,
 } from "@/server/types/product.types";
 import { toSearchParams, type RawParams } from "@/lib/catalog-url";
 import { toProduct } from "@/lib/home";
@@ -34,19 +35,20 @@ const parseQuery = (raw: RawParams): ProductQuery => {
   }
 };
 
-export async function buildTagCatalogData(tag: string): Promise<CatalogData | null> {
-  if (!(await storefrontTagController.exists(tag))) return null;
+export async function buildCategoryCatalogData(slug: string): Promise<CatalogData | null> {
+  const category: StorefrontCategory | null = await storefrontCategoryController.find(slug);
+  if (!category) return null;
 
-  const query: ProductQuery = { ...parseQuery({}), tags: [tag], collections: [] };
+  const query: ProductQuery = { ...parseQuery({}), categories: [slug], tags: [], collections: [] };
   const [page, facets] = await Promise.all([
     productController.search(query),
     productController.facets([]),
   ]);
 
   return {
-    title: tag,
-    description: `${page.meta.total} designs tagged ${tag}, 3D Printed to order.`,
-    basePath: `/products/${encodeURIComponent(tag)}`,
+    title: category.name,
+    description: category.description || `${page.meta.total} ${category.name} designs, 3D Printed to order.`,
+    basePath: category.href,
     query,
     facets,
     meta: page.meta,

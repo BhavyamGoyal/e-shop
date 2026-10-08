@@ -39,6 +39,7 @@ export { AdminProductsTable } from "./AdminProductsTable";
 export { Table } from "./Table/Table";
 export type { ColumnConfig, TableProps, SortState, PaginationState } from "./Table/Table.types";
 export { TagsManager } from "./TagsManager";
+export { CategoriesManager } from "./CategoriesManager";
 export { TagPicker, type TagPickerProps } from "./TagPicker";
 export { BlogEditor } from "./BlogEditor";
 export { BlogsManager } from "./BlogsManager";

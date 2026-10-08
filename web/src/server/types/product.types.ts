@@ -12,6 +12,7 @@ export type SortOption = (typeof SORT_OPTIONS)[number];
 export interface ProductQuery {
   q?: string;
   collections: string[];
+  categories: string[];
   tags: string[];
   productTypes: string[];
   minPrice?: number;
@@ -53,17 +54,14 @@ export interface ProductPage {
   meta: Pagination;
 }
 
-export interface StorefrontTag {
+export interface StorefrontCategory {
   name: string;
+  slug: string;
   href: string;
   icon: string;
   image: string;
+  description: string;
   count: number;
-}
-
-export interface StorefrontTags {
-  header: StorefrontTag[];
-  collection: StorefrontTag[];
 }
 
 export interface CollectionSummary {

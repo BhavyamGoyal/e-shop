@@ -65,6 +65,7 @@ export const productSchema = new Schema(
     productType: String,
     tags: { type: [String], default: [] },
     collections: { type: [String], default: [], index: true },
+    categories: { type: [String], default: [], index: true },
     descriptionHtml: String,
     descriptionText: String,
     options: [optionSchema],

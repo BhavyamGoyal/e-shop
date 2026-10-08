@@ -2,7 +2,7 @@
 
 import type { ProductInput } from "@/server/types/admin.types";
 import { useEffect, useState } from "react";
-import { fetchTags } from "@/lib/admin-api";
+import { fetchCategories, fetchTags } from "@/lib/admin-api";
 import { Heading, Label } from "../atoms";
 import { CheckField, FormField, ListField, TextAreaField } from "../molecules";
 import { TagPicker } from "./TagPicker";
@@ -14,11 +14,15 @@ export interface ProductBasicsFieldsProps {
 
 export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProps) {
   const [tagOptions, setTagOptions] = useState<string[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
 
   useEffect(() => {
     fetchTags()
       .then((tags): void => setTagOptions(tags.map((tag): string => tag.name)))
       .catch((): void => setTagOptions([]));
+    fetchCategories()
+      .then((categories): void => setCategoryOptions(categories.map((category): string => category.slug)))
+      .catch((): void => setCategoryOptions([]));
   }, []);
 
   return (
@@ -55,6 +59,16 @@ export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProp
         <div className="flex flex-col gap-1.5">
           <Label>Tags</Label>
           <TagPicker options={tagOptions} selected={input.tags} onChange={(tags: string[]) => onChange({ tags })} />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label>Categories</Label>
+          <TagPicker
+            options={categoryOptions}
+            selected={input.categories}
+            onChange={(categories: string[]) => onChange({ categories })}
+            addLabel="Add categories"
+            emptyText="No categories yet."
+          />
         </div>
         <ListField
           id="collections"

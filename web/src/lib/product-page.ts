@@ -25,6 +25,7 @@ export async function buildProductPage(handle: string): Promise<ProductPageData 
   const collectionHandle: string | undefined = product.collections[0];
   const query: ProductQuery = {
     collections: collectionHandle ? [collectionHandle] : [],
+    categories: [],
     tags: [],
     productTypes: [],
     sort: "newest",

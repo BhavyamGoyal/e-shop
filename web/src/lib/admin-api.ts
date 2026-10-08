@@ -3,6 +3,8 @@ import type {
   ImageListPage,
   ImageRecord,
   ProductListPage,
+  CategoryPatch,
+  CategoryRecord,
   TagPatch,
   TagRecord,
   UserRecord,
@@ -76,6 +78,17 @@ export async function updateTag(id: string, patch: TagPatch): Promise<void> {
 
 export async function deleteTag(id: string): Promise<void> {
   await fetch(`/api/admin/tags/${id}`, { method: "DELETE" }).then(parse<{ ok: boolean }>);
+}
+
+export async function fetchCategories(): Promise<CategoryRecord[]> {
+  const body = await fetch("/api/admin/categories").then(parse<{ data: CategoryRecord[] }>);
+  return body.data;
+}
+
+export async function updateCategory(id: string, patch: CategoryPatch): Promise<void> {
+  await fetch(`/api/admin/categories/${id}`, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify(patch) }).then(
+    parse<{ ok: boolean }>,
+  );
 }
 
 export async function fetchBlogs(): Promise<BlogRow[]> {

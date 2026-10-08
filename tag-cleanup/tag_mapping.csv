@@ -1,0 +1,505 @@
+old_tag,products_using,new_tag(s) separated by |,action
+"decor",70,"",delete
+"Home Décor Item",53,"",delete
+"unique home decor",47,"",delete
+"Table Decoration",43,"Table Decoration",keep
+"Tinglet",24,"",delete
+"home decor",16,"",delete
+"Table Lamps",13,"Table Lamps",keep
+"keychain",12,"keychain",keep
+"gift",8,"Gift",rename/merge
+"Home & Kitchen",7,"Home & Kitchen",keep
+"Gifting",7,"Gift",rename/merge
+"Gift",7,"Gift",keep
+"desk organizer",7,"desk organizer",keep
+"vase",7,"vase",keep
+"Fridge magnets",6,"Fridge magnets",keep
+"kitchen decoration",6,"Home & Kitchen",rename/merge
+"planter",6,"indoor planter",rename/merge
+"Ice Cream Pint Holder",4,"Home & Kitchen",rename/merge
+"heart",4,"",delete
+"indoor planter",4,"indoor planter",keep
+"living room decor",4,"Table Decoration",rename/merge
+"pencil holder",4,"pencil holder",keep
+"valentine",4,"Valentine's Day",rename/merge
+"Incense Holder",3,"Incense Holder",keep
+"Game",3,"Chess",rename/merge
+"Chess",3,"Chess",keep
+"Coaster",3,"Coaster",keep
+"decoration",3,"",delete
+"desk decor",3,"Table Decoration",rename/merge
+"gift box",3,"Gift",rename/merge
+"holder",3,"",delete
+"incense stand",3,"Incense Holder",rename/merge
+"incense burner",3,"Incense Holder",rename/merge
+"key holder",3,"keychain",rename/merge
+"lamp",3,"Table Lamps",rename/merge
+"meditation decor",3,"Pooja & Spiritual Decor",rename/merge
+"modern vase",3,"vase",rename/merge
+"modern planter",3,"indoor planter",rename/merge
+"modern home decor",3,"",delete
+"office desk decor",3,"desk organizer",rename/merge
+"nature inspired decor",3,"indoor planter",rename/merge
+"pen holder",3,"pencil holder",rename/merge
+"plant pot",3,"indoor planter",rename/merge
+"wall decor",3,"Wall Decor",rename/merge
+"fidget",3,"Kids & Toys",rename/merge
+"kawaii",3,"Kids & Toys",rename/merge
+"Valentine’s Day",2,"Valentine's Day",rename/merge
+"ash catcher",2,"Incense Holder",rename/merge
+"Indian home decor",2,"Pooja & Spiritual Decor",rename/merge
+"Piggy Bank",2,"Piggy Bank",keep
+"art decor",2,"",delete
+"box",2,"",delete
+"Unique Chess",2,"Chess",rename/merge
+"birthday",2,"Gift",rename/merge
+"Game Stand",2,"Chess",rename/merge
+"Decorative Vase",2,"vase",rename/merge
+"catch all",2,"",delete
+"board game",2,"Chess",rename/merge
+"celebration",2,"Gift",rename/merge
+"container",2,"",delete
+"cozy lighting",2,"Table Lamps",rename/merge
+"drainage planter",2,"indoor planter",rename/merge
+"drip tray",2,"indoor planter",rename/merge
+"desk vase",2,"vase",rename/merge
+"entryway organizer",2,"desk organizer",rename/merge
+"decorative vase",2,"vase",rename/merge
+"flying",2,"Kids & Toys",rename/merge
+"gaming room decor",2,"Chess",rename/merge
+"functional decor",2,"",delete
+"flower vase",2,"vase",rename/merge
+"home accent",2,"",delete
+"incense tray",2,"Incense Holder",rename/merge
+"incense stick holder",2,"Incense Holder",rename/merge
+"jewelry box",2,"desk organizer",rename/merge
+"jewelry",2,"desk organizer",rename/merge
+"made in India",2,"",delete
+"mother",2,"Gift",rename/merge
+"nursery decor",2,"Kids & Toys",rename/merge
+"organization",2,"",delete
+"office decor",2,"desk organizer",rename/merge
+"personalized",2,"Gift",rename/merge
+"picture frame",2,"Photo Frame",rename/merge
+"plant holder",2,"indoor planter",rename/merge
+"retro",2,"Table Decoration",rename/merge
+"ribbed planter",2,"indoor planter",rename/merge
+"space-saving decor",2,"",delete
+"statement wall art",2,"Wall Decor",rename/merge
+"storage",2,"",delete
+"tabletop decor",2,"Table Decoration",rename/merge
+"tabletop frame",2,"Photo Frame",rename/merge
+"table decor",2,"Table Decoration",rename/merge
+"teacher",2,"Gift",rename/merge
+"trinket tray",2,"desk organizer",rename/merge
+"trinket",2,"desk organizer",rename/merge
+"vintage",2,"Table Decoration",rename/merge
+"wastebasket",2,"Home & Kitchen",rename/merge
+"zen decor",2,"Pooja & Spiritual Decor",rename/merge
+"flexi toy",2,"Kids & Toys",rename/merge
+"kids gift",2,"Gift|Kids & Toys",rename/merge
+"custom",2,"",delete
+"Bowl",1,"Home & Kitchen",rename/merge
+"Furniture",1,"Furniture",keep
+"Horizontal Stand",1,"Gaming & Phone Stands",rename/merge
+"bedside organizer",1,"desk organizer",rename/merge
+"bubble photo frame",1,"Photo Frame",rename/merge
+"candy holder",1,"Home & Kitchen",rename/merge
+"cat furniture",1,"Pet Furniture",rename/merge
+"Wall art",1,"Wall Decor",rename/merge
+"3D wall art",1,"Wall Decor",rename/merge
+"black decor",1,"",delete
+"Mondlampe",1,"Table Lamps",rename/merge
+"Oil Diffuser",1,"Incense Holder",rename/merge
+"animal figurine",1,"Figurines & Sculptures",rename/merge
+"animal wall light",1,"Table Lamps",rename/merge
+"ash bark planter",1,"indoor planter",rename/merge
+"Unique Vase",1,"vase",rename/merge
+"aesthetic decor",1,"",delete
+"automotive decor",1,"",delete
+"cactus coaster",1,"Coaster",rename/merge
+"cake",1,"",delete
+"calming decor",1,"Pooja & Spiritual Decor",rename/merge
+"balance toy",1,"Kids & Toys",rename/merge
+"bonsai decor",1,"indoor planter",rename/merge
+"cartoon decor",1,"Table Decoration",rename/merge
+"cat cartoon vase",1,"vase",rename/merge
+"catch-all tray",1,"Home & Kitchen",rename/merge
+"Toy",1,"Kids & Toys",rename/merge
+"Flower Vase",1,"vase",rename/merge
+"PS5 Stand",1,"Gaming & Phone Stands",rename/merge
+"RPG accessories",1,"Chess",rename/merge
+"STEM toy",1,"Kids & Toys",rename/merge
+"anniversary",1,"Gift",rename/merge
+"Japanese decor",1,"Table Decoration",rename/merge
+"MagSafe charger stand",1,"Gaming & Phone Stands",rename/merge
+"ambient lighting",1,"Table Lamps",rename/merge
+"Unique Decoration",1,"",delete
+"bedside lamp",1,"Table Lamps",rename/merge
+"cabin decor",1,"Table Decoration",rename/merge
+"Design Vase",1,"vase",rename/merge
+"Organizer",1,"desk organizer",rename/merge
+"backpacking gear",1,"",delete
+"bedroom decor",1,"Table Decoration",rename/merge
+"botanical decor",1,"indoor planter",rename/merge
+"cat lover gift",1,"Gift|Pet Furniture",rename/merge
+"Sign",1,"",delete
+"Apple Watch stand",1,"Gaming & Phone Stands",rename/merge
+"Buddha incense holder",1,"Incense Holder",rename/merge
+"Halloween decor",1,"Festive Decor",rename/merge
+"animal decor",1,"Figurines & Sculptures",rename/merge
+"assemble model",1,"",delete
+"cat bed",1,"Pet Furniture",rename/merge
+"Bathroom Organizer",1,"desk organizer",rename/merge
+"LED dragon lamp",1,"Table Lamps",rename/merge
+"Minimal Vase",1,"vase",rename/merge
+"aromatherapy",1,"Incense Holder",rename/merge
+"cake container",1,"",delete
+"DND decor",1,"Chess",rename/merge
+"Desk organiser",1,"desk organizer",rename/merge
+"Japandi decor",1,"Table Decoration",rename/merge
+"PLA wall art",1,"",delete
+"ambient light",1,"Table Lamps",rename/merge
+"Planter accessory",1,"indoor planter",rename/merge
+"Cat House",1,"Pet Furniture",rename/merge
+"Indoor Lighting",1,"Table Lamps",rename/merge
+"Love",1,"",delete
+"bird decor",1,"Figurines & Sculptures",rename/merge
+"cat house",1,"Pet Furniture",rename/merge
+"Aromatic Orchid",1,"indoor planter",rename/merge
+"anniversary gift",1,"Gift",rename/merge
+"art",1,"",delete
+"bamboo",1,"indoor planter",rename/merge
+"black pen holder",1,"pencil holder",rename/merge
+"Shelf Décor Items",1,"Wall Decor",rename/merge
+"Shelf Décor Objects",1,"Wall Decor",rename/merge
+"Xbox Series X",1,"Gaming & Phone Stands",rename/merge
+"autumn decor",1,"Festive Decor",rename/merge
+"birthday gift",1,"Gift",rename/merge
+"catch all tray",1,"",delete
+"4x6 photo frame",1,"Photo Frame",rename/merge
+"Table Top Temple",1,"Pooja & Spiritual Decor",rename/merge
+"aerial root support",1,"Plant Support",rename/merge
+"ambient lamp",1,"Table Lamps",rename/merge
+"artistic flower pot",1,"indoor planter",rename/merge
+"car lover gift",1,"Gift",rename/merge
+"collectible decor",1,"",delete
+"countertop planter",1,"indoor planter",rename/merge
+"centerpiece",1,"Table Decoration",rename/merge
+"chess board",1,"Chess",rename/merge
+"chess gift",1,"Gift|Chess",rename/merge
+"cloud planter",1,"indoor planter",rename/merge
+"colorful decor",1,"",delete
+"christmas decor",1,"Festive Decor",rename/merge
+"coin bank",1,"Piggy Bank",rename/merge
+"climbing plant support",1,"Plant Support",rename/merge
+"cone lamp",1,"Table Lamps",rename/merge
+"classical home decor",1,"Table Decoration",rename/merge
+"contemporary decor",1,"",delete
+"catchall container",1,"",delete
+"childrens room decor",1,"Kids & Toys",rename/merge
+"cloud wall decor",1,"Wall Decor",rename/merge
+"colourful wall decor",1,"",delete
+"copper wall decor",1,"Wall Decor",rename/merge
+"coin tray",1,"Piggy Bank",rename/merge
+"compact planter",1,"indoor planter",rename/merge
+"contemporary home decor",1,"",delete
+"coaster set",1,"Coaster",rename/merge
+"compact chess set",1,"Chess",rename/merge
+"coaster holder",1,"Coaster",rename/merge
+"collectible dragon",1,"Figurines & Sculptures",rename/merge
+"corner wall decor",1,"Wall Decor",rename/merge
+"coffee table",1,"Furniture",rename/merge
+"decorative planter",1,"indoor planter",rename/merge
+"custom name sign",1,"Kids & Toys",rename/merge
+"crocodile tray",1,"Home & Kitchen",rename/merge
+"cute decor",1,"",delete
+"cup cake",1,"",delete
+"custom door plaque",1,"Kids & Toys",rename/merge
+"cute wall decor",1,"Wall Decor",rename/merge
+"cute home decor",1,"",delete
+"desk planter",1,"indoor planter",rename/merge
+"desk toy",1,"Kids & Toys",rename/merge
+"desktop planter",1,"indoor planter",rename/merge
+"designer furniture",1,"Furniture",rename/merge
+"desk plant decor",1,"indoor planter",rename/merge
+"deer wall lamp",1,"Table Lamps",rename/merge
+"enchanted decor",1,"Table Decoration",rename/merge
+"dog bed",1,"Pet Furniture",rename/merge
+"easy print",1,"",delete
+"decorative tray",1,"Home & Kitchen",rename/merge
+"desk vase lamp",1,"Table Lamps|vase",rename/merge
+"devotional gift",1,"Gift",rename/merge
+"diwali decor",1,"Festive Decor",rename/merge
+"double tier box",1,"",delete
+"desktop decor",1,"Table Decoration",rename/merge
+"electronics accessory",1,"",delete
+"desk lamp",1,"Table Lamps",rename/merge
+"dragon lamp",1,"Table Lamps",rename/merge
+"desserts",1,"",delete
+"diorama art",1,"Wall Decor",rename/merge
+"dragon decor",1,"Figurines & Sculptures",rename/merge
+"dual charging station",1,"Gaming & Phone Stands",rename/merge
+"dual layer bowl",1,"Home & Kitchen",rename/merge
+"educational toy",1,"Kids & Toys",rename/merge
+"diy puzzle",1,"",delete
+"exotic bird",1,"Figurines & Sculptures",rename/merge
+"fall decoration",1,"Festive Decor",rename/merge
+"fake cake decor",1,"",delete
+"fantasy home decor",1,"Table Decoration",rename/merge
+"festive storage",1,"Festive Decor",rename/merge
+"fidget toy",1,"Kids & Toys",rename/merge
+"fake cake",1,"",delete
+"fantasy lamp",1,"Table Lamps",rename/merge
+"fairy decor",1,"Figurines & Sculptures",rename/merge
+"fantasy wall art",1,"Wall Decor",rename/merge
+"fairy door",1,"Kids & Toys",rename/merge
+"fantasy decor",1,"Table Decoration",rename/merge
+"gaming desk accessory",1,"Gaming & Phone Stands",rename/merge
+"fridge calender",1,"Fridge magnets",rename/merge
+"fire dragon",1,"Figurines & Sculptures",rename/merge
+"food & drink",1,"",delete
+"fruit decor",1,"",delete
+"food storage",1,"Home & Kitchen",rename/merge
+"functional art",1,"",delete
+"garden decor",1,"indoor planter",rename/merge
+"flower pot",1,"indoor planter",rename/merge
+"gardening",1,"indoor planter",rename/merge
+"gelato lamp",1,"Table Lamps",rename/merge
+"geometric wall art",1,"Wall Decor",rename/merge
+"food",1,"",delete
+"food and drink",1,"",delete
+"functional",1,"",delete
+"gift for gamers",1,"Gift|Chess",rename/merge
+"gift for kids",1,"Gift|Kids & Toys",rename/merge
+"gnome decor",1,"Figurines & Sculptures",rename/merge
+"hindu decor",1,"Pooja & Spiritual Decor",rename/merge
+"heart box",1,"Valentine's Day",rename/merge
+"hanging shelf",1,"Wall Decor",rename/merge
+"gift for plant lovers",1,"Gift|indoor planter",rename/merge
+"hidden drip tray",1,"indoor planter",rename/merge
+"handcrafted look",1,"",delete
+"hidden waste compartment",1,"Home & Kitchen",rename/merge
+"herb planter",1,"indoor planter",rename/merge
+"hidden storage box",1,"",delete
+"gullak",1,"Piggy Bank",rename/merge
+"home garden",1,"indoor planter",rename/merge
+"ice cream decor",1,"",delete
+"hydroponic cutting holder",1,"Plant Support",rename/merge
+"houseplants",1,"indoor planter",rename/merge
+"iPhone charging dock",1,"Gaming & Phone Stands",rename/merge
+"home organizer",1,"",delete
+"incense stick stand",1,"Incense Holder",rename/merge
+"indoor plant pot",1,"indoor planter",rename/merge
+"indoor gardening",1,"indoor planter",rename/merge
+"jewellery tray",1,"desk organizer",rename/merge
+"jewellery box",1,"desk organizer",rename/merge
+"indoor pet house",1,"Pet Furniture",rename/merge
+"jewelry organizer",1,"desk organizer",rename/merge
+"indoor plants",1,"indoor planter",rename/merge
+"interactive toy",1,"Kids & Toys",rename/merge
+"katana decor",1,"Figurines & Sculptures",rename/merge
+"kids door sign",1,"Kids & Toys",rename/merge
+"kids toy",1,"Kids & Toys",rename/merge
+"kitchen",1,"Home & Kitchen",rename/merge
+"kids room decor",1,"Kids & Toys",rename/merge
+"kids bedroom decor",1,"Kids & Toys",rename/merge
+"kids decor",1,"Kids & Toys",rename/merge
+"key tray",1,"keychain",rename/merge
+"living room organizer",1,"desk organizer",rename/merge
+"kitchen tools",1,"Home & Kitchen",rename/merge
+"kitsch decor",1,"Table Decoration",rename/merge
+"landscape frame",1,"Photo Frame",rename/merge
+"lampshade",1,"Table Lamps",rename/merge
+"lotus om agarbatti holder",1,"Incense Holder",rename/merge
+"love",1,"",delete
+"life size bird",1,"Figurines & Sculptures",rename/merge
+"love you",1,"",delete
+"large wall decor",1,"Wall Decor",rename/merge
+"macaw",1,"Figurines & Sculptures",rename/merge
+"lotus decor",1,"Pooja & Spiritual Decor",rename/merge
+"kitsch",1,"Table Decoration",rename/merge
+"knife block",1,"Home & Kitchen",rename/merge
+"kitchen planter",1,"indoor planter",rename/merge
+"mandir decor",1,"Pooja & Spiritual Decor",rename/merge
+"minimalist vase",1,"vase",rename/merge
+"minimalist planter decor",1,"indoor planter",rename/merge
+"magical door",1,"Kids & Toys",rename/merge
+"matte ivory white",1,"",delete
+"metallic wall art",1,"Wall Decor",rename/merge
+"modern desk accessory",1,"desk organizer",rename/merge
+"miniature staircase",1,"Wall Decor",rename/merge
+"minimalist decor",1,"",delete
+"minimalist desk accessory",1,"desk organizer",rename/merge
+"minimalist home decor",1,"",delete
+"melon decor",1,"",delete
+"minimalist kitchenware",1,"Home & Kitchen",rename/merge
+"modern decor",1,"",delete
+"modern garden decor",1,"indoor planter",rename/merge
+"monstera support",1,"Plant Support",rename/merge
+"moss pole",1,"Plant Support",rename/merge
+"multipurpose bowl",1,"Home & Kitchen",rename/merge
+"modern vase holder",1,"vase",rename/merge
+"modular moss pole",1,"Plant Support",rename/merge
+"modern kitchen accessory",1,"Home & Kitchen",rename/merge
+"modern wall art",1,"Wall Decor",rename/merge
+"modular bowl",1,"Home & Kitchen",rename/merge
+"multifunctional furniture",1,"Furniture",rename/merge
+"modern flower vase",1,"vase",rename/merge
+"mother's day",1,"Gift",rename/merge
+"modular planter",1,"indoor planter",rename/merge
+"multipart print",1,"",delete
+"no AMS",1,"",delete
+"om symbol decor",1,"Pooja & Spiritual Decor",rename/merge
+"organizer",1,"desk organizer",rename/merge
+"parrot",1,"Figurines & Sculptures",rename/merge
+"nut bowl",1,"Home & Kitchen",rename/merge
+"pastel decor",1,"",delete
+"pencil box",1,"pencil holder",rename/merge
+"personalized home decor",1,"Gift",rename/merge
+"pen stand",1,"pencil holder",rename/merge
+"pet furniture",1,"Pet Furniture",rename/merge
+"peanut holder",1,"Home & Kitchen",rename/merge
+"pencil case",1,"pencil holder",rename/merge
+"penguin toy",1,"Kids & Toys",rename/merge
+"personalized kids room sign",1,"Kids & Toys|Gift",rename/merge
+"pet couch",1,"Pet Furniture",rename/merge
+"pistachio bowl",1,"Home & Kitchen",rename/merge
+"philodendron support",1,"Plant Support",rename/merge
+"picnic accessories",1,"",delete
+"phone stand",1,"Gaming & Phone Stands",rename/merge
+"plant",1,"indoor planter",rename/merge
+"pistachio cup",1,"Home & Kitchen",rename/merge
+"plant decor",1,"indoor planter",rename/merge
+"plant lover",1,"indoor planter",rename/merge
+"planter lamp",1,"Table Lamps|indoor planter",rename/merge
+"plant propagation tube",1,"Plant Support",rename/merge
+"plant lover gift",1,"Gift|indoor planter",rename/merge
+"plant care",1,"indoor planter",rename/merge
+"plant support",1,"Plant Support",rename/merge
+"planter set",1,"indoor planter",rename/merge
+"print in place",1,"",delete
+"propagation vase holder",1,"Plant Support",rename/merge
+"planter with legs",1,"indoor planter",rename/merge
+"pooja room decor",1,"Pooja & Spiritual Decor",rename/merge
+"portable snack bowl",1,"Home & Kitchen",rename/merge
+"portable chess set",1,"Chess",rename/merge
+"practical home decor",1,"",delete
+"portrait frame",1,"Photo Frame",rename/merge
+"pumpkin candy bowl",1,"",delete
+"pumpkin container",1,"",delete
+"quirky vase",1,"vase",rename/merge
+"rectangular planter",1,"indoor planter",rename/merge
+"quirky home decor",1,"",delete
+"red deer decor",1,"Figurines & Sculptures",rename/merge
+"realistic stag sculpture",1,"Figurines & Sculptures",rename/merge
+"quirky decor",1,"",delete
+"removable coasters",1,"Coaster",rename/merge
+"removable insert",1,"",delete
+"removable lid container",1,"",delete
+"road trip essentials",1,"",delete
+"roly-poly toy",1,"Kids & Toys",rename/merge
+"renaissance bust planter",1,"indoor planter",rename/merge
+"rose vase",1,"vase",rename/merge
+"rustic wall decor",1,"Wall Decor",rename/merge
+"retro cake jewelry box",1,"desk organizer",rename/merge
+"sculptural decor",1,"Table Decoration",rename/merge
+"self-righting toy",1,"Kids & Toys",rename/merge
+"self watering planter",1,"indoor planter",rename/merge
+"self-watering planter",1,"indoor planter",rename/merge
+"samurai incense holder",1,"Incense Holder",rename/merge
+"self watering moss pole",1,"Plant Support",rename/merge
+"sculpture planter",1,"indoor planter",rename/merge
+"serving bowl",1,"Home & Kitchen",rename/merge
+"screw lid cup",1,"",delete
+"snack bowl",1,"Home & Kitchen",rename/merge
+"soft lighting",1,"Table Lamps",rename/merge
+"shell disposal bowl",1,"Home & Kitchen",rename/merge
+"small space plant decor",1,"indoor planter",rename/merge
+"spiral vase",1,"vase",rename/merge
+"spiral wall art",1,"Wall Decor",rename/merge
+"snack container",1,"Home & Kitchen",rename/merge
+"shell compartment",1,"Home & Kitchen",rename/merge
+"single stem holder",1,"Plant Support",rename/merge
+"shelf decor",1,"Wall Decor",rename/merge
+"spiritual decor",1,"Pooja & Spiritual Decor",rename/merge
+"stag wall lamp",1,"Table Lamps",rename/merge
+"stationery organizer",1,"pencil holder",rename/merge
+"spiritual home decor",1,"Pooja & Spiritual Decor",rename/merge
+"stone effect frame",1,"Photo Frame",rename/merge
+"statement piece",1,"",delete
+"stackable moss pole",1,"Plant Support",rename/merge
+"staircase wall art",1,"Wall Decor",rename/merge
+"square planter",1,"indoor planter",rename/merge
+"statement decor",1,"",delete
+"storage bowl",1,"Home & Kitchen",rename/merge
+"sweet",1,"",delete
+"study table organizer",1,"desk organizer",rename/merge
+"succulent pot",1,"indoor planter",rename/merge
+"tabletop game",1,"Chess",rename/merge
+"summer decor",1,"Festive Decor",rename/merge
+"strategy game",1,"Chess",rename/merge
+"sushi roll decor",1,"",delete
+"tabletop lamp",1,"Table Lamps",rename/merge
+"tabletop tray",1,"Home & Kitchen",rename/merge
+"tom cat vase",1,"vase",rename/merge
+"textured planter",1,"indoor planter",rename/merge
+"textured wall decor",1,"Wall Decor",rename/merge
+"tire pen holder",1,"pencil holder",rename/merge
+"tissue box holder",1,"desk organizer",rename/merge
+"tabletop vase",1,"vase",rename/merge
+"traditional indian decor",1,"Pooja & Spiritual Decor",rename/merge
+"trash can",1,"Home & Kitchen",rename/merge
+"travel chess",1,"Chess",rename/merge
+"travel snack cup",1,"",delete
+"tree picture frame",1,"Photo Frame",rename/merge
+"tree trunk",1,"indoor planter",rename/merge
+"tree bark planter",1,"indoor planter",rename/merge
+"trinket box",1,"desk organizer",rename/merge
+"unique wall hanging",1,"",delete
+"unique photo frame",1,"Photo Frame",rename/merge
+"unique lamp",1,"Table Lamps",rename/merge
+"tyre pen holder",1,"pencil holder",rename/merge
+"unique plant pot",1,"indoor planter",rename/merge
+"tube vase holder",1,"Plant Support",rename/merge
+"vanity organizer",1,"desk organizer",rename/merge
+"vase with light",1,"Table Lamps|vase",rename/merge
+"vintage home decor",1,"Table Decoration",rename/merge
+"valentine's day",1,"Valentine's Day",rename/merge
+"wall mount frame",1,"Photo Frame",rename/merge
+"wall planter",1,"indoor planter|Wall Decor",rename/merge
+"wall shelf",1,"Wall Decor",rename/merge
+"wall mounted lamp",1,"Table Lamps",rename/merge
+"wall mounted planter",1,"indoor planter|Wall Decor",rename/merge
+"wall vase",1,"vase|Wall Decor",rename/merge
+"warrior decor",1,"Figurines & Sculptures",rename/merge
+"wedding gift",1,"Gift",rename/merge
+"whimsical decor",1,"Table Decoration",rename/merge
+"welcome room sign",1,"Kids & Toys",rename/merge
+"water reservoir",1,"",delete
+"whimsical home decor",1,"Table Decoration",rename/merge
+"windowsill planter",1,"indoor planter",rename/merge
+"watch charging dock",1,"Gaming & Phone Stands",rename/merge
+"watermelon bowl",1,"",delete
+"wobble penguin",1,"Kids & Toys",rename/merge
+"yoga decor",1,"Pooja & Spiritual Decor",rename/merge
+"zen desk decor",1,"Pooja & Spiritual Decor",rename/merge
+"wireless charger holder",1,"Gaming & Phone Stands",rename/merge
+"windowsill vase",1,"vase",rename/merge
+"bag charm",1,"keychain",rename/merge
+"bag tag",1,"keychain",rename/merge
+"cat",1,"Pet Furniture",rename/merge
+"clicker",1,"Kids & Toys",rename/merge
+"custom name",1,"Kids & Toys",rename/merge
+"cute",1,"",delete
+"dessert",1,"",delete
+"dinosaur",1,"Figurines & Sculptures",rename/merge
+"duck",1,"Figurines & Sculptures",rename/merge
+"dumpling",1,"",delete
+"figurine",1,"Figurines & Sculptures",rename/merge
+"kitty",1,"Pet Furniture",rename/merge
+"knitted",1,"",delete
+"macaron",1,"",delete
+"octopus",1,"Figurines & Sculptures",rename/merge
+"personalised",1,"Gift",rename/merge
+"waffle",1,"",delete

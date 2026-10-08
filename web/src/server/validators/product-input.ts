@@ -69,6 +69,7 @@ export function parseProductInput(payload: unknown): ProductInput {
     vendor: text(raw.vendor),
     productType: text(raw.productType),
     tags: strings(raw.tags),
+    categories: strings(raw.categories),
     collections: strings(raw.collections).map(slugify),
     descriptionHtml: typeof raw.descriptionHtml === "string" ? raw.descriptionHtml : "",
     price: amount(raw.price, "Price"),

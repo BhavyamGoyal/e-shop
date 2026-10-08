@@ -1,11 +1,11 @@
 import { collectionController } from "@/server/controllers/collection.controller";
-import { storefrontTagController } from "@/server/controllers/storefront-tag.controller";
+import { storefrontCategoryController } from "@/server/controllers/storefront-category.controller";
 import { productController } from "@/server/controllers/product.controller";
 import type {
   CollectionSummary,
   ProductQuery,
   ProductSummary,
-  StorefrontTag,
+  StorefrontCategory,
 } from "@/server/types/product.types";
 import { heroBannerSection, promoBannerSection } from "@/data/banners";
 import type {
@@ -27,6 +27,7 @@ const ICON_BASE = "https://static-assets-prod.fnp.com/icons/web";
 
 const baseQuery: ProductQuery = {
   collections: [],
+  categories: [],
   tags: [],
   productTypes: [],
   sort: "newest",
@@ -45,14 +46,14 @@ export const toProduct = (product: ProductSummary): Product => ({
     : undefined,
 });
 
-const toTile = (tag: StorefrontTag): Tile => ({
-  href: tag.href,
-  image: tag.image,
-  alt: tag.name,
+const toTile = (category: StorefrontCategory): Tile => ({
+  href: category.href,
+  image: category.image,
+  alt: category.name,
   aspectRatio: 1,
   radius: 16,
   caption: {
-    text: `${tag.name} (${tag.count})`,
+    text: `${category.name} (${category.count})`,
     placement: "below",
     color: "var(--foreground)",
     weight: 600,
@@ -93,7 +94,7 @@ const heading = (
     : undefined,
 });
 
-export function buildHeader(tags: StorefrontTag[]): HeaderData {
+export function buildHeader(categories: StorefrontCategory[]): HeaderData {
   return {
     logo: { href: "/", text: BRAND, tagline: TAGLINE },
     location: {
@@ -119,10 +120,10 @@ export function buildHeader(tags: StorefrontTag[]): HeaderData {
         label: "Hi Guest",
       },
     ],
-    nav: tags.map((tag: StorefrontTag) => ({
-      href: tag.href,
-      icon: tag.icon,
-      label: tag.name,
+    nav: categories.map((category: StorefrontCategory) => ({
+      href: category.href,
+      icon: category.icon,
+      label: category.name,
     })),
   };
 }
@@ -130,9 +131,9 @@ export function buildHeader(tags: StorefrontTag[]): HeaderData {
 export const buildSiteHeader = (): HeaderData => buildHeader([]);
 
 export async function buildHomeData(): Promise<WebsiteData> {
-  const [collections, flagged] = await Promise.all([
+  const [collections, homeCategories] = await Promise.all([
     collectionController.all(),
-    storefrontTagController.flagged(),
+    storefrontCategoryController.home(),
   ]);
   const categories = collections.filter(
     (collection) => collection.handle !== FEATURED_HANDLE,
@@ -175,7 +176,7 @@ export async function buildHomeData(): Promise<WebsiteData> {
           type: "tileScroller",
           gap: 20,
           visible: 6,
-          tiles: flagged.collection.map(toTile),
+          tiles: homeCategories.map(toTile),
         },
       ],
     },
@@ -222,5 +223,5 @@ export async function buildHomeData(): Promise<WebsiteData> {
     },
   ];
 
-  return { header: buildHeader(flagged.header), sections };
+  return { header: buildHeader(homeCategories), sections };
 }

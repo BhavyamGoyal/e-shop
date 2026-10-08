@@ -1,0 +1,26 @@
+new_tag,group,old_tags_merged,product_assignments_estimate,header,collection
+"Table Decoration","Product type",24,75,true,true
+"Table Lamps","Product type",26,41,true,true
+"indoor planter","Product type",61,79,true,true
+"vase","Product type",23,35,false,true
+"Incense Holder","Product type",12,21,false,true
+"keychain","Product type",5,18,true,true
+"Coaster","Product type",5,7,true,true
+"Fridge magnets","Product type",2,7,true,true
+"desk organizer","Product type",24,38,true,true
+"pencil holder","Product type",9,14,false,true
+"Photo Frame","Product type",10,12,false,false
+"Chess","Product type",16,24,false,true
+"Piggy Bank","Product type",4,5,false,true
+"Plant Support","Product type",14,14,false,false
+"Wall Decor","Product type",27,30,false,false
+"Figurines & Sculptures","Product type",20,20,false,false
+"Gaming & Phone Stands","Product type",11,11,false,false
+"Home & Kitchen","Product type",32,47,false,true
+"Pet Furniture","Product type",11,11,false,false
+"Furniture","Product type",4,4,false,false
+"Kids & Toys","Audience / theme",32,40,false,false
+"Gift","Occasion",26,53,true,true
+"Valentine's Day","Occasion",4,8,false,false
+"Festive Decor","Occasion",7,7,false,false
+"Pooja & Spiritual Decor","Theme",15,19,false,false
