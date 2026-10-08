@@ -50,8 +50,8 @@ interface ColumnLayoutParams<TRow> {
 }
 
 function useRoutePattern(): string {
-  const pathname = usePathname();
-  const params = useParams();
+  const pathname: string = usePathname() ?? "";
+  const params = useParams() ?? {};
 
   return useMemo<string>(() => {
     const dynamic = new Map<string, string>();

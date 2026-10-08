@@ -5,11 +5,14 @@ import { AdminPage } from "@/components/templates";
 
 const SECTIONS: { href: string; title: string; text: string }[] = [
   { href: "/admin/products", title: "Products", text: "View, add, edit and delete products and their details." },
+  { href: "/admin/categories", title: "Categories", text: "Create, rename and delete product categories." },
   { href: "/admin/tags", title: "Tags", text: "Create, rename and delete tags shared by products." },
   { href: "/admin/blogs", title: "Blogs", text: "Write, edit, publish and delete blog posts." },
   { href: "/admin/faqs", title: "FAQs", text: "Add, edit and remove FAQs, optionally linked to a blog post." },
   { href: "/admin/pages", title: "Pages", text: "Edit About, Privacy Policy and any other text page in Markdown." },
   { href: "/admin/images", title: "Images", text: "Upload and delete images stored in Vercel Blob." },
+  { href: "/admin/queries", title: "Queries", text: "Read and manage customer queries." },
+  { href: "/admin/instagram", title: "Instagram", text: "Upload or sync Instagram insights and view followers, reach, posts and audience." },
   { href: "/admin/users", title: "Users", text: "See registered users and manage their roles." },
 ];
 

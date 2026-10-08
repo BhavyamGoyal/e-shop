@@ -2,7 +2,7 @@ import { collectionController } from "@/server/controllers/collection.controller
 import { productController } from "@/server/controllers/product.controller";
 import { NotFoundError } from "@/server/http/errors";
 import type { ProductDetail, ProductQuery } from "@/server/types/product.types";
-import { toProduct } from "@/lib/home";
+import { toProduct } from "@/lib/product-mapper";
 import type { Product } from "@/lib/website-data";
 
 export interface ProductPageData {

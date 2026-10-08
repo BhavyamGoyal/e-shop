@@ -1,6 +1,5 @@
-import type { Metadata } from "next";
-import { SITE_NAME } from "@/lib/site";
-import type { PublicBlog } from "@/server/types/content.types";
+import type { PublicBlog, PublicPage } from "@/server/types/content.types";
+import type { SeoMeta } from "./seo-meta";
 
 const TITLE_LIMIT = 70;
 const DESCRIPTION_LIMIT = 160;
@@ -10,24 +9,20 @@ const clip = (text: string, limit: number): string => {
   return flat.length > limit ? `${flat.slice(0, limit - 1).trimEnd()}…` : flat;
 };
 
-export function blogMetadata(post: PublicBlog): Metadata {
-  const path: string = `/blog/${post.slug}`;
-  const title: string = clip(post.seoTitle ?? post.title, TITLE_LIMIT);
-  const description: string = clip(post.seoDescription ?? post.excerpt, DESCRIPTION_LIMIT);
+export const pageMetadata = (page: PublicPage): SeoMeta => ({
+  title: page.title,
+  description: page.description,
+  canonical: `/${page.url}`,
+});
+
+export function blogMetadata(post: PublicBlog): SeoMeta {
   return {
-    title,
-    description,
-    alternates: { canonical: path },
-    openGraph: {
-      type: "article",
-      siteName: SITE_NAME,
-      title,
-      description,
-      url: path,
-      publishedTime: post.publishedAt ?? undefined,
-      modifiedTime: post.updatedAt,
-      images: post.coverImage ? [{ url: post.coverImage }] : undefined,
-    },
-    twitter: { card: "summary_large_image", title, description, images: post.coverImage ? [post.coverImage] : undefined },
+    title: clip(post.seoTitle ?? post.title, TITLE_LIMIT),
+    description: clip(post.seoDescription ?? post.excerpt, DESCRIPTION_LIMIT),
+    canonical: `/blog/${post.slug}`,
+    image: post.coverImage ?? undefined,
+    ogType: "article",
+    publishedTime: post.publishedAt ?? undefined,
+    modifiedTime: post.updatedAt,
   };
 }

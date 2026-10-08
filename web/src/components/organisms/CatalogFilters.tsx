@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FilterGroup, FilterOption } from "../molecules";
 import type { CatalogFacets, FacetValue, ProductQuery } from "@/server/types/product.types";
 
@@ -73,9 +74,14 @@ export function CatalogFilters({ facets, query, basePath }: CatalogFiltersProps)
         </FilterGroup>
       )}
       {active > 0 && (
-        <a href={basePath} className="text-sm text-muted-foreground underline hover:text-foreground">
+        <Link
+          href={basePath}
+          shallow
+          scroll={false}
+          className="text-sm text-muted-foreground underline hover:text-foreground"
+        >
           Remove all
-        </a>
+        </Link>
       )}
     </div>
   );

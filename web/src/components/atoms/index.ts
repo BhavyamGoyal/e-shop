@@ -4,6 +4,7 @@ export { Button, type ButtonProps } from "./Button";
 export { Heading, type HeadingProps } from "./Heading";
 export { Input } from "./Input";
 export { JsonLd } from "./JsonLd";
+export { Seo } from "./Seo";
 export { Label } from "./Label";
 export { Swatch, type SwatchProps } from "./Swatch";
 export { Text, type TextProps } from "./Text";

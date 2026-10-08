@@ -2,15 +2,12 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin, requireStaff } from "../auth/guard";
 import { NotFoundError, ValidationError } from "../http/errors";
 import { blogRepository, type StoredBlog } from "../repositories/blog.repository";
-import { faqRepository, type StoredFaq } from "../repositories/faq.repository";
+import { faqRepository } from "../repositories/faq.repository";
+import { toIso } from "../services/storefront-blog.service";
 import type {
   BlogEditorData,
   BlogInput,
   BlogRow,
-  BlogSitemapEntry,
-  PublicBlog,
-  PublicBlogSummary,
-  PublicFaq,
 } from "../types/content.types";
 
 const EMPTY_INPUT: BlogInput = {
@@ -61,22 +58,6 @@ const toInput = (blog: StoredBlog): BlogInput => ({
   published: blog.published ?? false,
   seoTitle: blog.seoTitle ?? "",
   seoDescription: blog.seoDescription ?? "",
-});
-
-const toIso = (date: Date | null | undefined): string | null => (date ? new Date(date).toISOString() : null);
-
-const toSummary = (blog: StoredBlog): PublicBlogSummary => ({
-  slug: blog.slug,
-  title: blog.title,
-  excerpt: blog.excerpt ?? "",
-  coverImage: blog.coverImage || null,
-  publishedAt: toIso(blog.publishedAt),
-});
-
-const toPublicFaq = (faq: StoredFaq): PublicFaq => ({
-  id: faq._id.toString(),
-  question: faq.question,
-  answer: faq.answer,
 });
 
 const resolvePublishedAt = (published: boolean, existing: Date | null | undefined): Date | null =>
@@ -139,27 +120,5 @@ export const blogController = {
     if (!(await blogRepository.findById(id))) throw new NotFoundError("Blog post not found");
     await blogRepository.remove(id);
     refreshStorefront();
-  },
-
-  async published(): Promise<PublicBlogSummary[]> {
-    return (await blogRepository.listPublished()).map(toSummary);
-  },
-
-  async publicBySlug(slug: string): Promise<PublicBlog | null> {
-    const blog: StoredBlog | null = await blogRepository.findPublishedBySlug(slug);
-    if (!blog) return null;
-    const faqs: StoredFaq[] = await faqRepository.listPublishedForBlog(blog._id.toString());
-    return {
-      ...toSummary(blog),
-      bodyHtml: blog.bodyHtml ?? "",
-      seoTitle: blog.seoTitle || null,
-      seoDescription: blog.seoDescription || null,
-      updatedAt: new Date(blog.updatedAt).toISOString(),
-      faqs: faqs.map(toPublicFaq),
-    };
-  },
-
-  sitemapEntries(): Promise<BlogSitemapEntry[]> {
-    return blogRepository.sitemapEntries();
   },
 };

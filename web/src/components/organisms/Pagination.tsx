@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { buildQueryString } from "@/lib/catalog-url";
 import type { Pagination as PaginationMeta, ProductQuery } from "@/server/types/product.types";
@@ -31,26 +32,27 @@ export function Pagination({ meta, query, basePath }: PaginationProps) {
   return (
     <nav aria-label="Pagination" className="mt-10 flex flex-wrap items-center justify-center gap-2">
       {meta.page > 1 && (
-        <a href={href(meta.page - 1)} className={linkClass(false)}>
+        <Link href={href(meta.page - 1)} shallow className={linkClass(false)}>
           Previous
-        </a>
+        </Link>
       )}
       {pages.map((page: number, index: number) => (
         <span key={page} className="flex items-center gap-2">
           {index > 0 && page - pages[index - 1] > 1 && <span className="text-muted-foreground">…</span>}
-          <a
+          <Link
             href={href(page)}
+            shallow
             aria-current={page === meta.page ? "page" : undefined}
             className={linkClass(page === meta.page)}
           >
             {page}
-          </a>
+          </Link>
         </span>
       ))}
       {meta.page < meta.totalPages && (
-        <a href={href(meta.page + 1)} className={linkClass(false)}>
+        <Link href={href(meta.page + 1)} shallow className={linkClass(false)}>
           Next
-        </a>
+        </Link>
       )}
     </nav>
   );

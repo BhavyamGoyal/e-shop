@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/site";
-import { blogController } from "@/server/controllers/blog.controller";
+import { storefrontBlogs } from "@/server/services/storefront-blog.service";
 import { collectionController } from "@/server/controllers/collection.controller";
 import { pageController } from "@/server/controllers/page.controller";
 import { storefrontCategoryController } from "@/server/controllers/storefront-category.controller";
@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [collections, products, posts, pages, categories]: [CollectionSummary[], ProductSitemapEntry[], BlogSitemapEntry[], PageSitemapEntry[], string[]] = await Promise.all([
     collectionController.all(),
     productController.sitemapEntries(),
-    blogController.sitemapEntries(),
+    storefrontBlogs.sitemapEntries(),
     pageController.sitemapEntries(),
     storefrontCategoryController.slugs(),
   ]);

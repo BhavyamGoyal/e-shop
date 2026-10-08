@@ -4,14 +4,13 @@ import { productController } from "@/server/controllers/product.controller";
 import type {
   CollectionSummary,
   ProductQuery,
-  ProductSummary,
   StorefrontCategory,
 } from "@/server/types/product.types";
+import { toProduct } from "@/lib/product-mapper";
 import { heroBannerSection, promoBannerSection } from "@/data/banners";
 import type {
   HeaderData,
   HomeSectionData,
-  Product,
   Tile,
   WebsiteData,
 } from "@/lib/website-data";
@@ -34,17 +33,6 @@ const baseQuery: ProductQuery = {
   page: 1,
   limit: RAIL_SIZE,
 };
-
-export const toProduct = (product: ProductSummary): Product => ({
-  href: `/product/${product.handle}`,
-  image: product.image ?? "",
-  name: product.title,
-  price: product.price,
-  mrp: product.compareAtPrice ?? undefined,
-  discountLabel: product.discountPercent
-    ? `${product.discountPercent}% OFF`
-    : undefined,
-});
 
 const toTile = (category: StorefrontCategory): Tile => ({
   href: category.href,

@@ -5,34 +5,15 @@ import {
   type FooterGroup,
 } from "@/lib/footer";
 import { INSTAGRAM_URL, LOGO_PATH, SITE_NAME } from "@/lib/site";
-import { collectionController } from "@/server/controllers/collection.controller";
-import type { CollectionSummary } from "@/server/types/product.types";
 import { ContactSection } from "./ContactSection";
 
-const MAX_SHOP_LINKS: number = 6;
-
-const loadShopGroup = async (): Promise<FooterGroup> => {
-  const collections: CollectionSummary[] = await collectionController.all();
-  return {
-    title: "Shop",
-    links: [
-      { label: "All Products", href: "/product" },
-      ...collections
-        .slice(0, MAX_SHOP_LINKS)
-        .map((collection: CollectionSummary) => ({
-          label: collection.title,
-          href: `/${collection.handle}`,
-        })),
-    ],
-  };
-};
-
 interface SiteFooterProps {
+  shop: FooterGroup;
   showContact?: boolean;
 }
 
-export async function SiteFooter({ showContact = false }: SiteFooterProps) {
-  const groups: FooterGroup[] = [await loadShopGroup(), ...FOOTER_GROUPS];
+export function SiteFooter({ shop, showContact = false }: SiteFooterProps) {
+  const groups: FooterGroup[] = [shop, ...FOOTER_GROUPS];
   return (
     <div className="mt-auto w-full">
       {showContact && <ContactSection />}

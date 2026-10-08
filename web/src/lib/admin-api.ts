@@ -16,7 +16,7 @@ interface ErrorBody {
   error?: string;
 }
 
-async function parse<T>(response: Response): Promise<T> {
+export async function parse<T>(response: Response): Promise<T> {
   const body: T & ErrorBody = await response.json();
   if (!response.ok) throw new Error(body.error ?? "Request failed");
   return body;
@@ -57,7 +57,7 @@ export function fetchProducts(request: ProductsRequest): Promise<ProductListPage
   return fetch(`/api/admin/products?${params.toString()}`).then(parse<ProductListPage>);
 }
 
-const JSON_HEADERS: HeadersInit = { "Content-Type": "application/json" };
+export const JSON_HEADERS: HeadersInit = { "Content-Type": "application/json" };
 
 export async function fetchTags(): Promise<TagRecord[]> {
   const body = await fetch("/api/admin/tags").then(parse<{ data: TagRecord[] }>);

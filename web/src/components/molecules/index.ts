@@ -24,3 +24,6 @@ export { UploadButton, type UploadButtonProps } from "./UploadButton";
 export { PagerBar, type PagerBarProps } from "./PagerBar";
 export { ListField, type ListFieldProps } from "./ListField";
 export { ImageSlot, type ImageSlotProps } from "./ImageSlot";
+export { MetricCard, type MetricCardProps } from "./MetricCard";
+export { TrendChart, type TrendChartProps, type TrendPoint } from "./TrendChart";
+export { BarList, type BarListProps, type BarItem } from "./BarList";

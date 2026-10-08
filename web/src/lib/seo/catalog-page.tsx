@@ -1,44 +1,35 @@
-import { notFound } from "next/navigation";
-import { JsonLd } from "@/components/atoms";
+import { JsonLd, Seo } from "@/components/atoms";
 import { CatalogTemplate } from "@/components/templates";
-import { buildCatalogData, buildCategoryCatalogData, type CatalogData } from "@/lib/catalog";
-import type { RawParams } from "@/lib/catalog-url";
-import { buildSiteHeader } from "@/lib/home";
+import type { CatalogData } from "@/lib/catalog";
+import type { FooterGroup } from "@/lib/footer";
 import { breadcrumbJsonLd, collectionJsonLd, type Trail } from "@/lib/seo/json-ld";
+import { catalogMetadata } from "@/lib/seo/metadata";
+import type { HeaderData } from "@/lib/website-data";
 
-export const loadCatalog = async (handle: string | null, raw: RawParams): Promise<CatalogData> => {
-  const catalog: CatalogData | null = await buildCatalogData(handle, raw);
-  if (!catalog) notFound();
-  return catalog;
-};
-
-export const loadCategoryCatalog = async (slug: string): Promise<CatalogData> => {
-  const catalog: CatalogData | null = await buildCategoryCatalogData(slug);
-  if (!catalog) notFound();
-  return catalog;
-};
-
-const trailFor =(catalog: CatalogData, handle: string | null): Trail[] => [
+const trailFor = (catalog: CatalogData, handle: string | null): Trail[] => [
   { name: "Home", path: "/" },
   ...(handle ? [{ name: "All Products", path: "/product" }] : []),
   { name: catalog.title, path: catalog.basePath },
 ];
 
-interface CatalogPageProps {
+export interface CatalogPageProps {
   catalog: CatalogData;
   handle: string | null;
+  header: HeaderData;
+  shop: FooterGroup;
 }
 
-export function CatalogPage({ catalog, handle }: CatalogPageProps) {
+export function CatalogPage({ catalog, handle, header, shop }: CatalogPageProps) {
   return (
     <>
+      <Seo {...catalogMetadata(catalog)} />
       <JsonLd
         data={[
           collectionJsonLd(catalog.title, catalog.description, catalog.basePath, catalog.products),
           breadcrumbJsonLd(trailFor(catalog, handle)),
         ]}
       />
-      <CatalogTemplate header={buildSiteHeader()} catalog={catalog} />
+      <CatalogTemplate header={header} shop={shop} catalog={catalog} />
     </>
   );
 }

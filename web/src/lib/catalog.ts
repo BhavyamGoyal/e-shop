@@ -10,7 +10,7 @@ import type {
   StorefrontCategory,
 } from "@/server/types/product.types";
 import { toSearchParams, type RawParams } from "@/lib/catalog-url";
-import { toProduct } from "@/lib/home";
+import { toProduct } from "@/lib/product-mapper";
 import type { Product } from "@/lib/website-data";
 
 export interface CatalogData {

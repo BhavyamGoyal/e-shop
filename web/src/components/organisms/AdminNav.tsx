@@ -4,15 +4,6 @@ import { Button, Text } from "../atoms";
 
 const LINKS: { href: string; label: string }[] = [
   { href: "/admin", label: "Dashboard" },
-  { href: "/admin/products", label: "Products" },
-  { href: "/admin/categories", label: "Categories" },
-  { href: "/admin/tags", label: "Tags" },
-  { href: "/admin/blogs", label: "Blogs" },
-  { href: "/admin/faqs", label: "FAQs" },
-  { href: "/admin/pages", label: "Pages" },
-  { href: "/admin/images", label: "Images" },
-  { href: "/admin/queries", label: "Queries" },
-  { href: "/admin/users", label: "Users" },
 ];
 
 export function AdminNav({ email }: { email: string }) {

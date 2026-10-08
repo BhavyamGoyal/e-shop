@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, type ReactNode } from "react";
-import { loginAction, registerAction, type AuthState } from "@/server/actions/auth.actions";
+import { useState, type FormEvent, type ReactNode } from "react";
+import { postAuth } from "@/lib/auth-api";
 import { Button, Heading, Text } from "../atoms";
 import { AlertMessage, IconField } from "../molecules";
 import { GoogleSignInButton } from "./GoogleSignInButton";
@@ -46,16 +46,32 @@ const COPY: Record<
   },
 };
 
-const INITIAL: AuthState = { error: null };
-
 export function AuthForm({ mode, next }: AuthFormProps) {
-  const [state, action, pending] = useActionState(mode === "login" ? loginAction : registerAction, INITIAL);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState<boolean>(false);
   const copy = COPY[mode];
   const altHref: string = next ? `${copy.altHref}?next=${encodeURIComponent(next)}` : copy.altHref;
 
+  const submit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault();
+    const data: FormData = new FormData(event.currentTarget);
+    const payload: Record<string, string> = { next };
+    data.forEach((value: FormDataEntryValue, key: string): void => {
+      if (typeof value === "string") payload[key] = value;
+    });
+    setPending(true);
+    setError(null);
+    try {
+      window.location.assign(await postAuth(mode, payload));
+    } catch (caught: unknown) {
+      setError(caught instanceof Error ? caught.message : "Something went wrong");
+      setPending(false);
+    }
+  };
+
   return (
     <form
-      action={action}
+      onSubmit={submit}
       className="flex w-full max-w-sm flex-col gap-4 rounded-3xl border border-surface/60 bg-surface/60 p-8 shadow-xl backdrop-blur-md"
     >
       <span className="mx-auto flex size-12 items-center justify-center rounded-xl bg-background text-foreground shadow-sm">
@@ -84,7 +100,7 @@ export function AuthForm({ mode, next }: AuthFormProps) {
         hint={mode === "register" ? "At least 8 characters" : undefined}
         required
       />
-      {state.error ? <AlertMessage tone="danger" message={state.error} /> : null}
+      {error ? <AlertMessage tone="danger" message={error} /> : null}
       <Button type="submit" disabled={pending} className="h-11 rounded-lg bg-foreground text-background">
         {pending ? "Please wait..." : copy.submit}
       </Button>

@@ -1,13 +1,15 @@
 import type { PublicFaq } from "@/server/types/content.types";
 import { FaqAccordion, HomeSection, SiteFooter, SiteHeader } from "../organisms";
+import type { FooterGroup } from "@/lib/footer";
 import type { WebsiteData } from "@/lib/website-data";
 
 interface HomeTemplateProps {
   data: WebsiteData;
   faqs: PublicFaq[];
+  shop: FooterGroup;
 }
 
-export function HomeTemplate({ data, faqs }: HomeTemplateProps) {
+export function HomeTemplate({ data, faqs, shop }: HomeTemplateProps) {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <SiteHeader header={data.header} />
@@ -22,7 +24,7 @@ export function HomeTemplate({ data, faqs }: HomeTemplateProps) {
           </section>
         )}
       </main>
-      <SiteFooter showContact />
+      <SiteFooter shop={shop} showContact />
     </div>
   );
 }

@@ -52,3 +52,4 @@ export { BlogList } from "./BlogList";
 export { BlogArticle } from "./BlogArticle";
 export { UsersManager } from "./UsersManager";
 export { QueriesManager } from "./QueriesManager";
+export { InstagramDashboard } from "./InstagramDashboard";

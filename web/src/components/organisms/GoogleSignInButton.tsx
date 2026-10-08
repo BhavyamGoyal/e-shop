@@ -3,7 +3,7 @@
 import { GoogleAuthProvider, getAuth, signInWithPopup, signOut, type UserCredential } from "firebase/auth";
 import { useState } from "react";
 import { app } from "@/firebase";
-import { googleLoginAction } from "@/server/actions/auth.actions";
+import { postAuth } from "@/lib/auth-api";
 import { Button } from "../atoms";
 import { AlertMessage } from "../molecules";
 
@@ -23,14 +23,12 @@ export function GoogleSignInButton({ next }: GoogleSignInButtonProps) {
       const credential: UserCredential = await signInWithPopup(auth, new GoogleAuthProvider());
       const idToken: string = await credential.user.getIdToken();
       await signOut(auth);
-      const result = await googleLoginAction(idToken, next);
-      if (result.error) setError(result.error);
+      window.location.assign(await postAuth("google", { idToken, next }));
     } catch (caught: unknown) {
       const code: string = (caught as { code?: string }).code ?? "";
       if (code !== "auth/popup-closed-by-user" && code !== "auth/cancelled-popup-request") {
-        setError("Google sign-in failed. Please try again.");
+        setError(caught instanceof Error && !code ? caught.message : "Google sign-in failed. Please try again.");
       }
-    } finally {
       setPending(false);
     }
   };

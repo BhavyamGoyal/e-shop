@@ -4,7 +4,7 @@ import { requireAdmin, requireStaff } from "../auth/guard";
 import { NotFoundError, ValidationError } from "../http/errors";
 import { blogRepository, type StoredBlog } from "../repositories/blog.repository";
 import { faqRepository, type StoredFaq } from "../repositories/faq.repository";
-import type { FaqInput, FaqListData, FaqRecord, PublicFaq } from "../types/content.types";
+import type { FaqInput, FaqListData, FaqRecord } from "../types/content.types";
 
 async function parseInput(payload: unknown): Promise<FaqInput> {
   const raw = (payload ?? {}) as Record<string, unknown>;
@@ -26,8 +26,6 @@ async function parseInput(payload: unknown): Promise<FaqInput> {
     showOnHome: raw.showOnHome === true,
   };
 }
-
-const toPublic = (faq: StoredFaq): PublicFaq => ({ id: faq._id.toString(), question: faq.question, answer: faq.answer });
 
 const refreshStorefront = (): void => revalidatePath("/", "layout");
 
@@ -78,13 +76,5 @@ export const faqController = {
     await assertExists(id);
     await faqRepository.remove(id);
     refreshStorefront();
-  },
-
-  async home(): Promise<PublicFaq[]> {
-    return (await faqRepository.listPublishedForHome()).map(toPublic);
-  },
-
-  async general(): Promise<PublicFaq[]> {
-    return (await faqRepository.listPublishedGeneral()).map(toPublic);
   },
 };

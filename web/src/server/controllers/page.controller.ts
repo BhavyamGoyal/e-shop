@@ -1,11 +1,11 @@
 import { isValidObjectId } from "mongoose";
 import { revalidatePath } from "next/cache";
-import { markdownDescription, markdownTitle } from "@/lib/markdown-meta";
+import { markdownTitle } from "@/lib/markdown-meta";
 import { RESERVED_HANDLES } from "@/lib/site";
 import { requireAdmin, requireStaff } from "../auth/guard";
 import { NotFoundError, ValidationError } from "../http/errors";
 import { pageRepository, type StoredPage } from "../repositories/page.repository";
-import type { PageEditorData, PageInput, PageRecord, PageSitemapEntry, PublicPage } from "../types/content.types";
+import type { PageEditorData, PageInput, PageRecord, PageSitemapEntry } from "../types/content.types";
 import { slugify } from "./blog.controller";
 
 function parseInput(payload: unknown): PageInput {
@@ -23,14 +23,6 @@ const toRecord = (page: StoredPage): PageRecord => ({
   url: page.url,
   content: page.content,
   title: markdownTitle(page.content, page.url),
-  updatedAt: page.updatedAt.toISOString(),
-});
-
-const toPublic = (page: StoredPage): PublicPage => ({
-  url: page.url,
-  content: page.content,
-  title: markdownTitle(page.content, page.url),
-  description: markdownDescription(page.content),
   updatedAt: page.updatedAt.toISOString(),
 });
 
@@ -81,15 +73,6 @@ export const pageController = {
     await assertExists(id);
     await pageRepository.remove(id);
     refreshStorefront();
-  },
-
-  async findByUrl(url: string): Promise<PublicPage | null> {
-    const page: StoredPage | null = await pageRepository.findByUrl(url);
-    return page ? toPublic(page) : null;
-  },
-
-  async urls(): Promise<string[]> {
-    return (await pageRepository.list()).map((page: StoredPage): string => page.url);
   },
 
   async sitemapEntries(): Promise<PageSitemapEntry[]> {

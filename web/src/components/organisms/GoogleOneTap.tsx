@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 import { app } from "@/firebase";
-import { googleLoginAction } from "@/server/actions/auth.actions";
+import { postAuth } from "@/lib/auth-api";
 
 interface CredentialResponse {
   credential: string;
@@ -36,7 +36,7 @@ const CLIENT_ID: string = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "";
 const AUTH_PATHS: readonly string[] = ["/login", "/register"];
 
 export function GoogleOneTap() {
-  const pathname: string = usePathname();
+  const pathname: string = usePathname() ?? "/";
   const [ready, setReady] = useState<boolean>(false);
   const [anonymous, setAnonymous] = useState<boolean>(false);
   const nextRef = useRef<string>(pathname);
@@ -63,7 +63,7 @@ export function GoogleOneTap() {
           const result = await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
           const idToken: string = await result.user.getIdToken();
           await signOut(auth);
-          await googleLoginAction(idToken, nextRef.current);
+          window.location.assign(await postAuth("google", { idToken, next: nextRef.current }));
         } catch {
           return;
         }

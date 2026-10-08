@@ -2,10 +2,12 @@ import { Breadcrumbs, type Crumb } from "../molecules";
 import { ProductRail, ProductStory, ProductView, SiteFooter, SiteHeader } from "../organisms";
 import { outfit } from "@/lib/fonts";
 import type { ProductDetail } from "@/server/types/product.types";
+import type { FooterGroup } from "@/lib/footer";
 import type { HeaderData, Product } from "@/lib/website-data";
 
 interface ProductTemplateProps {
   header: HeaderData;
+  shop: FooterGroup;
   product: ProductDetail;
   related: Product[];
   collection: { handle: string; title: string } | null;
@@ -26,7 +28,7 @@ const summarise = (text: string): string => {
   return flat.length > SUMMARY_LENGTH ? `${flat.slice(0, SUMMARY_LENGTH).trimEnd()}…` : flat;
 };
 
-export function ProductTemplate({ header, product, related, collection }: ProductTemplateProps) {
+export function ProductTemplate({ header, shop, product, related, collection }: ProductTemplateProps) {
   return (
     <div
       className={`pdp ${outfit.variable} flex min-h-screen flex-col bg-(--pp-bone) pb-20 text-(--pp-ink) lg:pb-0`}
@@ -54,7 +56,7 @@ export function ProductTemplate({ header, product, related, collection }: Produc
           </section>
         )}
       </main>
-      <SiteFooter />
+      <SiteFooter shop={shop} />
     </div>
   );
 }
