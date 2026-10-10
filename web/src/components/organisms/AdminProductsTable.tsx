@@ -114,15 +114,6 @@ export function AdminProductsTable() {
           <Link href={`/admin/products/${row.id}`} className={LINK_CLASS}>
             Edit
           </Link>
-          <Button
-            variant="outline"
-            tone="danger"
-            size="sm"
-            disabled={table.isDeleting}
-            onClick={() => void table.remove(row)}
-          >
-            Delete
-          </Button>
         </div>
       ),
     },

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { PaginationState, SortState } from "@/components/organisms/Table/Table.types";
-import { deleteProductAction, setProductActiveAction, setProductTagsAction } from "@/server/actions/product.actions";
+import { setProductActiveAction, setProductTagsAction } from "@/server/actions/product.actions";
 import type { ProductListRow } from "@/server/types/admin.types";
 import { fetchProducts, fetchTags } from "./admin-api";
 
@@ -17,8 +17,6 @@ export interface ProductsTableController {
   setPageSize: (size: number) => void;
   isLoading: boolean;
   error: string | null;
-  isDeleting: boolean;
-  remove: (row: ProductListRow) => Promise<void>;
   tagOptions: string[];
   setTags: (row: ProductListRow, tags: string[]) => Promise<void>;
   setActive: (row: ProductListRow, active: boolean) => Promise<void>;
@@ -35,8 +33,6 @@ export function useProductsTable(): ProductsTableController {
   const [pageSize, setPageSizeState] = useState<number>(DEFAULT_PAGE_SIZE);
   const [loaded, setLoaded] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [version, setVersion] = useState<number>(0);
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [tagOptions, setTagOptions] = useState<string[]>([]);
 
   useEffect(() => {
@@ -46,7 +42,7 @@ export function useProductsTable(): ProductsTableController {
   }, []);
 
   const sortParam: string | null = sort ? `${sort.columnKey}:${sort.direction}` : null;
-  const key: string = JSON.stringify([page, pageSize, sortParam, filters, version]);
+  const key: string = JSON.stringify([page, pageSize, sortParam, filters]);
 
   useEffect(() => {
     let active = true;
@@ -81,15 +77,6 @@ export function useProductsTable(): ProductsTableController {
   const setPageSize = useCallback((size: number): void => {
     setPage(1);
     setPageSizeState(size);
-  }, []);
-
-  const remove = useCallback(async (row: ProductListRow): Promise<void> => {
-    if (!window.confirm(`Delete "${row.title}"? This cannot be undone.`)) return;
-    setIsDeleting(true);
-    const result = await deleteProductAction(row.id);
-    setIsDeleting(false);
-    if (result.ok) setVersion((value: number): number => value + 1);
-    else setError(result.error ?? "Delete failed");
   }, []);
 
   const setTags = useCallback(async (row: ProductListRow, tags: string[]): Promise<void> => {
@@ -130,8 +117,6 @@ export function useProductsTable(): ProductsTableController {
     setPageSize,
     isLoading: loaded !== key,
     error,
-    isDeleting,
-    remove,
     tagOptions,
     setTags,
     setActive,

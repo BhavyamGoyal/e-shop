@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useTransition, type FormEvent } from "react";
-import { saveProductAction } from "@/server/actions/product.actions";
+import { deleteProductAction, saveProductAction } from "@/server/actions/product.actions";
 import type { ActionResult, ProductEditorData, ProductInput } from "@/server/types/admin.types";
 import { Button, Heading } from "../atoms";
 import { AlertMessage } from "../molecules";
@@ -24,6 +25,7 @@ export function ProductEditor({ id: initialId, input: initial }: ProductEditorDa
   const [version, setVersion] = useState<number>(0);
   const [notice, setNotice] = useState<Notice | null>(null);
   const [pending, start] = useTransition();
+  const router = useRouter();
 
   const change = (patch: Partial<ProductInput>): void => setInput((current: ProductInput): ProductInput => ({ ...current, ...patch }));
 
@@ -44,6 +46,18 @@ export function ProductEditor({ id: initialId, input: initial }: ProductEditorDa
     });
   };
 
+  const remove = (): void => {
+    if (!id || !window.confirm(`Delete "${input.title}"? This cannot be undone.`)) return;
+    start(async (): Promise<void> => {
+      const result: ActionResult = await deleteProductAction(id);
+      if (!result.ok) {
+        setNotice({ tone: "danger", message: result.error ?? "Delete failed" });
+        return;
+      }
+      router.push("/admin/products");
+    });
+  };
+
   return (
     <form onSubmit={submit} className="flex flex-col gap-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -52,6 +66,11 @@ export function ProductEditor({ id: initialId, input: initial }: ProductEditorDa
           <Link href="/admin/products" className="text-sm font-medium text-muted-foreground hover:text-primary">
             Back to products
           </Link>
+          {id ? (
+            <Button type="button" variant="outline" tone="danger" disabled={pending} onClick={remove}>
+              Delete
+            </Button>
+          ) : null}
           <Button type="submit" disabled={pending}>
             {pending ? "Saving..." : "Save product"}
           </Button>
