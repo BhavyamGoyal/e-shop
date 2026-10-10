@@ -95,6 +95,7 @@ export interface ProductInput {
   price: number;
   compareAtPrice: number | null;
   available: boolean;
+  active: boolean;
   images: ImageInput[];
   options: OptionInput[];
   variants: VariantInput[];
@@ -108,6 +109,7 @@ export interface ProductListRow {
   title: string;
   price: number;
   available: boolean;
+  active: boolean;
   image: string | null;
   productType: string | null;
   tags: string[];

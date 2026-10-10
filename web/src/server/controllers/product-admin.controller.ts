@@ -68,6 +68,13 @@ export const productAdminController = {
     return { id, handle: updated.handle };
   },
 
+  async setActive(id: string, active: boolean): Promise<void> {
+    await requireStaff();
+    const updated: AdminProduct | null = await productAdminRepository.update(id, { active });
+    if (!updated) throw new NotFoundError("Product not found");
+    revalidateStorefront(updated.handle);
+  },
+
   async remove(id: string): Promise<void> {
     await requireAdmin();
     const removed: AdminProduct | null = await productAdminRepository.remove(id);

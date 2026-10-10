@@ -17,6 +17,7 @@ const SORT_FIELDS: Record<string, string> = {
   price: "price",
   productType: "productType",
   available: "available",
+  active: "active",
 };
 
 function buildFilter(query: ProductListQuery): FilterQuery<ProductDocument> {
@@ -38,6 +39,7 @@ const LIST_PROJECTION = {
   handle: 1,
   price: 1,
   available: 1,
+  active: 1,
   productType: 1,
   tags: 1,
   images: { $slice: 1 },

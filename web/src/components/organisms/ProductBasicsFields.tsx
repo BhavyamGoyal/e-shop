@@ -79,6 +79,7 @@ export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProp
         />
       </div>
       <CheckField label="Available for sale" checked={input.available} onChange={(e) => onChange({ available: e.target.checked })} />
+      <CheckField label="Active (inactive products are hidden from the store, search and sitemap)" checked={input.active} onChange={(e) => onChange({ active: e.target.checked })} />
       <TextAreaField
         id="descriptionHtml"
         label="Description (HTML)"

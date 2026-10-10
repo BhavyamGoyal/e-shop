@@ -29,6 +29,13 @@ export async function deleteProductAction(id: string): Promise<ActionResult> {
   });
 }
 
+export async function setProductActiveAction(id: string, active: boolean): Promise<ActionResult> {
+  return run(async (): Promise<ActionResult> => {
+    await productAdminController.setActive(id, active);
+    return { ok: true };
+  });
+}
+
 export async function setProductTagsAction(id: string, tags: string[]): Promise<ActionResult> {
   return run(async (): Promise<ActionResult> => {
     await tagController.setProductTags(id, tags);

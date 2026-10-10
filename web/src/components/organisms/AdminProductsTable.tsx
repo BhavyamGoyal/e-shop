@@ -83,6 +83,22 @@ export function AdminProductsTable() {
       render: (row) => (row.available ? "Available" : "Hidden"),
     },
     {
+      key: "active",
+      header: "active",
+      sortable: true,
+      filterValue: (row) => (row.active ? "Active" : "Inactive"),
+      render: (row) => (
+        <Button
+          variant="outline"
+          tone={row.active ? "secondary" : "danger"}
+          size="sm"
+          onClick={() => void table.setActive(row, !row.active)}
+        >
+          {row.active ? "Active" : "Inactive"}
+        </Button>
+      ),
+    },
+    {
       key: "actions",
       header: "",
       sticky: true,

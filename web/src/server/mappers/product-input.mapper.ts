@@ -15,6 +15,7 @@ export const EMPTY_INPUT: ProductInput = {
   price: 0,
   compareAtPrice: null,
   available: true,
+  active: true,
   images: [],
   options: [],
   variants: [],
@@ -42,6 +43,7 @@ export function toDocumentFields(input: ProductInput): Record<string, unknown> {
     priceMax: Math.max(...prices),
     compareAtPrice: input.compareAtPrice,
     available: input.available,
+    active: input.active,
     featuredImage: input.images[0]?.url ?? null,
     images: input.images.map((image, index) => ({
       position: index + 1,
@@ -77,6 +79,7 @@ export function toInput(doc: AdminProduct): ProductInput {
     price: doc.price,
     compareAtPrice: doc.compareAtPrice ?? null,
     available: doc.available ?? true,
+    active: doc.active ?? true,
     images: (doc.images ?? []).map((image) => ({ url: image.url, alt: image.alt ?? "" })),
     options: (doc.options ?? []).map((option) => ({ name: option.name ?? "", values: option.values ?? [] })),
     variants: (doc.variants ?? []).map((variant) => ({
@@ -100,6 +103,7 @@ export const toListRow = (doc: AdminProduct): ProductListRow => ({
   title: doc.title,
   price: doc.price,
   available: doc.available ?? true,
+  active: doc.active ?? true,
   image: doc.images?.[0]?.url ?? null,
   productType: doc.productType ?? null,
   tags: doc.tags ?? [],

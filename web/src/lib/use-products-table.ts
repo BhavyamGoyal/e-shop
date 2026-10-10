@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { PaginationState, SortState } from "@/components/organisms/Table/Table.types";
-import { deleteProductAction, setProductTagsAction } from "@/server/actions/product.actions";
+import { deleteProductAction, setProductActiveAction, setProductTagsAction } from "@/server/actions/product.actions";
 import type { ProductListRow } from "@/server/types/admin.types";
 import { fetchProducts, fetchTags } from "./admin-api";
 
@@ -21,6 +21,7 @@ export interface ProductsTableController {
   remove: (row: ProductListRow) => Promise<void>;
   tagOptions: string[];
   setTags: (row: ProductListRow, tags: string[]) => Promise<void>;
+  setActive: (row: ProductListRow, active: boolean) => Promise<void>;
 }
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -105,6 +106,19 @@ export function useProductsTable(): ProductsTableController {
     }
   }, []);
 
+  const setActive = useCallback(async (row: ProductListRow, active: boolean): Promise<void> => {
+    const apply = (next: boolean): void =>
+      setRows((current: ProductListRow[]): ProductListRow[] =>
+        current.map((item: ProductListRow): ProductListRow => (item.id === row.id ? { ...item, active: next } : item)),
+      );
+    apply(active);
+    const result = await setProductActiveAction(row.id, active);
+    if (!result.ok) {
+      apply(row.active);
+      setError(result.error ?? "Could not update status");
+    }
+  }, []);
+
   return {
     rows,
     sort,
@@ -120,5 +134,6 @@ export function useProductsTable(): ProductsTableController {
     remove,
     tagOptions,
     setTags,
+    setActive,
   };
 }

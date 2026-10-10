@@ -1,6 +1,6 @@
 import type { FilterQuery, SortOrder } from "mongoose";
 import { connectDb } from "../db/connect";
-import { ProductModel, type ProductDocument } from "../models/product.model";
+import { ACTIVE_PRODUCT, ProductModel, type ProductDocument } from "../models/product.model";
 import type { CatalogFacets, FacetValue, ProductQuery, SortOption } from "../types/product.types";
 
 export interface ProductSearchResult {
@@ -62,7 +62,7 @@ const toFacetValues = (rows: FacetCount[]): FacetValue[] =>
 const escapeRegex = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 function buildFilter(query: ProductQuery): FilterQuery<ProductDocument> {
-  const clauses: FilterQuery<ProductDocument>[] = [];
+  const clauses: FilterQuery<ProductDocument>[] = [ACTIVE_PRODUCT];
 
   if (query.q) {
     const pattern: RegExp = new RegExp(escapeRegex(query.q), "i");
@@ -88,7 +88,7 @@ function buildFilter(query: ProductQuery): FilterQuery<ProductDocument> {
     clauses.push({ "videos.0": { $exists: query.hasVideo } });
   }
 
-  return clauses.length ? { $and: clauses } : {};
+  return { $and: clauses };
 }
 
 export const productRepository = {
@@ -108,13 +108,13 @@ export const productRepository = {
 
   async findByHandle(handle: string): Promise<ProductDocument | null> {
     await connectDb();
-    return ProductModel.findOne({ handle }).lean<ProductDocument>();
+    return ProductModel.findOne({ handle, ...ACTIVE_PRODUCT }).lean<ProductDocument>();
   },
 
   async sitemapEntries(): Promise<ProductSitemapEntry[]> {
     await connectDb();
     const rows: { handle: string; sourceUpdatedAt?: Date | null; publishedAt?: Date | null }[] =
-      await ProductModel.find({}, { handle: 1, sourceUpdatedAt: 1, publishedAt: 1 })
+      await ProductModel.find(ACTIVE_PRODUCT, { handle: 1, sourceUpdatedAt: 1, publishedAt: 1 })
         .sort({ handle: 1 })
         .lean<{ handle: string; sourceUpdatedAt?: Date | null; publishedAt?: Date | null }[]>();
     return rows.map(
@@ -127,7 +127,9 @@ export const productRepository = {
 
   async facets(collections: string[]): Promise<CatalogFacets> {
     await connectDb();
-    const match: FilterQuery<ProductDocument> = collections.length ? { collections: { $in: collections } } : {};
+    const match: FilterQuery<ProductDocument> = collections.length
+      ? { ...ACTIVE_PRODUCT, collections: { $in: collections } }
+      : ACTIVE_PRODUCT;
     const [row]: FacetRow[] = await ProductModel.aggregate([
       { $match: match },
       {
@@ -158,7 +160,7 @@ export const productRepository = {
   async collectionStats(): Promise<CollectionStat[]> {
     await connectDb();
     const rows: { _id: string; count: number; images: string[] }[] = await ProductModel.aggregate([
-      { $match: { "images.0": { $exists: true } } },
+      { $match: { ...ACTIVE_PRODUCT, "images.0": { $exists: true } } },
       { $sort: { publishedAt: -1 } },
       { $unwind: "$collections" },
       {

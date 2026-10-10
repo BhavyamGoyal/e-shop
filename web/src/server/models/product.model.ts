@@ -75,6 +75,7 @@ export const productSchema = new Schema(
     compareAtPrice: Number,
     currency: { type: String, default: "INR" },
     available: { type: Boolean, default: true },
+    active: { type: Boolean, default: true, index: true },
     featuredImage: String,
     images: [imageSchema],
     videos: [videoSchema],
@@ -94,6 +95,8 @@ export const productSchema = new Schema(
 productSchema.index({ title: "text", descriptionText: "text", tags: "text" });
 productSchema.index({ price: 1 });
 productSchema.index({ publishedAt: -1 });
+
+export const ACTIVE_PRODUCT: { active: { $ne: boolean } } = { active: { $ne: false } };
 
 export type ProductDocument = InferSchemaType<typeof productSchema>;
 

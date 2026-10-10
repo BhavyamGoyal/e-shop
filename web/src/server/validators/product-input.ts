@@ -75,6 +75,7 @@ export function parseProductInput(payload: unknown): ProductInput {
     price: amount(raw.price, "Price"),
     compareAtPrice: optionalAmount(raw.compareAtPrice, "Compare-at price"),
     available: raw.available !== false,
+    active: raw.active !== false,
     images: list(raw.images).map(toImage).filter((image: ImageInput): boolean => image.url.length > 0),
     options: list(raw.options).map(toOption).filter((option: OptionInput): boolean => option.name.length > 0),
     variants: list(raw.variants).map(toVariant),
