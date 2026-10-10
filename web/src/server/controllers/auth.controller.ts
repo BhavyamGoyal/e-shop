@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { isStaff } from "../auth/guard";
-import { startSession, type Session } from "../auth/session";
+import { endSession, startSession, type Session } from "../auth/session";
 import { handleRequest } from "../http/handler";
 import { loginUser, loginWithGoogle, registerUser } from "../services/auth.service";
 
@@ -33,6 +33,12 @@ export class AuthController {
     this.authenticate(request, (raw: Fields): Promise<Session> =>
       registerUser(text(raw, "name"), text(raw, "email"), text(raw, "password")),
     );
+
+  logout = (): Promise<Response> =>
+    handleRequest(async (): Promise<Response> => {
+      await endSession();
+      return Response.json({ redirect: "/login" });
+    });
 
   google = (request: NextRequest): Promise<Response> =>
     this.authenticate(request, (raw: Fields): Promise<Session> => loginWithGoogle(text(raw, "idToken")));

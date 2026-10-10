@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Text } from "../atoms";
+import { Button, Text } from "../atoms";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
 interface Profile {
@@ -15,6 +15,12 @@ interface ProfileMenuProps {
 }
 
 const initialOf = (profile: Profile): string => (profile.name || profile.email).charAt(0).toUpperCase();
+
+async function logout(): Promise<void> {
+  const response: Response = await fetch("/api/auth/logout", { method: "POST" });
+  const body: { redirect?: string } = await response.json();
+  window.location.assign(body.redirect ?? "/login");
+}
 
 function Avatar({ profile }: { profile: Profile }) {
   if (profile.image) {
@@ -73,6 +79,11 @@ export function ProfileMenu({ guestIcon }: ProfileMenuProps) {
             <div className="flex flex-col gap-2 border-t pt-3">
               <Text className="text-sm font-medium">Theme</Text>
               <ThemeSwitcher />
+            </div>
+            <div className="border-t pt-3">
+              <Button type="button" variant="outline" tone="secondary" size="sm" className="w-full" onClick={() => void logout()}>
+                Log out
+              </Button>
             </div>
           </div>
         </div>

@@ -17,13 +17,18 @@ export function AdminProductsTable() {
     {
       key: "image",
       header: "image",
-      width: 90,
+      width: 140,
       filterValue: (row) => row.image ?? "",
       render: (row) =>
         row.image ? (
-          <img src={row.image} alt="" loading="lazy" className="h-12 w-12 rounded-md object-cover" />
+          <img
+            src={row.image}
+            alt=""
+            loading="lazy"
+            className="h-28 w-28 rounded-md object-cover"
+          />
         ) : (
-          <div className="h-12 w-12 rounded-md bg-muted" />
+          <div className="h-28 w-28 rounded-md bg-muted" />
         ),
     },
     {
@@ -36,7 +41,9 @@ export function AdminProductsTable() {
       render: (row) => (
         <div className="min-w-0">
           <div className="truncate font-medium">{row.title}</div>
-          <div className="truncate text-xs text-muted-foreground">{row.handle}</div>
+          <div className="truncate text-xs text-muted-foreground">
+            {row.handle}
+          </div>
         </div>
       ),
     },
@@ -81,13 +88,23 @@ export function AdminProductsTable() {
       sticky: true,
       render: (row) => (
         <div className="flex items-center gap-3">
-          <Link href={`/product/${row.handle}`} target="_blank" className={LINK_CLASS}>
+          <Link
+            href={`/product/${row.handle}`}
+            target="_blank"
+            className={LINK_CLASS}
+          >
             View
           </Link>
           <Link href={`/admin/products/${row.id}`} className={LINK_CLASS}>
             Edit
           </Link>
-          <Button variant="outline" tone="danger" size="sm" disabled={table.isDeleting} onClick={() => void table.remove(row)}>
+          <Button
+            variant="outline"
+            tone="danger"
+            size="sm"
+            disabled={table.isDeleting}
+            onClick={() => void table.remove(row)}
+          >
             Delete
           </Button>
         </div>
