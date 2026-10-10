@@ -19,6 +19,7 @@ export { TrustGrid } from "./TrustGrid";
 export { TextAreaField, type TextAreaFieldProps } from "./TextAreaField";
 export { CheckField, type CheckFieldProps } from "./CheckField";
 export { AlertMessage, type AlertMessageProps } from "./AlertMessage";
+export { AddressCard } from "./AddressCard";
 export { ImageTile, type ImageTileProps } from "./ImageTile";
 export { UploadButton, type UploadButtonProps } from "./UploadButton";
 export { PagerBar, type PagerBarProps } from "./PagerBar";

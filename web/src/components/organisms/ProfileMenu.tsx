@@ -80,7 +80,10 @@ export function ProfileMenu({ guestIcon }: ProfileMenuProps) {
               <Text className="text-sm font-medium">Theme</Text>
               <ThemeSwitcher />
             </div>
-            <div className="border-t pt-3">
+            <div className="flex flex-col gap-2 border-t pt-3">
+              <a href="/account/addresses" className="text-sm font-medium hover:underline">
+                My addresses
+              </a>
               <Button type="button" variant="outline" tone="secondary" size="sm" className="w-full" onClick={() => void logout()}>
                 Log out
               </Button>

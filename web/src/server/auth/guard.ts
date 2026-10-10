@@ -15,6 +15,14 @@ async function currentSession(): Promise<Session | null> {
   return user ? { ...session, role: user.role ?? "customer" } : null;
 }
 
+export async function requireCustomer(): Promise<StoredUser> {
+  const session: Session | null = await readSession();
+  if (!session) throw new UnauthorizedError();
+  const user: StoredUser | null = await userRepository.findById(session.userId);
+  if (!user) throw new UnauthorizedError();
+  return user;
+}
+
 export async function requireStaff(): Promise<Session> {
   const session: Session | null = await currentSession();
   if (!session) throw new UnauthorizedError();

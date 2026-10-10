@@ -13,6 +13,7 @@ const SECTIONS: { href: string; title: string; text: string }[] = [
   { href: "/admin/images", title: "Images", text: "Upload and delete images stored in Vercel Blob." },
   { href: "/admin/queries", title: "Queries", text: "Read and manage customer queries." },
   { href: "/admin/instagram", title: "Instagram", text: "Upload or sync Instagram insights and view followers, reach, posts and audience." },
+  { href: "/admin/carts", title: "Carts", text: "See what logged-in users have in their carts and the value of each cart." },
   { href: "/admin/users", title: "Users", text: "See registered users and manage their roles." },
 ];
 

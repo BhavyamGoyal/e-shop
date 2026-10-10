@@ -1,5 +1,5 @@
 import type { AppProps } from "next/app";
-import { ClarityAnalytics, GoogleOneTap } from "@/components/organisms";
+import { CartSync, ClarityAnalytics, GoogleOneTap } from "@/components/organisms";
 import { geistMono, geistSans } from "@/lib/fonts";
 import { ThemeProvider } from "@/theme";
 import "../app/globals.css";
@@ -10,6 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ThemeProvider>
         <Component {...pageProps} />
       </ThemeProvider>
+      <CartSync />
       <GoogleOneTap />
       <ClarityAnalytics />
     </div>

@@ -10,6 +10,7 @@ import type {
   UserRecord,
   UserRoleName,
 } from "@/server/types/admin.types";
+import type { CartDetail, CartSummary } from "@/server/types/cart.types";
 import type { BlogInput, BlogRow, FaqInput, FaqListData, PageInput, PageRecord } from "@/server/types/content.types";
 
 interface ErrorBody {
@@ -158,5 +159,15 @@ export async function updateUserRole(id: string, role: UserRoleName): Promise<vo
 
 export async function fetchQueries(): Promise<QueryRecord[]> {
   const body = await fetch("/api/admin/queries").then(parse<{ data: QueryRecord[] }>);
+  return body.data;
+}
+
+export async function fetchCarts(): Promise<CartSummary[]> {
+  const body = await fetch("/api/admin/carts").then(parse<{ data: CartSummary[] }>);
+  return body.data;
+}
+
+export async function fetchCart(userId: string): Promise<CartDetail> {
+  const body = await fetch(`/api/admin/carts/${userId}`).then(parse<{ data: CartDetail }>);
   return body.data;
 }
