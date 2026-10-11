@@ -63,14 +63,14 @@ export function ProfileMenu({ guestIcon }: ProfileMenuProps) {
               </div>
             </div>
             <div className="flex flex-col gap-2 border-t pt-3">
-              <Text className="text-sm font-medium">Theme</Text>
-              <ThemeSwitcher />
-            </div>
-            <div className="flex flex-col gap-2 border-t pt-3">
               <AccountLinks />
               <Button type="button" variant="outline" tone="secondary" size="sm" className="w-full" onClick={() => void logout()}>
                 Log out
               </Button>
+            </div>
+            <div className="flex flex-col gap-2 border-t pt-3">
+              <Text className="text-sm font-medium">Theme</Text>
+              <ThemeSwitcher />
             </div>
           </div>
         </div>
