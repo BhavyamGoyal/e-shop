@@ -28,6 +28,11 @@ export const paymentRepository = {
     return PaymentModel.findOne({ providerOrderId }).lean<StoredPayment>();
   },
 
+  async findByOrderNumbers(orderNumbers: string[]): Promise<StoredPayment[]> {
+    await connectDb();
+    return PaymentModel.find({ orderNumber: { $in: orderNumbers } }).lean<StoredPayment[]>();
+  },
+
   async markFailed(providerOrderId: string, failureReason: string): Promise<void> {
     await connectDb();
     await PaymentModel.updateOne(

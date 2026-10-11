@@ -3,7 +3,7 @@ import type { AddressInput, AddressRecord, AddressSnapshot, GeoPoint } from "../
 
 type StoredAddress = AddressDocument & { _id: unknown };
 
-const toPoint = (location: AddressDocument["location"]): GeoPoint | null => {
+export const toPoint = (location: AddressDocument["location"]): GeoPoint | null => {
   const [lng, lat]: number[] = location?.coordinates ?? [];
   return lat === undefined || lng === undefined ? null : { lat, lng };
 };

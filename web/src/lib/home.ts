@@ -96,11 +96,6 @@ export function buildHeader(categories: StorefrontCategory[]): HeaderData {
       placeholder: "Search for lamps, planters, desk organisers...",
     },
     actions: [
-      {
-        href: "/corporate-gifts",
-        icon: `${ICON_BASE}/corporate-gift.svg`,
-        label: "Corporate Gifts",
-      },
       { href: "/cart", icon: `${ICON_BASE}/cart.svg`, label: "Cart" },
       {
         href: "/login",

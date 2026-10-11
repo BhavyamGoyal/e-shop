@@ -1,5 +1,6 @@
 import type { HeaderData } from "@/lib/website-data";
 import { CartLink } from "./CartLink";
+import { MobileMenu } from "./MobileMenu";
 import { ProfileMenu } from "./ProfileMenu";
 
 const PROFILE_HREF = "/login";
@@ -13,8 +14,9 @@ export function SiteHeader({ header }: SiteHeaderProps) {
   const { logo, location, search, actions, nav } = header;
   return (
     <div className="sticky top-0 z-50 w-full bg-background">
-      <header className="flex items-center justify-between gap-5 border-b border-border px-6 py-3 md:px-10">
-        <a href={logo.href} className="shrink-0">
+      <header className="relative flex items-center justify-between gap-5 border-b border-border px-4 py-3 md:px-10">
+        <MobileMenu />
+        <a href={logo.href} className="absolute left-1/2 shrink-0 -translate-x-1/2 md:static md:translate-x-0">
           <img src="/logo_v1.svg" alt={logo.text} className="block h-12 w-auto" />
         </a>
         <span className="hidden h-10 border-r border-border lg:block" />
@@ -43,7 +45,9 @@ export function SiteHeader({ header }: SiteHeaderProps) {
         <div className="flex shrink-0 items-center gap-2 text-xs md:gap-5">
           {actions.map((action) =>
             action.href === PROFILE_HREF ? (
-              <ProfileMenu key={action.href} guestIcon={action.icon} />
+              <div key={action.href} className="hidden md:block">
+                <ProfileMenu guestIcon={action.icon} />
+              </div>
             ) : action.href === CART_HREF ? (
               <CartLink key={action.href} href={action.href} icon={action.icon} label={action.label} />
             ) : (

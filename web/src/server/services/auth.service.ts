@@ -37,11 +37,12 @@ export interface Profile {
   image: string;
 }
 
+export const toProfile = (user: StoredUser): Profile => ({ name: user.name ?? "", email: user.email, image: user.image ?? "" });
+
 export async function currentProfile(session: Session | null): Promise<Profile | null> {
   if (!session) return null;
   const user: StoredUser | null = await userRepository.findById(session.userId);
-  if (!user) return null;
-  return { name: user.name ?? "", email: user.email, image: user.image ?? "" };
+  return user ? toProfile(user) : null;
 }
 
 export async function loginUser(email: string, password: string): Promise<Session> {

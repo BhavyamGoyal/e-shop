@@ -28,3 +28,7 @@ export { ImageSlot, type ImageSlotProps } from "./ImageSlot";
 export { MetricCard, type MetricCardProps } from "./MetricCard";
 export { TrendChart, type TrendChartProps, type TrendPoint } from "./TrendChart";
 export { BarList, type BarListProps, type BarItem } from "./BarList";
+export { OrderTracker } from "./OrderTracker";
+export { StatusBadge } from "./StatusBadge";
+export { AccountTile } from "./AccountTile";
+export { LoginPrompt } from "./LoginPrompt";

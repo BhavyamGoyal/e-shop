@@ -9,7 +9,7 @@ export interface OrderLineRecord {
   quantity: number;
 }
 
-export const ORDER_STATUSES = ["pending", "paid", "cancelled"] as const;
+export const ORDER_STATUSES = ["pending", "paid", "shipped", "delivered", "cancelled"] as const;
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 export const PAYMENT_STATUSES = ["created", "captured", "failed"] as const;

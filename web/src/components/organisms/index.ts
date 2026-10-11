@@ -57,3 +57,9 @@ export { InstagramDashboard } from "./InstagramDashboard";
 export * from "./CartSync";
 export * from "./CartsManager";
 export * from "./CartDetailView";
+
+export { OrderCard } from "./OrderCard";
+export { OrdersManager } from "./OrdersManager";
+export { AdminOrdersManager } from "./AdminOrdersManager";
+export { OrderDetailView } from "./OrderDetailView";
+export { ProfileForm } from "./ProfileForm";

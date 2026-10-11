@@ -1,14 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useProfile, type Profile } from "@/lib/use-profile";
 import { Button, Text } from "../atoms";
+import { AccountLinks } from "./AccountLinks";
 import { ThemeSwitcher } from "./ThemeSwitcher";
-
-interface Profile {
-  name: string;
-  email: string;
-  image: string;
-}
 
 interface ProfileMenuProps {
   guestIcon: string;
@@ -16,13 +11,13 @@ interface ProfileMenuProps {
 
 const initialOf = (profile: Profile): string => (profile.name || profile.email).charAt(0).toUpperCase();
 
-async function logout(): Promise<void> {
+export async function logout(): Promise<void> {
   const response: Response = await fetch("/api/auth/logout", { method: "POST" });
   const body: { redirect?: string } = await response.json();
   window.location.assign(body.redirect ?? "/login");
 }
 
-function Avatar({ profile }: { profile: Profile }) {
+export function Avatar({ profile }: { profile: Profile }) {
   if (profile.image) {
     return (
       <img
@@ -41,16 +36,7 @@ function Avatar({ profile }: { profile: Profile }) {
 }
 
 export function ProfileMenu({ guestIcon }: ProfileMenuProps) {
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loaded, setLoaded] = useState<boolean>(false);
-
-  useEffect(() => {
-    fetch("/api/me")
-      .then((response: Response) => response.json())
-      .then((body: { data: Profile | null }) => setProfile(body.data))
-      .catch(() => setProfile(null))
-      .finally(() => setLoaded(true));
-  }, []);
+  const { profile, loaded } = useProfile();
 
   if (loaded && !profile) {
     return (
@@ -81,9 +67,7 @@ export function ProfileMenu({ guestIcon }: ProfileMenuProps) {
               <ThemeSwitcher />
             </div>
             <div className="flex flex-col gap-2 border-t pt-3">
-              <a href="/account/addresses" className="text-sm font-medium hover:underline">
-                My addresses
-              </a>
+              <AccountLinks />
               <Button type="button" variant="outline" tone="secondary" size="sm" className="w-full" onClick={() => void logout()}>
                 Log out
               </Button>

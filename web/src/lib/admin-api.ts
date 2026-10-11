@@ -1,3 +1,4 @@
+import type { OrderSummary } from "@/server/types/order-view.types";
 import type { QueryRecord } from "@/server/types/contact.types";
 import type {
   ImageListPage,
@@ -169,5 +170,10 @@ export async function fetchCarts(): Promise<CartSummary[]> {
 
 export async function fetchCart(userId: string): Promise<CartDetail> {
   const body = await fetch(`/api/admin/carts/${userId}`).then(parse<{ data: CartDetail }>);
+  return body.data;
+}
+
+export async function fetchOrders(): Promise<OrderSummary[]> {
+  const body = await fetch("/api/admin/orders").then(parse<{ data: OrderSummary[] }>);
   return body.data;
 }

@@ -21,6 +21,7 @@ const paymentSchema = new Schema(
 );
 
 paymentSchema.index({ userId: 1, createdAt: -1 });
+paymentSchema.index({ orderNumber: 1 });
 
 export type PaymentDocument = InferSchemaType<typeof paymentSchema>;
 
