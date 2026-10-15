@@ -28,7 +28,6 @@ export function CartView() {
   const items: CartItem[] = useCartStore((state) => state.items);
   const setQuantity = useCartStore((state) => state.setQuantity);
   const remove = useCartStore((state) => state.remove);
-  const clear = useCartStore((state) => state.clear);
   const checkout: CheckoutState = useCheckout();
   const [addressId, setAddressId] = useState<string>("");
 
@@ -103,9 +102,6 @@ export function CartView() {
           error={checkout.error}
           onPay={(): void => void checkout.pay(addressId)}
         />
-        <button type="button" onClick={clear} className="text-sm font-medium text-(--pp-muted) hover:text-danger">
-          Clear cart
-        </button>
       </aside>
     </div>
   );

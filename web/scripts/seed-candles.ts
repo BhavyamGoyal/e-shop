@@ -8,6 +8,7 @@ import { CANDLES_B } from "./data/candles-b";
 
 const ROOT: string = path.resolve("public", "products");
 const CATEGORY = { name: "Candles", slug: "candles" };
+const CATEGORY_IMAGE = "/products/scented-soy-wax-candle-swirl-single/images/01-img-9186-min.webp";
 
 interface Placed {
   url: string;
@@ -90,7 +91,7 @@ async function main(): Promise<void> {
       $setOnInsert: {
         name: CATEGORY.name,
         slug: CATEGORY.slug,
-        image: "",
+        image: CATEGORY_IMAGE,
         icon: "",
         description: "Handmade scented soy wax candles for gifting and decor.",
         position: count,

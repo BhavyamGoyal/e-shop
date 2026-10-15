@@ -1,10 +1,13 @@
+import { Fragment } from "react";
 import type { HeaderData } from "@/lib/website-data";
 import { CartLink } from "./CartLink";
 import { MobileMenu } from "./MobileMenu";
 import { ProfileMenu } from "./ProfileMenu";
+import { WishlistLink } from "./WishlistLink";
 
 const PROFILE_HREF = "/login";
 const CART_HREF = "/cart";
+const WISHLIST_HREF = "/wishlist";
 
 interface SiteHeaderProps {
   header: HeaderData;
@@ -49,7 +52,10 @@ export function SiteHeader({ header }: SiteHeaderProps) {
                 <ProfileMenu guestIcon={action.icon} />
               </div>
             ) : action.href === CART_HREF ? (
-              <CartLink key={action.href} href={action.href} icon={action.icon} label={action.label} />
+              <Fragment key={action.href}>
+                <WishlistLink href={WISHLIST_HREF} label="Wishlist" />
+                <CartLink href={action.href} icon={action.icon} label={action.label} />
+              </Fragment>
             ) : (
             <a
               key={action.href}

@@ -6,6 +6,8 @@ export { HeroSlider } from "./HeroSlider";
 export { HomeSection } from "./HomeSection";
 export { ProductRail } from "./ProductRail";
 export { CartLink } from "./CartLink";
+export { WishlistLink } from "./WishlistLink";
+export { WishlistView } from "./WishlistView";
 export { CartView } from "./CartView";
 export { ProfileMenu } from "./ProfileMenu";
 export { SiteHeader } from "./SiteHeader";
@@ -55,6 +57,7 @@ export { AddressManager } from "./AddressManager";
 export { QueriesManager } from "./QueriesManager";
 export { InstagramDashboard } from "./InstagramDashboard";
 export * from "./CartSync";
+export * from "./WishlistSync";
 export * from "./CartsManager";
 export * from "./CartDetailView";
 
