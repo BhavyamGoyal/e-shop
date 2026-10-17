@@ -29,7 +29,7 @@ export function OrderDetailView({ order }: { order: OrderDetail }) {
         <div>
           <Heading level={2}>{order.orderNumber}</Heading>
           <Text tone="muted" className="text-sm">
-            {order.email} · placed {new Date(order.createdAt).toLocaleString()}
+            {order.email}{order.isLoggedOutOrder ? " (logged out order)" : ""} · placed {new Date(order.createdAt).toLocaleString()}
           </Text>
         </div>
         <Link href="/admin/orders" className="text-sm font-medium text-muted-foreground hover:text-primary">
@@ -111,6 +111,12 @@ export function OrderDetailView({ order }: { order: OrderDetail }) {
             ))}
           </tbody>
           <tfoot>
+            {order.discount > 0 ? (
+              <tr className="border-t">
+                <td className="px-4 py-2" colSpan={3}>Coupon{order.couponCode ? ` (${order.couponCode})` : ""}</td>
+                <td className="px-4 py-2 text-right">-{formatPaise(order.discount)}</td>
+              </tr>
+            ) : null}
             <tr className="border-t font-semibold">
               <td className="px-4 py-2" colSpan={3}>Total</td>
               <td className="px-4 py-2 text-right">{formatPaise(order.total)}</td>

@@ -52,7 +52,10 @@ export function AdminOrdersManager() {
                 className="cursor-pointer border-t hover:bg-muted"
               >
                 <td className="px-4 py-2 font-medium">{order.orderNumber}</td>
-                <td className="px-4 py-2">{order.email}</td>
+                <td className="px-4 py-2">
+                  {order.email}
+                  {order.isLoggedOutOrder ? <span className="ml-2 text-xs text-muted-foreground">Logged out</span> : null}
+                </td>
                 <td className="px-4 py-2 text-right">{order.itemCount}</td>
                 <td className="px-4 py-2 text-right">{formatPaise(order.total)}</td>
                 <td className="px-4 py-2"><StatusBadge status={order.status} /></td>

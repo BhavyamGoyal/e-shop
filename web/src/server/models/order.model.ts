@@ -37,10 +37,16 @@ const orderSchema = new Schema(
     orderNumber: { type: String, required: true, unique: true },
     userId: { type: String, required: true },
     email: { type: String, required: true, lowercase: true, trim: true },
+    isLoggedOutOrder: { type: Boolean, default: false },
     items: { type: [lineSchema], required: true },
     shippingAddress: { type: shippingSchema, required: true },
     subtotal: { type: Number, required: true, min: 0, validate: Number.isInteger },
+    discount: { type: Number, default: 0, min: 0, validate: Number.isInteger },
+    couponId: { type: String, default: null },
+    couponCode: { type: String, default: null },
     total: { type: Number, required: true, min: 0, validate: Number.isInteger },
+    tinglePointsUsed: { type: Number, default: 0, min: 0, validate: Number.isInteger },
+    tinglePointsEarned: { type: Number, default: 0, min: 0, validate: Number.isInteger },
     currency: { type: String, required: true, default: "INR" },
     status: { type: String, enum: ORDER_STATUSES, default: "pending", required: true },
     paidAt: { type: Date, default: null },
@@ -50,6 +56,7 @@ const orderSchema = new Schema(
 
 orderSchema.index({ userId: 1, createdAt: -1 });
 orderSchema.index({ status: 1, createdAt: -1 });
+orderSchema.index({ userId: 1, couponId: 1, status: 1, createdAt: -1 });
 
 export type OrderDocument = InferSchemaType<typeof orderSchema>;
 

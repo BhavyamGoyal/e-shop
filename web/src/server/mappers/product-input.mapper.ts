@@ -1,4 +1,4 @@
-import type { ProductInput, ProductListRow, VariantInput } from "../types/admin.types";
+import type { CostInput, ProductInput, ProductListRow, VariantInput } from "../types/admin.types";
 import type { AdminProduct } from "../repositories/product-admin.repository";
 
 const stripHtml = (html: string): string => html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -19,6 +19,7 @@ export const EMPTY_INPUT: ProductInput = {
   images: [],
   options: [],
   variants: [],
+  costs: [],
   seoTitle: "",
   seoDescription: "",
 };
@@ -58,6 +59,7 @@ export function toDocumentFields(input: ProductInput): Record<string, unknown> {
       image: variant.image || null,
       position: index + 1,
     })),
+    costs: input.costs,
     seo: {
       title: input.seoTitle || null,
       description: input.seoDescription || null,
@@ -92,6 +94,7 @@ export function toInput(doc: AdminProduct): ProductInput {
       options: variant.options ?? [],
       image: variant.image ?? "",
     })),
+    costs: (doc.costs ?? []).map((cost) => ({ name: cost.name ?? "", amount: cost.amount ?? 0 })),
     seoTitle: doc.seo?.title ?? "",
     seoDescription: doc.seo?.description ?? "",
   };
@@ -102,6 +105,7 @@ export const toListRow = (doc: AdminProduct): ProductListRow => ({
   handle: doc.handle,
   title: doc.title,
   price: doc.price,
+  totalCost: (doc.costs ?? []).reduce((sum: number, cost): number => sum + (cost.amount ?? 0), 0),
   available: doc.available ?? true,
   active: doc.active ?? true,
   image: doc.images?.[0]?.url ?? null,

@@ -49,7 +49,9 @@ const variantSchema = new Schema(
   { _id: false },
 );
 
-const seoSchema = new Schema(
+const costSchema = new Schema({ name: String, amount: Number }, { _id: false });
+
+const seoSchema =new Schema(
   { title: String, description: String, ogImage: String },
   { _id: false },
 );
@@ -70,6 +72,7 @@ export const productSchema = new Schema(
     descriptionText: String,
     options: [optionSchema],
     variants: [variantSchema],
+    costs: { type: [costSchema], default: [] },
     price: { type: Number, required: true },
     priceMax: Number,
     compareAtPrice: Number,

@@ -148,19 +148,15 @@ export async function buildHomeData(): Promise<WebsiteData> {
     heroBannerSection,
     {
       ...sectionBase,
-      key: "shopByCategory",
-      id: "shopByCategory",
+      key: "onSale",
+      id: "onSale",
       header: heading(
-        "Shop by Category",
-        "Lamps, planters, desk organisers and more, designed and 3D Printed to order.",
+        "On Sale Now",
+        "Limited-time prices on popular prints.",
+        "/product?onSale=true",
       ),
       blocks: [
-        {
-          type: "tileScroller",
-          gap: 20,
-          visible: 6,
-          tiles: homeCategories.map(toTile),
-        },
+        { type: "productRail", gap: 24, visible: 4.4, products: onSale },
       ],
     },
     promoBannerSection,
@@ -180,15 +176,19 @@ export async function buildHomeData(): Promise<WebsiteData> {
     },
     {
       ...sectionBase,
-      key: "onSale",
-      id: "onSale",
+      key: "shopByCategory",
+      id: "shopByCategory",
       header: heading(
-        "On Sale Now",
-        "Limited-time prices on popular prints.",
-        "/product?onSale=true",
+        "Shop by Category",
+        "Lamps, planters, desk organisers and more, designed and 3D Printed to order.",
       ),
       blocks: [
-        { type: "productRail", gap: 24, visible: 4.4, products: onSale },
+        {
+          type: "tileScroller",
+          gap: 20,
+          visible: 6,
+          tiles: homeCategories.map(toTile),
+        },
       ],
     },
     {

@@ -76,6 +76,12 @@ export function AdminProductsTable() {
       render: (row) => `₹${row.price}`,
     },
     {
+      key: "totalCost",
+      header: "total cost",
+      align: "right",
+      render: (row) => `₹${row.totalCost}`,
+    },
+    {
       key: "available",
       header: "status",
       sortable: true,

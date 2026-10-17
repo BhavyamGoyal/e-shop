@@ -7,6 +7,7 @@ import { deleteProductAction, saveProductAction } from "@/server/actions/product
 import type { ActionResult, ProductEditorData, ProductInput } from "@/server/types/admin.types";
 import { Button, Heading } from "../atoms";
 import { AlertMessage } from "../molecules";
+import { CostsField } from "./CostsField";
 import { ImagesField } from "./ImagesField";
 import { OptionsField } from "./OptionsField";
 import { ProductBasicsFields } from "./ProductBasicsFields";
@@ -81,6 +82,7 @@ export function ProductEditor({ id: initialId, input: initial }: ProductEditorDa
       <ImagesField images={input.images} onChange={(images) => change({ images })} />
       <OptionsField options={input.options} onChange={(options) => change({ options })} />
       <VariantsField variants={input.variants} basePrice={input.price} onChange={(variants) => change({ variants })} />
+      <CostsField costs={input.costs} onChange={(costs) => change({ costs })} />
       {savedHandle ? <ProductPreview handle={savedHandle} version={version} /> : null}
     </form>
   );

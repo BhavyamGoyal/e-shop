@@ -15,6 +15,7 @@ const SECTIONS: { href: string; title: string; text: string }[] = [
   { href: "/admin/instagram", title: "Instagram", text: "Upload or sync Instagram insights and view followers, reach, posts and audience." },
   { href: "/admin/orders", title: "Orders", text: "Track orders, their payment status and delivery addresses." },
   { href: "/admin/carts", title: "Carts", text: "See what logged-in users have in their carts and the value of each cart." },
+  { href: "/admin/coupons", title: "Coupons", text: "Create discount coupons and assign them to users." },
   { href: "/admin/users", title: "Users", text: "See registered users and manage their roles." },
 ];
 

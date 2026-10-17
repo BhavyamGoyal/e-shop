@@ -9,6 +9,7 @@ export interface NewUser {
   email: string;
   passwordHash: string;
   image?: string;
+  phone?: string;
   role: UserRole;
 }
 
@@ -16,6 +17,16 @@ export const userRepository = {
   async findByEmail(email: string): Promise<StoredUser | null> {
     await connectDb();
     return UserModel.findOne({ email: email.toLowerCase().trim() }).lean<StoredUser>();
+  },
+
+  async findByPhone(phone: string): Promise<StoredUser | null> {
+    await connectDb();
+    return UserModel.findOne({ phone }).lean<StoredUser>();
+  },
+
+  async setPhone(id: string, phone: string): Promise<void> {
+    await connectDb();
+    await UserModel.updateOne({ _id: id }, { $set: { phone } });
   },
 
   async findById(id: string): Promise<StoredUser | null> {
@@ -42,6 +53,13 @@ export const userRepository = {
     await connectDb();
     const created = await UserModel.create(user);
     return created.toObject() as StoredUser;
+  },
+
+  async adjustTinglePoints(id: string, delta: number): Promise<void> {
+    await connectDb();
+    await UserModel.updateOne({ _id: id }, [
+      { $set: { tinglePoints: { $max: [0, { $add: [{ $ifNull: ["$tinglePoints", 0] }, delta] }] } } },
+    ]);
   },
 
   async updateProfile(email: string, profile: { name: string; image: string }): Promise<StoredUser | null> {

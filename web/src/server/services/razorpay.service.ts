@@ -2,8 +2,9 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import Razorpay from "razorpay";
 import { ApiError } from "../http/errors";
 import type { PaymentProof } from "../types/order.types";
+import { MIN_PAYABLE_PAISE } from "./coupon-discount";
 
-export const MIN_AMOUNT_PAISE = 100;
+export const MIN_AMOUNT_PAISE: number = MIN_PAYABLE_PAISE;
 
 interface Credentials {
   keyId: string;

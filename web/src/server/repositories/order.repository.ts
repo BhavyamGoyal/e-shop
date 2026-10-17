@@ -9,9 +9,16 @@ export interface NewOrder {
   orderNumber: string;
   userId: string;
   email: string;
+  isLoggedOutOrder: boolean;
   items: OrderLineRecord[];
   shippingAddress: AddressSnapshot;
+  subtotal: number;
+  discount: number;
+  couponId: string | null;
+  couponCode: string | null;
   total: number;
+  tinglePointsUsed: number;
+  tinglePointsEarned: number;
   currency: string;
 }
 
@@ -22,7 +29,7 @@ export const orderRepository = {
     const shippingAddress = location
       ? { ...rest, location: { type: "Point", coordinates: [location.lng, location.lat] } }
       : rest;
-    const created = await OrderModel.create({ ...order, shippingAddress, subtotal: order.total });
+    const created = await OrderModel.create({ ...order, shippingAddress });
     return String(created._id);
   },
 
@@ -36,8 +43,16 @@ export const orderRepository = {
     return OrderModel.findOne({ orderNumber, ...(userId ? { userId } : {}) }).lean<StoredOrder & { _id: unknown }>();
   },
 
-  async markPaid(orderId: string): Promise<void> {
+  async markPaid(orderId: string): Promise<StoredOrder | null> {
     await connectDb();
-    await OrderModel.updateOne({ _id: orderId, status: "pending" }, { $set: { status: "paid", paidAt: new Date() } });
+    return OrderModel.findOneAndUpdate(
+      { _id: orderId, status: "pending" },
+      { $set: { status: "paid", paidAt: new Date() } },
+    ).lean<StoredOrder>();
+  },
+
+  async countPendingWithCoupon(userId: string, couponId: string, since: Date): Promise<number> {
+    await connectDb();
+    return OrderModel.countDocuments({ userId, couponId, status: "pending", createdAt: { $gte: since } });
   },
 };

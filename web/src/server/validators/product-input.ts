@@ -1,5 +1,5 @@
 import { ValidationError } from "../http/errors";
-import type { ImageInput, OptionInput, ProductInput, VariantInput } from "../types/admin.types";
+import type { CostInput, ImageInput, OptionInput, ProductInput, VariantInput } from "../types/admin.types";
 
 type Raw = Record<string, unknown>;
 
@@ -57,6 +57,12 @@ const toVariant = (value: unknown, index: number): VariantInput => {
   };
 };
 
+const toCost = (value: unknown): CostInput => {
+  const raw: Raw = asRecord(value);
+  const name: string = text(raw.name);
+  return { name, amount: amount(raw.amount === "" ? 0 : raw.amount, `Cost "${name}"`) };
+};
+
 export function parseProductInput(payload: unknown): ProductInput {
   const raw: Raw = asRecord(payload);
   const title: string = text(raw.title);
@@ -79,6 +85,7 @@ export function parseProductInput(payload: unknown): ProductInput {
     images: list(raw.images).map(toImage).filter((image: ImageInput): boolean => image.url.length > 0),
     options: list(raw.options).map(toOption).filter((option: OptionInput): boolean => option.name.length > 0),
     variants: list(raw.variants).map(toVariant),
+    costs: list(raw.costs).map(toCost).filter((cost: CostInput): boolean => cost.name.length > 0),
     seoTitle: text(raw.seoTitle),
     seoDescription: text(raw.seoDescription),
   };

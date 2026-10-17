@@ -26,7 +26,10 @@ export const toPaymentView = (payment: StoredPayment | null): PaymentView | null
 export const toOrderSummary = (order: StoredOrder, payment: StoredPayment | null): OrderSummary => ({
   orderNumber: order.orderNumber,
   email: order.email,
+  isLoggedOutOrder: order.isLoggedOutOrder ?? false,
   itemCount: order.items.reduce((sum: number, line): number => sum + line.quantity, 0),
+  discount: order.discount ?? 0,
+  couponCode: order.couponCode ?? null,
   total: order.total,
   currency: order.currency,
   status: order.status,

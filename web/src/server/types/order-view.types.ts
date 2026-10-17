@@ -14,7 +14,10 @@ export interface PaymentView {
 export interface OrderSummary {
   orderNumber: string;
   email: string;
+  isLoggedOutOrder: boolean;
   itemCount: number;
+  discount: number;
+  couponCode: string | null;
   total: number;
   currency: string;
   status: OrderStatus;

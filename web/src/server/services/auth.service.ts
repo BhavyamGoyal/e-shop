@@ -3,11 +3,11 @@ import { hashPassword, verifyPassword } from "../auth/password";
 import type { Session } from "../auth/session";
 import { ValidationError } from "../http/errors";
 import { userRepository, type StoredUser } from "../repositories/user.repository";
+import { EMAIL_PATTERN } from "../validators/contact-input";
 
 const ADMIN_EMAIL = "admin@tinglet.com";
 const ADMIN_PASSWORD = "tinglet@2026#123";
 const MIN_PASSWORD_LENGTH = 8;
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const globalScope = globalThis as unknown as { adminSeeded?: boolean };
 

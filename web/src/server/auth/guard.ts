@@ -23,6 +23,11 @@ export async function requireCustomer(): Promise<StoredUser> {
   return user;
 }
 
+export async function optionalCustomer(): Promise<StoredUser | null> {
+  const session: Session | null = await readSession();
+  return session ? userRepository.findById(session.userId) : null;
+}
+
 export async function requireStaff(): Promise<Session> {
   const session: Session | null = await currentSession();
   if (!session) throw new UnauthorizedError();

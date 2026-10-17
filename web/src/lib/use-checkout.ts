@@ -3,14 +3,14 @@ import { useState } from "react";
 import { AuthRequiredError } from "@/lib/api-request";
 import { createCheckoutOrder, verifyCheckoutPayment } from "@/lib/checkout-api";
 import { loadRazorpay, type RazorpayFailure, type RazorpaySuccess } from "@/lib/razorpay-checkout";
-import type { CheckoutOrder } from "@/server/types/order.types";
+import type { CheckoutOrder, GuestCheckout } from "@/server/types/order.types";
 import { useCartStore } from "@/stores/cart/Cart.store";
 
 export interface CheckoutState {
   busy: boolean;
   error: string;
   orderNumber: string;
-  pay: (addressId: string) => Promise<void>;
+  pay: (addressId: string, tinglePoints: number, couponCode: string, guest: GuestCheckout | null) => Promise<void>;
 }
 
 const STORE_NAME = "Tinglet";
@@ -57,12 +57,17 @@ export function useCheckout(): CheckoutState {
     checkout.open();
   };
 
-  const pay = async (addressId: string): Promise<void> => {
+  const pay = async (
+    addressId: string,
+    tinglePoints: number,
+    couponCode: string,
+    guest: GuestCheckout | null,
+  ): Promise<void> => {
     setBusy(true);
     setError("");
     try {
       if (!(await loadRazorpay())) throw new Error("Could not load the payment window");
-      open(await createCheckoutOrder(items, addressId));
+      open(await createCheckoutOrder(items, addressId, tinglePoints, couponCode, guest));
     } catch (failure) {
       setBusy(false);
       if (failure instanceof AuthRequiredError) {

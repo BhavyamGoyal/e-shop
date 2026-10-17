@@ -83,6 +83,11 @@ export interface VariantInput {
   image: string;
 }
 
+export interface CostInput {
+  name: string;
+  amount: number;
+}
+
 export interface ProductInput {
   title: string;
   handle: string;
@@ -99,6 +104,7 @@ export interface ProductInput {
   images: ImageInput[];
   options: OptionInput[];
   variants: VariantInput[];
+  costs: CostInput[];
   seoTitle: string;
   seoDescription: string;
 }
@@ -108,6 +114,7 @@ export interface ProductListRow {
   handle: string;
   title: string;
   price: number;
+  totalCost: number;
   available: boolean;
   active: boolean;
   image: string | null;

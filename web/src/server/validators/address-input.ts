@@ -1,9 +1,9 @@
 import { ValidationError } from "../http/errors";
 import type { AddressInput, GeoPoint } from "../types/address.types";
+import { parsePhone } from "./contact-input";
 
 type Raw = Record<string, unknown>;
 
-const PHONE = /^[6-9]\d{9}$/;
 const POSTAL_CODE = /^[1-9]\d{5}$/;
 
 const text = (value: unknown): string => (typeof value === "string" ? value.trim() : "");
@@ -14,12 +14,6 @@ function bounded(value: unknown, label: string, min: number, max: number): strin
     throw new ValidationError(min === 0 ? `${label} is too long` : `${label} must be ${min}-${max} characters`);
   }
   return result;
-}
-
-function parsePhone(value: unknown): string {
-  const digits: string = text(value).replace(/[\s-]/g, "").replace(/^(\+91|91|0)(?=\d{10}$)/, "");
-  if (!PHONE.test(digits)) throw new ValidationError("Enter a valid 10-digit mobile number");
-  return digits;
 }
 
 function parseLocation(value: unknown): GeoPoint | null {

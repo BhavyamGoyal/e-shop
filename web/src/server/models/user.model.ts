@@ -7,13 +7,17 @@ const userSchema = new Schema(
   {
     name: { type: String, default: "" },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    phone: { type: String, default: null },
     image: { type: String, default: "" },
     passwordHash: { type: String, default: "" },
     role: { type: String, enum: USER_ROLES, default: "customer" },
+    tinglePoints: { type: Number, default: 0, min: 0, validate: Number.isInteger },
     createdAt: { type: Date, default: Date.now },
   },
   { collection: "users", versionKey: false },
 );
+
+userSchema.index({ phone: 1 }, { unique: true, partialFilterExpression: { phone: { $type: "string" } } });
 
 export type UserDocument = InferSchemaType<typeof userSchema>;
 

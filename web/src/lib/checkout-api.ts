@@ -1,10 +1,19 @@
 import { request } from "@/lib/api-request";
-import type { CheckoutOrder, PaymentProof, VerifiedPayment } from "@/server/types/order.types";
+import type { CheckoutOrder, GuestCheckout, PaymentProof, VerifiedPayment } from "@/server/types/order.types";
 import type { CartItem } from "@/stores/cart/Cart.types";
 
-export const createCheckoutOrder = (items: CartItem[], addressId: string): Promise<CheckoutOrder> =>
+export const createCheckoutOrder = (
+  items: CartItem[],
+  addressId: string,
+  tinglePoints: number,
+  couponCode: string,
+  guest: GuestCheckout | null,
+): Promise<CheckoutOrder> =>
   request<CheckoutOrder>("POST", "/api/checkout/order", {
     addressId,
+    tinglePoints,
+    couponCode,
+    guest,
     items: items.map((item: CartItem) => ({ key: item.key, quantity: item.quantity })),
   });
 

@@ -38,6 +38,7 @@ const LIST_PROJECTION = {
   title: 1,
   handle: 1,
   price: 1,
+  costs: 1,
   available: 1,
   active: 1,
   productType: 1,

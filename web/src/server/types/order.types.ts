@@ -25,6 +25,22 @@ export interface CheckoutOrder {
   name: string;
 }
 
+export interface GuestAddress {
+  fullName: string;
+  line1: string;
+  line2: string;
+  landmark: string;
+  city: string;
+  state: string;
+  postalCode: string;
+}
+
+export interface GuestCheckout {
+  email: string;
+  phone: string;
+  address: GuestAddress;
+}
+
 export interface PaymentProof {
   razorpay_order_id: string;
   razorpay_payment_id: string;
