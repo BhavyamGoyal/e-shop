@@ -1,4 +1,4 @@
-import type { CostInput, ProductInput, ProductListRow, VariantInput } from "../types/admin.types";
+import type { CostInput, MetaDataInput, ProductInput, ProductListRow, VariantInput } from "../types/admin.types";
 import type { AdminProduct } from "../repositories/product-admin.repository";
 
 const stripHtml = (html: string): string => html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -22,7 +22,20 @@ export const EMPTY_INPUT: ProductInput = {
   costs: [],
   seoTitle: "",
   seoDescription: "",
+  reviewed: { description: false, images: false, title: false },
+  metaData: [],
 };
+
+const parseMetaValue = (value: string): unknown => {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+};
+
+const formatMetaValue = (value: unknown): string =>
+  typeof value === "string" ? value : JSON.stringify(value) ?? "";
 
 export function toDocumentFields(input: ProductInput): Record<string, unknown> {
   const prices: number[] = input.variants.length
@@ -60,6 +73,10 @@ export function toDocumentFields(input: ProductInput): Record<string, unknown> {
       position: index + 1,
     })),
     costs: input.costs,
+    reviewed: input.reviewed,
+    metaData: Object.fromEntries(
+      input.metaData.map((entry: MetaDataInput): [string, unknown] => [entry.key, parseMetaValue(entry.value)]),
+    ),
     seo: {
       title: input.seoTitle || null,
       description: input.seoDescription || null,
@@ -97,6 +114,14 @@ export function toInput(doc: AdminProduct): ProductInput {
     costs: (doc.costs ?? []).map((cost) => ({ name: cost.name ?? "", amount: cost.amount ?? 0 })),
     seoTitle: doc.seo?.title ?? "",
     seoDescription: doc.seo?.description ?? "",
+    reviewed: {
+      description: doc.reviewed?.description ?? false,
+      images: doc.reviewed?.images ?? false,
+      title: doc.reviewed?.title ?? false,
+    },
+    metaData: Object.entries((doc.metaData ?? {}) as Record<string, unknown>).map(
+      ([key, value]): MetaDataInput => ({ key, value: formatMetaValue(value) }),
+    ),
   };
 }
 

@@ -56,6 +56,15 @@ const seoSchema =new Schema(
   { _id: false },
 );
 
+const reviewedSchema = new Schema(
+  {
+    description: { type: Boolean, default: false },
+    images: { type: Boolean, default: false },
+    title: { type: Boolean, default: false },
+  },
+  { _id: false },
+);
+
 export const productSchema = new Schema(
   {
     sourceId: { type: Number, required: true, index: true },
@@ -86,6 +95,8 @@ export const productSchema = new Schema(
     models3d: [modelSchema],
     mediaFolder: String,
     seo: seoSchema,
+    metaData: { type: Schema.Types.Mixed, default: () => ({}) },
+    reviewed: { type: reviewedSchema, default: () => ({}) },
     structuredData: Schema.Types.Mixed,
     publishedAt: Date,
     sourceCreatedAt: Date,

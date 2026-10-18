@@ -88,6 +88,17 @@ export interface CostInput {
   amount: number;
 }
 
+export interface ReviewedInput {
+  description: boolean;
+  images: boolean;
+  title: boolean;
+}
+
+export interface MetaDataInput {
+  key: string;
+  value: string;
+}
+
 export interface ProductInput {
   title: string;
   handle: string;
@@ -107,6 +118,8 @@ export interface ProductInput {
   costs: CostInput[];
   seoTitle: string;
   seoDescription: string;
+  reviewed: ReviewedInput;
+  metaData: MetaDataInput[];
 }
 
 export interface ProductListRow {

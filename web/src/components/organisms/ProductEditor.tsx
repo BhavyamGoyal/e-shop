@@ -9,9 +9,11 @@ import { Button, Heading } from "../atoms";
 import { AlertMessage } from "../molecules";
 import { CostsField } from "./CostsField";
 import { ImagesField } from "./ImagesField";
+import { MetaDataField } from "./MetaDataField";
 import { OptionsField } from "./OptionsField";
 import { ProductBasicsFields } from "./ProductBasicsFields";
 import { ProductPreview } from "./ProductPreview";
+import { ReviewedField } from "./ReviewedField";
 import { VariantsField } from "./VariantsField";
 
 interface Notice {
@@ -79,10 +81,12 @@ export function ProductEditor({ id: initialId, input: initial }: ProductEditorDa
       </div>
       {notice ? <AlertMessage tone={notice.tone} message={notice.message} /> : null}
       <ProductBasicsFields input={input} onChange={change} />
+      <ReviewedField reviewed={input.reviewed} onChange={(reviewed) => change({ reviewed })} />
       <ImagesField images={input.images} onChange={(images) => change({ images })} />
       <OptionsField options={input.options} onChange={(options) => change({ options })} />
       <VariantsField variants={input.variants} basePrice={input.price} onChange={(variants) => change({ variants })} />
       <CostsField costs={input.costs} onChange={(costs) => change({ costs })} />
+      <MetaDataField metaData={input.metaData} onChange={(metaData) => change({ metaData })} />
       {savedHandle ? <ProductPreview handle={savedHandle} version={version} /> : null}
     </form>
   );

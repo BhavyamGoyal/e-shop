@@ -1,5 +1,5 @@
 import { ValidationError } from "../http/errors";
-import type { CostInput, ImageInput, OptionInput, ProductInput, VariantInput } from "../types/admin.types";
+import type { CostInput, ImageInput, MetaDataInput, OptionInput, ProductInput, ReviewedInput, VariantInput } from "../types/admin.types";
 
 type Raw = Record<string, unknown>;
 
@@ -63,6 +63,29 @@ const toCost = (value: unknown): CostInput => {
   return { name, amount: amount(raw.amount === "" ? 0 : raw.amount, `Cost "${name}"`) };
 };
 
+const toReviewed = (value: unknown): ReviewedInput => {
+  const raw: Raw = asRecord(value);
+  return { description: raw.description === true, images: raw.images === true, title: raw.title === true };
+};
+
+const toMetaData = (value: unknown): MetaDataInput[] => {
+  const seen: Set<string> = new Set();
+  return list(value)
+    .map((item: unknown): MetaDataInput => {
+      const raw: Raw = asRecord(item);
+      return { key: text(raw.key), value: typeof raw.value === "string" ? raw.value : "" };
+    })
+    .filter((entry: MetaDataInput): boolean => entry.key.length > 0)
+    .map((entry: MetaDataInput): MetaDataInput => {
+      if (entry.key.includes(".") || entry.key.startsWith("$")) {
+        throw new ValidationError(`Meta data key "${entry.key}" cannot contain "." or start with "$"`);
+      }
+      if (seen.has(entry.key)) throw new ValidationError(`Duplicate meta data key "${entry.key}"`);
+      seen.add(entry.key);
+      return entry;
+    });
+};
+
 export function parseProductInput(payload: unknown): ProductInput {
   const raw: Raw = asRecord(payload);
   const title: string = text(raw.title);
@@ -88,5 +111,7 @@ export function parseProductInput(payload: unknown): ProductInput {
     costs: list(raw.costs).map(toCost).filter((cost: CostInput): boolean => cost.name.length > 0),
     seoTitle: text(raw.seoTitle),
     seoDescription: text(raw.seoDescription),
+    reviewed: toReviewed(raw.reviewed),
+    metaData: toMetaData(raw.metaData),
   };
 }
