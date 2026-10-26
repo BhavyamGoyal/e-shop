@@ -30,7 +30,10 @@ export function CouponForm({ formId, initial, submitLabel, onSubmit, onCancel, r
   };
 
   const valid: boolean =
-    input.code.trim().length >= 3 && input.description.trim().length > 0 && input.discountAmount >= 1 && input.usageLimit >= 1;
+    input.code.trim().length >= 3 && input.description.trim().length > 0 && input.discountPercent >= 1 &&
+    input.discountPercent <= 100 &&
+    input.maxDiscountAmount >= 1 &&
+    input.usageLimit >= 1;
 
   return (
     <form onSubmit={(event) => void submit(event)} className="flex flex-col gap-4 rounded-md border p-4">
@@ -50,13 +53,23 @@ export function CouponForm({ formId, initial, submitLabel, onSubmit, onCancel, r
           onChange={(e) => change({ description: e.target.value })}
         />
         <FormField
-          id={`${formId}-amount`}
-          label="Discount amount (₹)"
+          id={`${formId}-percent`}
+          label="Discount (%)"
+          type="number"
+          min={1}
+          max={100}
+          step={1}
+          value={input.discountPercent}
+          onChange={(e) => change({ discountPercent: Math.trunc(Number(e.target.value)) })}
+        />
+        <FormField
+          id={`${formId}-max`}
+          label="Max discount (₹)"
           type="number"
           min={1}
           step="0.01"
-          value={input.discountAmount / 100}
-          onChange={(e) => change({ discountAmount: Math.round(Number(e.target.value) * 100) })}
+          value={input.maxDiscountAmount / 100}
+          onChange={(e) => change({ maxDiscountAmount: Math.round(Number(e.target.value) * 100) })}
         />
         <FormField
           id={`${formId}-limit`}

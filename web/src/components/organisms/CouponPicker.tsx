@@ -21,7 +21,7 @@ export function CouponPicker({ coupons, selected, onSelect }: CouponPickerProps)
         placeholder="No coupon"
         options={coupons.map((coupon: UserCouponView) => ({
           value: coupon.code,
-          label: `${coupon.code} - ${formatPaise(coupon.discountAmount)} off`,
+          label: `${coupon.code} - ${coupon.discountPercent}% off up to ${formatPaise(coupon.maxDiscountAmount)}`,
         }))}
         onChange={(event): void => onSelect(event.target.value)}
       />

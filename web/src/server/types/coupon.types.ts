@@ -1,7 +1,8 @@
 export interface CouponInput {
   code: string;
   description: string;
-  discountAmount: number;
+  discountPercent: number;
+  maxDiscountAmount: number;
   usageLimit: number;
 }
 
@@ -23,7 +24,8 @@ export interface CouponListData {
 export interface UserCouponView {
   code: string;
   description: string;
-  discountAmount: number;
+  discountPercent: number;
+  maxDiscountAmount: number;
   usesRemaining: number;
 }
 

@@ -3,7 +3,7 @@ export interface PageSeed {
   content: string;
 }
 
-const ADDRESS: string = "110029, Safdarjung Enclave, New Delhi, India";
+const ADDRESS: string = "New Delhi, India";
 
 export const PAGES: PageSeed[] = [
   {

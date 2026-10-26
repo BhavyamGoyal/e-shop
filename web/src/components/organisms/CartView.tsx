@@ -88,7 +88,7 @@ export function CartView() {
   const pointsUsed: number = useTingle ? maxPoints : 0;
   const coupon: UserCouponView | undefined = coupons.find((item: UserCouponView): boolean => item.code === couponCode);
   const afterPointsPaise: number = subtotalPaise - pointsValuePaise(pointsUsed);
-  const couponPaise: number = coupon ? couponDiscountPaise(coupon.discountAmount, afterPointsPaise) : 0;
+  const couponPaise: number = coupon ? couponDiscountPaise(coupon, afterPointsPaise) : 0;
   const payablePaise: number = afterPointsPaise - couponPaise;
   const discounted: boolean = pointsUsed > 0 || couponPaise > 0;
   return (

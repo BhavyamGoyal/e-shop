@@ -12,7 +12,8 @@ const toRecord = (coupon: StoredCoupon, counts: Record<string, number>): CouponR
   id: coupon._id.toString(),
   code: coupon.code,
   description: coupon.description,
-  discountAmount: coupon.discountAmount,
+  discountPercent: coupon.discountPercent,
+  maxDiscountAmount: coupon.maxDiscountAmount,
   usageLimit: coupon.usageLimit,
   assignedCount: counts[coupon._id.toString()] ?? 0,
 });
@@ -25,7 +26,8 @@ const toUserOption = (user: StoredUser): UserOption => ({
 const toUserCouponView = (coupon: StoredCoupon, assignment: StoredUserCoupon): UserCouponView => ({
   code: coupon.code,
   description: coupon.description,
-  discountAmount: coupon.discountAmount,
+  discountPercent: coupon.discountPercent,
+  maxDiscountAmount: coupon.maxDiscountAmount,
   usesRemaining: assignment.usesRemaining,
 });
 

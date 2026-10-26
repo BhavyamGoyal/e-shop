@@ -9,12 +9,13 @@ import { AlertMessage } from "../molecules";
 import { CouponAssign } from "./CouponAssign";
 import { CouponForm } from "./CouponForm";
 
-const BLANK: CouponInput = { code: "", description: "", discountAmount: 0, usageLimit: 1 };
+const BLANK: CouponInput = { code: "", description: "", discountPercent: 0, maxDiscountAmount: 0, usageLimit: 1 };
 
 const toInput = (coupon: CouponRecord): CouponInput => ({
   code: coupon.code,
   description: coupon.description,
-  discountAmount: coupon.discountAmount,
+  discountPercent: coupon.discountPercent,
+  maxDiscountAmount: coupon.maxDiscountAmount,
   usageLimit: coupon.usageLimit,
 });
 
@@ -70,7 +71,9 @@ export function CouponsManager() {
                       {coupon.description}
                     </Text>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      <Badge>{formatPaise(coupon.discountAmount)} off</Badge>
+                      <Badge>
+                        {coupon.discountPercent}% off up to {formatPaise(coupon.maxDiscountAmount)}
+                      </Badge>
                       <Badge>
                         {coupon.usageLimit} {coupon.usageLimit === 1 ? "use" : "uses"} per user
                       </Badge>

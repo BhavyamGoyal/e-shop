@@ -1,0 +1,260 @@
+:root {
+  --bg: #192631;
+  --panel: #192631;
+  --field: #425d72;
+  --line: #4f6b80;
+  --text: #ffffff;
+  --muted: #b8c7d3;
+  --accent: #425d72;
+  --accent-hover: #51708a;
+  --accent-soft: #7f9bb0;
+  --on-accent: #ffffff;
+  --ok: #9be3b4;
+  --warn: #f2d28b;
+  --err: #ffb4a8;
+  scrollbar-width: thin;
+  scrollbar-color: #425d72 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #425d72;
+  border-radius: 999px;
+  border: 2px solid var(--panel);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #51708a;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  height: 100%;
+}
+
+.panel {
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.brand {
+  display: block;
+  height: 56px;
+  width: auto;
+  margin-bottom: 8px;
+}
+
+.panel header h1 {
+  font-size: 18px;
+  margin: 0 0 4px;
+  color: var(--text);
+}
+
+.panel header p {
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+
+section {
+  border-top: 1px solid var(--line);
+  padding: 12px 0;
+}
+
+section h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 110px 1fr 56px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.row span {
+  color: var(--muted);
+}
+
+.row > :nth-child(2):last-child {
+  grid-column: 2 / 4;
+}
+
+.row .num {
+  width: 100%;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 6px;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 1px;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: #7f9bb0;
+}
+
+input[type="color"] {
+  width: 48px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: none;
+  border-radius: 4px;
+}
+
+select,
+input[type="text"],
+input[type="file"],
+input[type="number"],
+textarea {
+  width: 100%;
+  background: var(--field);
+  color: var(--on-accent);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: inherit;
+  font-weight: 600;
+  padding: 11px 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--accent-hover);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.stats {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.stats .ok {
+  color: var(--ok);
+}
+
+.stats .bad {
+  color: var(--err);
+}
+
+.stage {
+  position: relative;
+  min-width: 0;
+}
+
+#viewport {
+  position: absolute;
+  inset: 0;
+}
+
+.status {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(25, 38, 49, 0.9);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.status.err {
+  color: var(--err);
+}
+
+.reset {
+  position: absolute;
+  right: 14px;
+  top: 12px;
+  width: auto;
+  padding: 6px 12px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 500;
+}
+
+.reset:hover {
+  background: var(--accent-hover);
+}
+
+@media (max-width: 760px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 55vh 1fr;
+  }
+
+  .stage {
+    order: -1;
+  }
+
+  .panel {
+    border-right: 0;
+    border-top: 1px solid var(--line);
+  }
+}

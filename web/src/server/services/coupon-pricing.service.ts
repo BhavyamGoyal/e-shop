@@ -21,5 +21,5 @@ export async function applyCoupon(userId: string, code: string | null, payable: 
     new Date(Date.now() - PENDING_WINDOW_MS),
   );
   if (inFlight >= assignment.usesRemaining) throw new QueryError("You have unpaid orders using this coupon");
-  return { couponId, code: coupon.code, discount: couponDiscountPaise(coupon.discountAmount, payable) };
+  return { couponId, code: coupon.code, discount: couponDiscountPaise(coupon, payable) };
 }
