@@ -1,9 +1,16 @@
 import type { ReactNode } from "react";
+import { cn } from "@/lib/cn";
 
 interface AccountLink {
   href: string;
   label: string;
   icon: ReactNode;
+}
+
+interface AccountLinksProps {
+  onNavigate?: () => void;
+  current?: string;
+  className?: string;
 }
 
 const svgProps = {
@@ -62,17 +69,26 @@ const ACCOUNT_LINKS: AccountLink[] = [
   },
 ];
 
-export function AccountLinks({ onNavigate }: { onNavigate?: () => void }) {
+export function AccountLinks({ onNavigate, current, className }: AccountLinksProps) {
   return (
-    <nav className="flex flex-col gap-1">
+    <nav className={cn("flex flex-col gap-1", className)}>
       {ACCOUNT_LINKS.map((link: AccountLink) => (
         <a
           key={link.href}
           href={link.href}
           onClick={onNavigate}
-          className="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-surface-foreground transition-colors hover:bg-muted"
+          aria-current={link.href === current ? "page" : undefined}
+          className={cn(
+            "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium whitespace-nowrap text-surface-foreground transition-colors hover:bg-muted",
+            link.href === current && "bg-primary/10 text-primary",
+          )}
         >
-          <span className="flex size-8 items-center justify-center text-muted-foreground transition-colors group-hover:text-primary">
+          <span
+            className={cn(
+              "flex size-8 items-center justify-center text-muted-foreground transition-colors group-hover:text-primary",
+              link.href === current && "text-primary",
+            )}
+          >
             {link.icon}
           </span>
           {link.label}

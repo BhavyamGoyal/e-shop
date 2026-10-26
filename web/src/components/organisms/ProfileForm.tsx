@@ -4,32 +4,28 @@ import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { Button, Text } from "../atoms";
 import { AlertMessage, FormField, LoginPrompt } from "../molecules";
 import { AuthRequiredError } from "@/lib/api-request";
-import { fetchProfile, saveProfile } from "@/lib/profile-api";
-import type { Profile } from "@/server/services/auth.service";
+import { saveProfile } from "@/lib/profile-api";
+import { useProfile, type ProfileState } from "@/lib/use-profile";
+import { useAccountStore } from "@/stores/account/Account.store";
 
 interface ProfileFormProps {
   loginNext: string;
 }
 
 export function ProfileForm({ loginNext }: ProfileFormProps) {
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const { profile, loaded }: ProfileState = useProfile();
+  const setProfile = useAccountStore((state) => state.setProfile);
+  const reset = useAccountStore((state) => state.reset);
   const [name, setName] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [saved, setSaved] = useState<boolean>(false);
 
   useEffect((): void => {
-    fetchProfile()
-      .then((loaded: Profile | null): void => {
-        setProfile(loaded);
-        setName(loaded?.name ?? "");
-      })
-      .catch((failure: unknown): void => setError(failure instanceof Error ? failure.message : "Could not load profile"))
-      .finally((): void => setLoading(false));
-  }, []);
+    setName(profile?.name ?? "");
+  }, [profile?.name]);
 
-  if (loading) return <div className="h-24 animate-pulse rounded-2xl bg-muted" aria-busy />;
+  if (!loaded) return <div className="h-24 animate-pulse rounded-2xl bg-muted" aria-busy />;
   if (!profile) return <LoginPrompt message="Log in to view your profile." next={loginNext} />;
 
   const submit = async (event: FormEvent): Promise<void> => {
@@ -37,13 +33,11 @@ export function ProfileForm({ loginNext }: ProfileFormProps) {
     setSaving(true);
     setSaved(false);
     try {
-      const updated: Profile = await saveProfile(name);
-      setProfile(updated);
-      setName(updated.name);
+      setProfile(await saveProfile(name));
       setError("");
       setSaved(true);
     } catch (failure) {
-      if (failure instanceof AuthRequiredError) setProfile(null);
+      if (failure instanceof AuthRequiredError) reset();
       else setError(failure instanceof Error ? failure.message : "Could not save profile");
     } finally {
       setSaving(false);

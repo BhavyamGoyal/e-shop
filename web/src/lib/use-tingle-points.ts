@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useHydrated } from "@/hooks/useHydrated";
+import { loadBalance } from "@/lib/account-loaders";
+import { useAccountStore } from "@/stores/account/Account.store";
 
-export function useTinglePoints(refreshKey: string): number {
-  const [balance, setBalance] = useState<number>(0);
+export function useTinglePoints(refreshKey: string = ""): number {
+  const hydrated: boolean = useHydrated();
+  const balance: number = useAccountStore((state) => state.balance);
 
-  useEffect(() => {
-    fetch("/api/tingle-points")
-      .then((response: Response) => (response.ok ? response.json() : { balance: 0 }))
-      .then((body: { balance: number }) => setBalance(body.balance))
-      .catch(() => setBalance(0));
+  useEffect((): void => {
+    void loadBalance();
   }, [refreshKey]);
 
-  return balance;
+  return hydrated ? balance : 0;
 }

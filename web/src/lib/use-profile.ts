@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useHydrated } from "@/hooks/useHydrated";
+import { loadProfile } from "@/lib/account-loaders";
+import { useAccountStore } from "@/stores/account/Account.store";
+import type { Profile } from "@/stores/account/Account.types";
 
-export interface Profile {
-  name: string;
-  email: string;
-  image: string;
-}
+export type { Profile };
 
 export interface ProfileState {
   profile: Profile | null;
@@ -14,16 +14,14 @@ export interface ProfileState {
 }
 
 export function useProfile(): ProfileState {
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loaded, setLoaded] = useState<boolean>(false);
+  const hydrated: boolean = useHydrated();
+  const profile: Profile | null = useAccountStore((state) => state.profile);
+  const [settled, setSettled] = useState<boolean>(false);
 
-  useEffect(() => {
-    fetch("/api/me")
-      .then((response: Response) => response.json())
-      .then((body: { data: Profile | null }) => setProfile(body.data))
-      .catch(() => setProfile(null))
-      .finally(() => setLoaded(true));
+  useEffect((): void => {
+    void loadProfile().finally((): void => setSettled(true));
   }, []);
 
-  return { profile, loaded };
+  const cached: boolean = hydrated && profile !== null;
+  return { profile: hydrated ? profile : null, loaded: cached || settled };
 }

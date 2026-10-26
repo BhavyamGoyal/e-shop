@@ -63,6 +63,10 @@ export * from "./CartDetailView";
 
 export { OrderCard } from "./OrderCard";
 export { OrdersManager } from "./OrdersManager";
+export { RecentOrders } from "./RecentOrders";
+export { AccountSidebar } from "./AccountSidebar";
+export { AccountShell } from "./AccountShell";
+export { AccountDashboard } from "./AccountDashboard";
 export { AdminOrdersManager } from "./AdminOrdersManager";
 export { OrderDetailView } from "./OrderDetailView";
 export { ProfileForm } from "./ProfileForm";

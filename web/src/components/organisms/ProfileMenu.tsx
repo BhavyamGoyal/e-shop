@@ -1,6 +1,7 @@
 "use client";
 
 import { useProfile, type Profile } from "@/lib/use-profile";
+import { useAccountStore } from "@/stores/account/Account.store";
 import { Button, Text } from "../atoms";
 import { AccountLinks } from "./AccountLinks";
 import { ThemeSwitcher } from "./ThemeSwitcher";
@@ -14,6 +15,7 @@ const initialOf = (profile: Profile): string => (profile.name || profile.email).
 export async function logout(): Promise<void> {
   const response: Response = await fetch("/api/auth/logout", { method: "POST" });
   const body: { redirect?: string } = await response.json();
+  useAccountStore.getState().reset();
   window.location.assign(body.redirect ?? "/login");
 }
 

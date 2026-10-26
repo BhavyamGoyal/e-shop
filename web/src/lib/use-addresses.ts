@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+import { useHydrated } from "@/hooks/useHydrated";
+import { hasData } from "@/lib/account-cache";
+import { loadAddresses } from "@/lib/account-loaders";
 import { AuthRequiredError } from "@/lib/api-request";
-import { deleteAddress, fetchAddresses, saveAddress } from "@/lib/address-api";
+import { deleteAddress, saveAddress } from "@/lib/address-api";
+import { useAccountStore } from "@/stores/account/Account.store";
 import type { AddressInput, AddressRecord } from "@/server/types/address.types";
 
 export interface AddressesState {
@@ -14,8 +18,10 @@ export interface AddressesState {
 }
 
 export function useAddresses(): AddressesState {
-  const [addresses, setAddresses] = useState<AddressRecord[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const hydrated: boolean = useHydrated();
+  const addresses: AddressRecord[] = useAccountStore((state) => state.addresses);
+  const addressesAt: number = useAccountStore((state) => state.addressesAt);
+  const [settled, setSettled] = useState<boolean>(false);
   const [authRequired, setAuthRequired] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -26,7 +32,7 @@ export function useAddresses(): AddressesState {
 
   const reload = useCallback(async (): Promise<void> => {
     try {
-      setAddresses(await fetchAddresses());
+      await loadAddresses(true);
       setError("");
     } catch (failure) {
       fail(failure);
@@ -34,10 +40,9 @@ export function useAddresses(): AddressesState {
   }, [fail]);
 
   useEffect((): void => {
-    fetchAddresses()
-      .then(setAddresses)
+    loadAddresses()
       .catch(fail)
-      .finally((): void => setLoading(false));
+      .finally((): void => setSettled(true));
   }, [fail]);
 
   const save = async (id: string | null, input: AddressInput): Promise<AddressRecord> => {
@@ -64,5 +69,7 @@ export function useAddresses(): AddressesState {
     }
   };
 
-  return { addresses, loading, authRequired, error, save, remove, makeDefault };
+  const cached: boolean = hydrated && hasData(addressesAt);
+  const loading: boolean = !hydrated || (!cached && !settled);
+  return { addresses: hydrated ? addresses : [], loading, authRequired, error, save, remove, makeDefault };
 }

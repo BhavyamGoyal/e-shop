@@ -30,6 +30,8 @@ export const toOrderSummary = (order: StoredOrder, payment: StoredPayment | null
   itemCount: order.items.reduce((sum: number, line): number => sum + line.quantity, 0),
   discount: order.discount ?? 0,
   couponCode: order.couponCode ?? null,
+  tinglePointsEarned: order.tinglePointsEarned ?? 0,
+  tinglePointsUsed: order.tinglePointsUsed ?? 0,
   deliveryCharge: order.deliveryCharge ?? 0,
   invoiceData: (order.invoiceData ?? []).map(
     (entry): InvoiceEntry => ({ type: entry.type, code: entry.code, label: entry.label, amount: entry.amount }),

@@ -31,4 +31,7 @@ export { BarList, type BarListProps, type BarItem } from "./BarList";
 export { OrderTracker } from "./OrderTracker";
 export { StatusBadge } from "./StatusBadge";
 export { AccountTile } from "./AccountTile";
+export { AccountStats } from "./AccountStats";
+export { TinglePointsCard } from "./TinglePointsCard";
+export { TinglePointsGuide } from "./TinglePointsGuide";
 export { LoginPrompt } from "./LoginPrompt";

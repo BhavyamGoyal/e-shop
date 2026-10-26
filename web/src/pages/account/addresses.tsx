@@ -1,6 +1,6 @@
 import type { GetStaticProps } from "next";
 import { Seo } from "@/components/atoms";
-import { AddressManager } from "@/components/organisms";
+import { AccountShell, AddressManager } from "@/components/organisms";
 import { ContentTemplate } from "@/components/templates";
 import { isr } from "@/lib/isr";
 import { NOINDEX } from "@/lib/seo/seo-meta";
@@ -12,9 +12,11 @@ export default function AddressesPage({ header, shop }: SiteChrome) {
   return (
     <>
       <Seo title="Your addresses" robots={NOINDEX} />
-      <ContentTemplate header={header} shop={shop} widthClass="max-w-[900px]">
-        <h1 className="text-4xl font-bold">Your addresses</h1>
-        <AddressManager loginNext="/account/addresses" />
+      <ContentTemplate header={header} shop={shop} widthClass="max-w-[1120px]">
+        <AccountShell current="/account/addresses">
+          <h1 className="text-3xl font-bold">Your addresses</h1>
+          <AddressManager loginNext="/account/addresses" />
+        </AccountShell>
       </ContentTemplate>
     </>
   );

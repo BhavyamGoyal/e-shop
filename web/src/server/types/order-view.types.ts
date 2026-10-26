@@ -19,6 +19,8 @@ export interface OrderSummary {
   itemCount: number;
   discount: number;
   couponCode: string | null;
+  tinglePointsEarned: number;
+  tinglePointsUsed: number;
   deliveryCharge: number;
   invoiceData: InvoiceEntry[];
   delivery: OrderDelivery | null;

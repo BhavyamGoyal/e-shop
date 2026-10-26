@@ -4,6 +4,7 @@ import { AuthRequiredError } from "@/lib/api-request";
 import { createCheckoutOrder, verifyCheckoutPayment } from "@/lib/checkout-api";
 import { loadRazorpay, type RazorpayFailure, type RazorpaySuccess } from "@/lib/razorpay-checkout";
 import type { CheckoutOrder, GuestCheckout } from "@/server/types/order.types";
+import { useAccountStore } from "@/stores/account/Account.store";
 import { useCartStore } from "@/stores/cart/Cart.store";
 
 export interface CheckoutState {
@@ -19,6 +20,7 @@ export function useCheckout(): CheckoutState {
   const router = useRouter();
   const items = useCartStore((state) => state.items);
   const clear = useCartStore((state) => state.clear);
+  const invalidateAccount = useAccountStore((state) => state.invalidate);
   const [busy, setBusy] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [orderNumber, setOrderNumber] = useState<string>("");
@@ -28,6 +30,7 @@ export function useCheckout(): CheckoutState {
       const result = await verifyCheckoutPayment(response);
       setOrderNumber(result.orderNumber);
       clear();
+      invalidateAccount();
     } catch (failure) {
       setError(failure instanceof Error ? failure.message : "Payment verification failed");
     } finally {

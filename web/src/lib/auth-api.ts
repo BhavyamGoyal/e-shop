@@ -1,3 +1,5 @@
+import { useAccountStore } from "@/stores/account/Account.store";
+
 export type AuthRoute = "login" | "register" | "google";
 
 export async function postAuth(route: AuthRoute, payload: Record<string, string>): Promise<string> {
@@ -8,5 +10,6 @@ export async function postAuth(route: AuthRoute, payload: Record<string, string>
   });
   const body: { redirect?: string; error?: string } = await response.json().catch(() => ({}));
   if (!response.ok || !body.redirect) throw new Error(body.error ?? "Something went wrong");
+  useAccountStore.getState().reset();
   return body.redirect;
 }
