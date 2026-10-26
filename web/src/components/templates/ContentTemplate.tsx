@@ -9,16 +9,17 @@ interface ContentTemplateProps {
   shop: FooterGroup;
   children: ReactNode;
   widthClass?: string;
+  paddingClass?: string;
 }
 
-export function ContentTemplate({ header, shop, children, widthClass = "max-w-[820px]" }: ContentTemplateProps) {
+export function ContentTemplate({ header, shop, children, widthClass = "max-w-[820px]", paddingClass = "py-12" }: ContentTemplateProps) {
   return (
     <div
       className={`pdp ${outfit.variable} flex min-h-screen flex-col bg-(--pp-bone) text-(--pp-ink)`}
       style={{ fontFamily: "var(--font-outfit), system-ui, sans-serif" }}
     >
       <SiteHeader header={header} />
-      <main className={`mx-auto flex w-full ${widthClass} flex-1 flex-col gap-8 px-4 py-12 md:px-10`}>{children}</main>
+      <main className={`mx-auto flex w-full ${widthClass} flex-1 flex-col gap-8 px-4 ${paddingClass} md:px-10`}>{children}</main>
       <SiteFooter shop={shop} />
     </div>
   );

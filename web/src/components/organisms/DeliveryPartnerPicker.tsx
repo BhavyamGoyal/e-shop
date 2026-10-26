@@ -35,7 +35,7 @@ export function DeliveryPartnerPicker({ partners, selected, onSelect, state, has
         options={partners.map((partner: DeliveryPartnerOption) => ({ value: partner.id, label: partner.name }))}
         onChange={(event): void => onSelect(event.target.value)}
       />
-      <span className={unserviceable || state.error ? "text-red-600" : "text-(--pp-muted)"}>{message(state, hasPincode)}</span>
+      <span className={unserviceable || state.error ? "text-red-600" : "font-bold text-(--pp-muted)"}>{message(state, hasPincode)}</span>
     </div>
   );
 }

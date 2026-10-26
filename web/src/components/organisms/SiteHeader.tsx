@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import type { HeaderData } from "@/lib/website-data";
 import { CartLink } from "./CartLink";
+import { HeaderLocation } from "./HeaderLocation";
 import { MobileMenu } from "./MobileMenu";
 import { ProfileMenu } from "./ProfileMenu";
 import { WishlistLink } from "./WishlistLink";
@@ -23,16 +24,7 @@ export function SiteHeader({ header }: SiteHeaderProps) {
           <img src="/logo_v1.svg" alt={logo.text} className="block h-12 w-auto" />
         </a>
         <span className="hidden h-10 border-r border-border lg:block" />
-        <div className="hidden min-w-[170px] cursor-pointer items-center gap-2 lg:flex">
-          <img src={location.icon} alt="location" width={24} height={24} />
-          <div>
-            <div className="text-base font-semibold text-foreground">{location.title}</div>
-            <div className="flex items-center gap-1 text-xs font-medium text-danger">
-              {location.status}
-              <img src={location.chevron} alt="" width={14} height={14} />
-            </div>
-          </div>
-        </div>
+        <HeaderLocation location={location} />
         <form className="hidden max-w-[652px] flex-1 md:block">
           <div className="relative">
             <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center">

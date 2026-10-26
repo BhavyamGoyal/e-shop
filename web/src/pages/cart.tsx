@@ -12,7 +12,7 @@ export default function CartPage({ header, shop }: SiteChrome) {
   return (
     <>
       <Seo title="Your cart" robots={NOINDEX} />
-      <ContentTemplate header={header} shop={shop} widthClass="max-w-[1100px]">
+      <ContentTemplate header={header} shop={shop} widthClass="max-w-[1100px]" paddingClass="pt-4 pb-12">
         <h1 className="text-4xl font-bold">Your cart</h1>
         <CartView />
       </ContentTemplate>

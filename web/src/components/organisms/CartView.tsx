@@ -6,8 +6,10 @@ import { CartLine } from "../molecules";
 import { EmptyState } from "../molecules/States/EmptyState";
 import { AddressManager } from "./AddressManager";
 import { CheckoutButton } from "./CheckoutButton";
+import { CouponApply } from "./CouponApply";
 import { CouponPicker } from "./CouponPicker";
 import { DeliveryPartnerPicker } from "./DeliveryPartnerPicker";
+import { EarnPointsNote } from "./EarnPointsNote";
 import { GuestCheckoutForm } from "./GuestCheckoutForm";
 import { TinglePointsRedeem } from "./TinglePointsRedeem";
 import { useHydrated } from "@/hooks/useHydrated";
@@ -127,8 +129,8 @@ export function CartView() {
           </div>
           {savings > 0 && (
             <div className="flex justify-between">
-              <dt className="text-(--pp-muted)">You save</dt>
-              <dd className="font-medium text-(--pp-green)">{formatPrice(savings)}</dd>
+              <dt className="font-bold text-(--pp-green)">You save</dt>
+              <dd className="font-bold text-(--pp-green)">{formatPrice(savings)}</dd>
             </div>
           )}
           {discounted && (
@@ -169,12 +171,13 @@ export function CartView() {
             hasPincode={/^[1-9]\d{5}$/.test(pincode.trim())}
           />
         )}
+        <CouponApply coupons={coupons} payablePaise={afterPointsPaise} onApply={setCouponCode} />
         {coupons.length > 0 && <CouponPicker coupons={coupons} selected={couponCode} onSelect={setCouponCode} />}
         {balance > 0 && (
           <TinglePointsRedeem balance={balance} maxPoints={maxPoints} applied={useTingle} onToggle={setUseTingle} />
         )}
         {earnedPoints(payablePaise - deliveryPaise) > 0 && (
-          <p className="text-xs text-(--pp-muted)">You will earn {earnedPoints(payablePaise - deliveryPaise)} Tingle Points on this order.</p>
+          <EarnPointsNote points={earnedPoints(payablePaise - deliveryPaise)} />
         )}
         <p className="text-xs text-(--pp-muted)">Inclusive of all taxes.</p>
         <CheckoutButton
