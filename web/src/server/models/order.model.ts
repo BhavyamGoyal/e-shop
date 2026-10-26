@@ -1,6 +1,6 @@
 import { model, models, Schema, type InferSchemaType, type Model } from "mongoose";
 import { pointSchema } from "./address.model";
-import { ORDER_STATUSES } from "../types/order.types";
+import { INVOICE_ENTRY_TYPES, ORDER_STATUSES } from "../types/order.types";
 
 const lineSchema = new Schema(
   {
@@ -32,6 +32,26 @@ const shippingSchema = new Schema(
   { _id: false },
 );
 
+const deliverySchema = new Schema(
+  {
+    partnerId: { type: String, required: true },
+    manufacturingDays: { type: Number, required: true, min: 0, validate: Number.isInteger },
+    transitDays: { type: Number, required: true, min: 0, validate: Number.isInteger },
+    estimatedDate: { type: String, required: true },
+  },
+  { _id: false },
+);
+
+const invoiceEntrySchema = new Schema(
+  {
+    type: { type: String, enum: INVOICE_ENTRY_TYPES, required: true },
+    code: { type: String, required: true },
+    label: { type: String, required: true },
+    amount: { type: Number, required: true, min: 0, validate: Number.isInteger },
+  },
+  { _id: false },
+);
+
 const orderSchema = new Schema(
   {
     orderNumber: { type: String, required: true, unique: true },
@@ -44,6 +64,9 @@ const orderSchema = new Schema(
     discount: { type: Number, default: 0, min: 0, validate: Number.isInteger },
     couponId: { type: String, default: null },
     couponCode: { type: String, default: null },
+    deliveryCharge: { type: Number, default: 0, min: 0, validate: Number.isInteger },
+    delivery: { type: deliverySchema, default: undefined },
+    invoiceData: { type: [invoiceEntrySchema], default: [] },
     total: { type: Number, required: true, min: 0, validate: Number.isInteger },
     tinglePointsUsed: { type: Number, default: 0, min: 0, validate: Number.isInteger },
     tinglePointsEarned: { type: Number, default: 0, min: 0, validate: Number.isInteger },

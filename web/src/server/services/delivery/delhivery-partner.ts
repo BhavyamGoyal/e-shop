@@ -10,6 +10,10 @@ interface TatResponse {
   data?: { tat?: number };
 }
 
+interface ChargeResponseEntry {
+  total_amount?: number;
+}
+
 const REQUEST_TIMEOUT_MS = 10000;
 
 export class DelhiveryPartner extends BaseDeliveryPartner {
@@ -49,5 +53,20 @@ export class DelhiveryPartner extends BaseDeliveryPartner {
     const days: number | undefined = body.data?.tat;
     if (typeof days !== "number") throw new ApiError(502, "Delivery partner returned no estimate");
     return days;
+  }
+
+  protected async shippingCharge(originPincode: string, destinationPincode: string, weightGrams: number): Promise<number> {
+    const query: string = new URLSearchParams({
+      md: "S",
+      ss: "Delivered",
+      o_pin: originPincode,
+      d_pin: destinationPincode,
+      cgm: String(weightGrams),
+      pt: "Pre-paid",
+    }).toString();
+    const body: ChargeResponseEntry[] = await this.get<ChargeResponseEntry[]>(`/api/kinko/v1/invoice/charges/.json?${query}`);
+    const amount: number | undefined = body[0]?.total_amount;
+    if (typeof amount !== "number") throw new ApiError(502, "Delivery partner returned no shipping cost");
+    return Math.round(amount * 100);
   }
 }

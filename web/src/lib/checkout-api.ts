@@ -7,12 +7,14 @@ export const createCheckoutOrder = (
   addressId: string,
   tinglePoints: number,
   couponCode: string,
+  deliveryPartner: string,
   guest: GuestCheckout | null,
 ): Promise<CheckoutOrder> =>
   request<CheckoutOrder>("POST", "/api/checkout/order", {
     addressId,
     tinglePoints,
     couponCode,
+    deliveryPartner,
     guest,
     items: items.map((item: CartItem) => ({ key: item.key, quantity: item.quantity })),
   });

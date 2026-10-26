@@ -1,7 +1,8 @@
 import { connectDb } from "../db/connect";
 import { OrderModel, type OrderDocument } from "../models/order.model";
 import type { AddressSnapshot } from "../types/address.types";
-import type { OrderLineRecord } from "../types/order.types";
+import type { OrderDelivery } from "../types/delivery.types";
+import type { InvoiceEntry, OrderLineRecord } from "../types/order.types";
 
 export type StoredOrder = OrderDocument & { _id: unknown };
 
@@ -16,6 +17,9 @@ export interface NewOrder {
   discount: number;
   couponId: string | null;
   couponCode: string | null;
+  deliveryCharge: number;
+  invoiceData: InvoiceEntry[];
+  delivery: OrderDelivery;
   total: number;
   tinglePointsUsed: number;
   tinglePointsEarned: number;

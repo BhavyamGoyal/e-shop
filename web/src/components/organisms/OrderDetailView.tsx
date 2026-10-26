@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { formatPaise } from "@/lib/format-price";
-import type { OrderLineRecord } from "@/server/types/order.types";
+import type { InvoiceEntry, OrderLineRecord } from "@/server/types/order.types";
 import type { OrderDetail } from "@/server/types/order-view.types";
 import { Heading, Text } from "../atoms";
 import { Card, StatusBadge } from "../molecules";
@@ -9,6 +9,16 @@ const mapLink = (order: OrderDetail): string | null => {
   const point = order.shippingAddress.location;
   return point ? `https://www.google.com/maps?q=${point.lat},${point.lng}` : null;
 };
+
+function adjustments(order: OrderDetail): InvoiceEntry[] {
+  if (order.invoiceData.length > 0) return order.invoiceData.filter((entry: InvoiceEntry): boolean => entry.code !== "items");
+  const legacy: InvoiceEntry[] = [];
+  if (order.discount > 0) {
+    legacy.push({ type: "discount", code: "coupon", label: `Coupon${order.couponCode ? ` (${order.couponCode})` : ""}`, amount: order.discount });
+  }
+  if (order.deliveryCharge > 0) legacy.push({ type: "charge", code: "delivery", label: "Delivery", amount: order.deliveryCharge });
+  return legacy;
+}
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
@@ -71,6 +81,9 @@ export function OrderDetailView({ order }: { order: OrderDetail }) {
           <Text tone="muted" className="text-sm">
             {address.city}, {address.state} {address.postalCode}
           </Text>
+          {order.delivery ? (
+            <Text className="text-sm font-medium">Estimated delivery {order.delivery.estimatedDate}</Text>
+          ) : null}
           {link && address.location ? (
             <a href={link} target="_blank" rel="noreferrer" className="text-sm font-medium text-primary hover:underline">
               GPS {address.location.lat.toFixed(5)}, {address.location.lng.toFixed(5)} (open map)
@@ -111,12 +124,14 @@ export function OrderDetailView({ order }: { order: OrderDetail }) {
             ))}
           </tbody>
           <tfoot>
-            {order.discount > 0 ? (
-              <tr className="border-t">
-                <td className="px-4 py-2" colSpan={3}>Coupon{order.couponCode ? ` (${order.couponCode})` : ""}</td>
-                <td className="px-4 py-2 text-right">-{formatPaise(order.discount)}</td>
+            {adjustments(order).map((entry: InvoiceEntry) => (
+              <tr key={entry.code} className="border-t">
+                <td className="px-4 py-2" colSpan={3}>{entry.label}</td>
+                <td className="px-4 py-2 text-right">
+                  {entry.type === "discount" ? "-" : ""}{formatPaise(entry.amount)}
+                </td>
               </tr>
-            ) : null}
+            ))}
             <tr className="border-t font-semibold">
               <td className="px-4 py-2" colSpan={3}>Total</td>
               <td className="px-4 py-2 text-right">{formatPaise(order.total)}</td>

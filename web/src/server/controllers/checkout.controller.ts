@@ -4,8 +4,12 @@ import { QueryError } from "../http/errors";
 import { orderRepository, type StoredOrder } from "../repositories/order.repository";
 import { paymentRepository, type StoredPayment } from "../repositories/payment.repository";
 import type { StoredUser } from "../repositories/user.repository";
+import { partnerFrom } from "./delivery.controller";
 import { resolveBuyer, type CheckoutBuyer } from "../services/checkout-buyer.service";
 import { priceCart, type PricedCart } from "../services/checkout-pricing.service";
+import type { BaseDeliveryPartner } from "../services/delivery/base-delivery-partner";
+import { estimateDelivery, requireServiceable } from "../services/delivery/delivery-estimate.service";
+import { buildInvoiceData, invoiceTotal } from "../services/invoice-data.service";
 import { applyCoupon } from "../services/coupon-pricing.service";
 import { settlePayment } from "../services/payment-settlement.service";
 import { earnedPoints, maxRedeemablePoints, pointsValuePaise } from "../services/tingle-points.service";
@@ -17,8 +21,9 @@ import {
   razorpayKeyId,
   type GatewayPayment,
 } from "../services/razorpay.service";
+import type { DeliveryEstimate } from "../types/delivery.types";
 import type { AppliedCoupon } from "../types/coupon.types";
-import type { CheckoutOrder, PaymentProof, VerifiedPayment } from "../types/order.types";
+import type { CheckoutOrder, InvoiceEntry, PaymentProof, VerifiedPayment } from "../types/order.types";
 
 type Raw = Record<string, unknown>;
 
@@ -74,7 +79,21 @@ export const checkoutController = {
       ? null
       : await applyCoupon(userId, couponCode(payload), afterPoints);
     const discount: number = coupon?.discount ?? 0;
-    const payable: number = afterPoints - discount;
+    const goodsPayable: number = afterPoints - discount;
+    const partner: BaseDeliveryPartner = partnerFrom(payload);
+    const estimate: DeliveryEstimate = await estimateDelivery(partner, buyer.shipping.postalCode, cart);
+    requireServiceable(estimate);
+    const payable: number = goodsPayable + estimate.charge;
+    const invoiceData: InvoiceEntry[] = buildInvoiceData({
+      subtotal: cart.total,
+      tinglePointsValue: pointsValuePaise(pointsUsed),
+      tinglePointsUsed: pointsUsed,
+      couponDiscount: discount,
+      couponCode: coupon?.code ?? null,
+      deliveryCharge: estimate.charge,
+      deliveryPartnerName: partner.name,
+    });
+    if (invoiceTotal(invoiceData) !== payable) throw new Error("Invoice total does not match the payable amount");
     const orderNumber: string = newOrderNumber();
     const razorpayOrderId: string = await createGatewayOrder(payable, CURRENCY, orderNumber);
     const orderId: string = await orderRepository.create({
@@ -88,9 +107,17 @@ export const checkoutController = {
       discount,
       couponId: coupon?.couponId ?? null,
       couponCode: coupon?.code ?? null,
+      deliveryCharge: estimate.charge,
+      invoiceData,
+      delivery: {
+        partnerId: estimate.partnerId,
+        manufacturingDays: estimate.manufacturingDays,
+        transitDays: estimate.transitDays,
+        estimatedDate: estimate.estimatedDate,
+      },
       total: payable,
       tinglePointsUsed: pointsUsed,
-      tinglePointsEarned: buyer.loggedOut ? 0 : earnedPoints(payable),
+      tinglePointsEarned: buyer.loggedOut ? 0 : earnedPoints(goodsPayable),
       currency: CURRENCY,
     });
     await paymentRepository.create({

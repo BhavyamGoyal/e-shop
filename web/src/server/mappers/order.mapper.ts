@@ -1,7 +1,7 @@
 import type { OrderDocument } from "../models/order.model";
 import type { PaymentDocument } from "../models/payment.model";
 import type { AddressSnapshot } from "../types/address.types";
-import type { OrderLineRecord } from "../types/order.types";
+import type { InvoiceEntry, OrderLineRecord } from "../types/order.types";
 import type { OrderDetail, OrderSummary, PaymentView } from "../types/order-view.types";
 import { toPoint } from "./address.mapper";
 
@@ -30,6 +30,18 @@ export const toOrderSummary = (order: StoredOrder, payment: StoredPayment | null
   itemCount: order.items.reduce((sum: number, line): number => sum + line.quantity, 0),
   discount: order.discount ?? 0,
   couponCode: order.couponCode ?? null,
+  deliveryCharge: order.deliveryCharge ?? 0,
+  invoiceData: (order.invoiceData ?? []).map(
+    (entry): InvoiceEntry => ({ type: entry.type, code: entry.code, label: entry.label, amount: entry.amount }),
+  ),
+  delivery: order.delivery
+    ? {
+        partnerId: order.delivery.partnerId,
+        manufacturingDays: order.delivery.manufacturingDays,
+        transitDays: order.delivery.transitDays,
+        estimatedDate: order.delivery.estimatedDate,
+      }
+    : null,
   total: order.total,
   currency: order.currency,
   status: order.status,

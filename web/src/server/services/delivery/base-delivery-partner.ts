@@ -1,6 +1,4 @@
-import type { DeliveryEstimate, DeliveryPartnerOption } from "../../types/delivery.types";
-
-const DAY_MS = 24 * 60 * 60 * 1000;
+import type { DeliveryPartnerOption, DeliveryQuote } from "../../types/delivery.types";
 
 export abstract class BaseDeliveryPartner {
   abstract readonly id: string;
@@ -8,17 +6,20 @@ export abstract class BaseDeliveryPartner {
 
   protected abstract isServiceable(pincode: string): Promise<boolean>;
   protected abstract transitDays(originPincode: string, destinationPincode: string): Promise<number>;
+  protected abstract shippingCharge(originPincode: string, destinationPincode: string, weightGrams: number): Promise<number>;
 
   option(): DeliveryPartnerOption {
     return { id: this.id, name: this.name };
   }
 
-  async estimate(originPincode: string, destinationPincode: string): Promise<DeliveryEstimate> {
+  async quote(originPincode: string, destinationPincode: string, weightGrams: number): Promise<DeliveryQuote> {
     if (!(await this.isServiceable(destinationPincode))) {
-      return { partnerId: this.id, serviceable: false, days: null, estimatedDate: null };
+      return { partnerId: this.id, serviceable: false, transitDays: null, charge: 0 };
     }
-    const days: number = await this.transitDays(originPincode, destinationPincode);
-    const estimatedDate: string = new Date(Date.now() + days * DAY_MS).toISOString().slice(0, 10);
-    return { partnerId: this.id, serviceable: true, days, estimatedDate };
+    const [transitDays, charge]: [number, number] = await Promise.all([
+      this.transitDays(originPincode, destinationPincode),
+      this.shippingCharge(originPincode, destinationPincode, weightGrams),
+    ]);
+    return { partnerId: this.id, serviceable: true, transitDays, charge };
   }
 }

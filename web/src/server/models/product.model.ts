@@ -82,6 +82,7 @@ export const productSchema = new Schema(
     options: [optionSchema],
     variants: [variantSchema],
     costs: { type: [costSchema], default: [] },
+    manufacturingDays: { type: Number, default: 2, min: 0, validate: Number.isInteger },
     price: { type: Number, required: true },
     priceMax: Number,
     compareAtPrice: Number,

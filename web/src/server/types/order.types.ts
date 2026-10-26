@@ -9,6 +9,16 @@ export interface OrderLineRecord {
   quantity: number;
 }
 
+export const INVOICE_ENTRY_TYPES = ["charge", "discount"] as const;
+export type InvoiceEntryType = (typeof INVOICE_ENTRY_TYPES)[number];
+
+export interface InvoiceEntry {
+  type: InvoiceEntryType;
+  code: string;
+  label: string;
+  amount: number;
+}
+
 export const ORDER_STATUSES = ["pending", "paid", "shipped", "delivered", "cancelled"] as const;
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 

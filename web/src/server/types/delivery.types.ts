@@ -3,9 +3,21 @@ export interface DeliveryPartnerOption {
   name: string;
 }
 
-export interface DeliveryEstimate {
+export interface DeliveryQuote {
   partnerId: string;
   serviceable: boolean;
-  days: number | null;
+  transitDays: number | null;
+  charge: number;
+}
+
+export interface DeliveryEstimate extends DeliveryQuote {
+  manufacturingDays: number;
   estimatedDate: string | null;
+}
+
+export interface OrderDelivery {
+  partnerId: string;
+  manufacturingDays: number;
+  transitDays: number;
+  estimatedDate: string;
 }

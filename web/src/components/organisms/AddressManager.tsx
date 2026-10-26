@@ -10,12 +10,13 @@ import type { AddressInput, AddressRecord } from "@/server/types/address.types";
 interface AddressManagerProps {
   selectedId?: string;
   onSelect?: (id: string) => void;
+  onPostalCode?: (postalCode: string) => void;
   loginNext: string;
 }
 
 type Editing = AddressRecord | "new" | null;
 
-export function AddressManager({ selectedId, onSelect, loginNext }: AddressManagerProps) {
+export function AddressManager({ selectedId, onSelect, onPostalCode, loginNext }: AddressManagerProps) {
   const state: AddressesState = useAddresses();
   const [editing, setEditing] = useState<Editing>(null);
   const { addresses, loading } = state;
@@ -26,6 +27,12 @@ export function AddressManager({ selectedId, onSelect, loginNext }: AddressManag
     const fallback: AddressRecord | undefined = addresses.find((address: AddressRecord): boolean => address.isDefault) ?? addresses[0];
     if (fallback) onSelect(fallback.id);
   }, [addresses, loading, selectedId, onSelect]);
+
+  const selectedPostalCode: string = addresses.find((address: AddressRecord): boolean => address.id === selectedId)?.postalCode ?? "";
+
+  useEffect((): void => {
+    onPostalCode?.(selectedPostalCode);
+  }, [selectedPostalCode, onPostalCode]);
 
   if (loading) return <div className="h-24 animate-pulse rounded-2xl bg-muted" aria-busy />;
 

@@ -19,7 +19,18 @@ interface ParsedKey {
 export interface PricedCart {
   items: OrderLineRecord[];
   total: number;
+  manufacturingDays: number;
+  weightGrams: number;
 }
+
+interface PricedLine {
+  record: OrderLineRecord;
+  manufacturingDays: number;
+  weightGrams: number;
+}
+
+export const DEFAULT_MANUFACTURING_DAYS = 2;
+export const DEFAULT_UNIT_GRAMS = 500;
 
 const MAX_LINES = 100;
 const MAX_QUANTITY = 99;
@@ -54,7 +65,7 @@ function parseKey(key: string): ParsedKey {
   return { handle, variantId };
 }
 
-async function priceLine(line: RequestedLine): Promise<OrderLineRecord> {
+async function priceLine(line: RequestedLine): Promise<PricedLine> {
   const { handle, variantId }: ParsedKey = parseKey(line.key);
   const product: ProductDocument | null = await productRepository.findByHandle(handle);
   if (!product) throw new QueryError("A product in your cart is no longer available");
@@ -63,23 +74,34 @@ async function priceLine(line: RequestedLine): Promise<OrderLineRecord> {
   if (variantId !== null && !variant) throw new QueryError(`"${product.title}" option is no longer available`);
   const inStock: boolean = variant ? variant.available !== false : product.available !== false;
   if (!inStock) throw new QueryError(`"${product.title}" is out of stock`);
+  const unitGrams: number = variant?.grams && variant.grams > 0 ? variant.grams : DEFAULT_UNIT_GRAMS;
   return {
-    key: line.key,
-    handle,
-    variantId,
-    title: product.title,
-    variantTitle: variant?.title ?? null,
-    image: variant?.image ?? product.featuredImage ?? product.images?.[0]?.url ?? null,
-    unitAmount: Math.round((variant?.price ?? product.price) * 100),
-    quantity: line.quantity,
+    record: {
+      key: line.key,
+      handle,
+      variantId,
+      title: product.title,
+      variantTitle: variant?.title ?? null,
+      image: variant?.image ?? product.featuredImage ?? product.images?.[0]?.url ?? null,
+      unitAmount: Math.round((variant?.price ?? product.price) * 100),
+      quantity: line.quantity,
+    },
+    manufacturingDays: product.manufacturingDays ?? DEFAULT_MANUFACTURING_DAYS,
+    weightGrams: unitGrams * line.quantity,
   };
 }
 
 export async function priceCart(payload: unknown): Promise<PricedCart> {
-  const items: OrderLineRecord[] = await Promise.all(parseRequested(payload).map(priceLine));
+  const lines: PricedLine[] = await Promise.all(parseRequested(payload).map(priceLine));
+  const items: OrderLineRecord[] = lines.map((line: PricedLine): OrderLineRecord => line.record);
   const total: number = items.reduce(
     (sum: number, line: OrderLineRecord): number => sum + line.unitAmount * line.quantity,
     0,
   );
-  return { items, total };
+  return {
+    items,
+    total,
+    manufacturingDays: Math.max(...lines.map((line: PricedLine): number => line.manufacturingDays)),
+    weightGrams: lines.reduce((sum: number, line: PricedLine): number => sum + line.weightGrams, 0),
+  };
 }

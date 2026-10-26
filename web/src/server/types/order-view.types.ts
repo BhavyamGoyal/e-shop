@@ -1,5 +1,6 @@
 import type { AddressSnapshot } from "./address.types";
-import type { OrderLineRecord, OrderStatus, PaymentStatus } from "./order.types";
+import type { OrderDelivery } from "./delivery.types";
+import type { InvoiceEntry, OrderLineRecord, OrderStatus, PaymentStatus } from "./order.types";
 
 export interface PaymentView {
   status: PaymentStatus;
@@ -18,6 +19,9 @@ export interface OrderSummary {
   itemCount: number;
   discount: number;
   couponCode: string | null;
+  deliveryCharge: number;
+  invoiceData: InvoiceEntry[];
+  delivery: OrderDelivery | null;
   total: number;
   currency: string;
   status: OrderStatus;

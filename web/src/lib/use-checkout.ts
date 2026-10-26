@@ -10,7 +10,7 @@ export interface CheckoutState {
   busy: boolean;
   error: string;
   orderNumber: string;
-  pay: (addressId: string, tinglePoints: number, couponCode: string, guest: GuestCheckout | null) => Promise<void>;
+  pay: (addressId: string, tinglePoints: number, couponCode: string, deliveryPartner: string, guest: GuestCheckout | null) => Promise<void>;
 }
 
 const STORE_NAME = "Tinglet";
@@ -61,13 +61,14 @@ export function useCheckout(): CheckoutState {
     addressId: string,
     tinglePoints: number,
     couponCode: string,
+    deliveryPartner: string,
     guest: GuestCheckout | null,
   ): Promise<void> => {
     setBusy(true);
     setError("");
     try {
       if (!(await loadRazorpay())) throw new Error("Could not load the payment window");
-      open(await createCheckoutOrder(items, addressId, tinglePoints, couponCode, guest));
+      open(await createCheckoutOrder(items, addressId, tinglePoints, couponCode, deliveryPartner, guest));
     } catch (failure) {
       setBusy(false);
       if (failure instanceof AuthRequiredError) {
