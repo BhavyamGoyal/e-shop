@@ -13,6 +13,7 @@ import {
   type AdminProductPage,
 } from "../repositories/product-admin.repository";
 import type { ProductEditorData, ProductInput, ProductListPage, ProductListQuery } from "../types/admin.types";
+import { revalidatePages } from "../services/pages-revalidate.service";
 import { customizerRepository } from "../repositories/customizer.repository";
 import { tagRepository } from "../repositories/tag.repository";
 import { parseProductInput } from "../validators/product-input";
@@ -22,11 +23,12 @@ export interface SavedProduct {
   handle: string;
 }
 
-function revalidateStorefront(handle: string, previousHandle?: string): void {
-  revalidatePath(`/product/${handle}`);
-  if (previousHandle && previousHandle !== handle) revalidatePath(`/product/${previousHandle}`);
+async function revalidateStorefront(handle: string, previousHandle?: string): Promise<void> {
   revalidatePath("/", "layout");
   revalidatePath("/sitemap.xml");
+  const pages: string[] = ["/", "/product", `/product/${handle}`];
+  if (previousHandle && previousHandle !== handle) pages.push(`/product/${previousHandle}`);
+  await revalidatePages(pages);
 }
 
 export const productAdminController = {
@@ -62,13 +64,13 @@ export const productAdminController = {
     });
     if (!id) {
       const created: AdminProduct = await productAdminRepository.create(fields);
-      revalidateStorefront(created.handle);
+      await revalidateStorefront(created.handle);
       return { id: created._id.toString(), handle: created.handle };
     }
     const previous: AdminProduct | null = await productAdminRepository.findById(id);
     const updated: AdminProduct | null = await productAdminRepository.update(id, fields);
     if (!updated) throw new NotFoundError("Product not found");
-    revalidateStorefront(updated.handle, previous?.handle);
+    await revalidateStorefront(updated.handle, previous?.handle);
     return { id, handle: updated.handle };
   },
 
@@ -76,13 +78,13 @@ export const productAdminController = {
     await requireStaff();
     const updated: AdminProduct | null = await productAdminRepository.update(id, { active });
     if (!updated) throw new NotFoundError("Product not found");
-    revalidateStorefront(updated.handle);
+    await revalidateStorefront(updated.handle);
   },
 
   async remove(id: string): Promise<void> {
     await requireAdmin();
     const removed: AdminProduct | null = await productAdminRepository.remove(id);
     if (!removed) throw new NotFoundError("Product not found");
-    revalidateStorefront(removed.handle);
+    await revalidateStorefront(removed.handle);
   },
 };
