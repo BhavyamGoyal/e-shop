@@ -1,5 +1,6 @@
 import type { CostInput, MetaDataInput, ProductInput, ProductListRow, VariantInput } from "../types/admin.types";
 import type { AdminProduct } from "../repositories/product-admin.repository";
+import { DEFAULT_MANUFACTURING_DAYS } from "../services/checkout-pricing.service";
 
 const stripHtml = (html: string): string => html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 
@@ -15,6 +16,7 @@ export const EMPTY_INPUT: ProductInput = {
   descriptionHtml: "",
   price: 0,
   compareAtPrice: null,
+  manufacturingDays: DEFAULT_MANUFACTURING_DAYS,
   available: true,
   active: true,
   images: [],
@@ -58,6 +60,7 @@ export function toDocumentFields(input: ProductInput): Record<string, unknown> {
     price: Math.min(...prices),
     priceMax: Math.max(...prices),
     compareAtPrice: input.compareAtPrice,
+    manufacturingDays: input.manufacturingDays,
     available: input.available,
     active: input.active,
     featuredImage: input.images[0]?.url ?? null,
@@ -100,6 +103,7 @@ export function toInput(doc: AdminProduct): ProductInput {
     descriptionHtml: doc.descriptionHtml ?? "",
     price: doc.price,
     compareAtPrice: doc.compareAtPrice ?? null,
+    manufacturingDays: doc.manufacturingDays ?? DEFAULT_MANUFACTURING_DAYS,
     available: doc.available ?? true,
     active: doc.active ?? true,
     images: (doc.images ?? []).map((image) => ({ url: image.url, alt: image.alt ?? "" })),

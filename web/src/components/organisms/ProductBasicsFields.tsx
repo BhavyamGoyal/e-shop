@@ -65,6 +65,16 @@ export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProp
           value={input.compareAtPrice ?? ""}
           onChange={(e) => onChange({ compareAtPrice: e.target.value === "" ? null : Number(e.target.value) })}
         />
+        <FormField
+          id="manufacturingDays"
+          label="Manufacturing days"
+          type="number"
+          min={0}
+          step={1}
+          value={input.manufacturingDays}
+          hint="Days to make the product before it ships; used for the delivery date"
+          onChange={(e) => onChange({ manufacturingDays: Number(e.target.value) })}
+        />
         <div className="flex flex-col gap-1.5">
           <Label>Tags</Label>
           <TagPicker options={tagOptions} selected={input.tags} onChange={(tags: string[]) => onChange({ tags })} />

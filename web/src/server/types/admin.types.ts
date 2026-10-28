@@ -111,6 +111,7 @@ export interface ProductInput {
   descriptionHtml: string;
   price: number;
   compareAtPrice: number | null;
+  manufacturingDays: number;
   available: boolean;
   active: boolean;
   images: ImageInput[];

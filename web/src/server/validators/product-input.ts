@@ -26,6 +26,12 @@ function optionalAmount(value: unknown, label: string): number | null {
   return amount(value, label);
 }
 
+function wholeDays(value: unknown, label: string): number {
+  const parsed: number = amount(value, label);
+  if (!Number.isInteger(parsed)) throw new ValidationError(`${label} must be a whole number`);
+  return parsed;
+}
+
 export const slugify = (value: string): string =>
   value
     .toLowerCase()
@@ -104,6 +110,7 @@ export function parseProductInput(payload: unknown): ProductInput {
     descriptionHtml: typeof raw.descriptionHtml === "string" ? raw.descriptionHtml : "",
     price: amount(raw.price, "Price"),
     compareAtPrice: optionalAmount(raw.compareAtPrice, "Compare-at price"),
+    manufacturingDays: wholeDays(raw.manufacturingDays, "Manufacturing days"),
     available: raw.available !== false,
     active: raw.active !== false,
     images: list(raw.images).map(toImage).filter((image: ImageInput): boolean => image.url.length > 0),
