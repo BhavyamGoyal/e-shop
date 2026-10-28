@@ -47,6 +47,7 @@ export function ProductTemplate({ header, shop, product, related, collection }: 
           price={product.price}
           compareAtPrice={product.compareAtPrice}
           available={product.available}
+          customizerSlug={product.customizerSlug}
         />
         {product.descriptionHtml && <ProductStory html={product.descriptionHtml} />}
         {related.length > 0 && (

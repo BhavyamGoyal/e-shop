@@ -97,6 +97,7 @@ export function parseProductInput(payload: unknown): ProductInput {
     handle,
     vendor: text(raw.vendor),
     productType: text(raw.productType),
+    customizerSlug: text(raw.customizerSlug),
     tags: strings(raw.tags),
     categories: strings(raw.categories),
     collections: strings(raw.collections).map(slugify),

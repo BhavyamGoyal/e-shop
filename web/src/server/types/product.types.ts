@@ -119,6 +119,7 @@ export interface ProductVariant {
 }
 
 export interface ProductDetail extends ProductSummary {
+  customizerSlug: string | null;
   sourceUrl: string | null;
   vendor: string | null;
   currency: string;

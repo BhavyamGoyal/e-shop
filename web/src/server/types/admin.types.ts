@@ -104,6 +104,7 @@ export interface ProductInput {
   handle: string;
   vendor: string;
   productType: string;
+  customizerSlug: string;
   tags: string[];
   categories: string[];
   collections: string[];

@@ -12,6 +12,7 @@ const lineSchema = new Schema(
     image: { type: String, default: null },
     unitAmount: { type: Number, required: true, min: 0, validate: Number.isInteger },
     quantity: { type: Number, required: true, min: 1, max: 99, validate: Number.isInteger },
+    customization: { type: Schema.Types.Mixed, default: null },
   },
   { _id: false },
 );

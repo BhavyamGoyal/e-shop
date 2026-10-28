@@ -3,6 +3,9 @@
 import type { ProductInput } from "@/server/types/admin.types";
 import { useEffect, useState } from "react";
 import { fetchCategories, fetchTags } from "@/lib/admin-api";
+import { fetchCustomizers } from "@/lib/customizer-api";
+import { Select } from "@/components/atoms/Controls/Select";
+import type { SelectOption } from "@/components/atoms/Controls/Select.types";
 import { Heading, Label } from "../atoms";
 import { CheckField, FormField, ListField, TextAreaField } from "../molecules";
 import { TagPicker } from "./TagPicker";
@@ -15,6 +18,7 @@ export interface ProductBasicsFieldsProps {
 export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProps) {
   const [tagOptions, setTagOptions] = useState<string[]>([]);
   const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
+  const [customizerOptions, setCustomizerOptions] = useState<SelectOption[]>([]);
 
   useEffect(() => {
     fetchTags()
@@ -23,6 +27,11 @@ export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProp
     fetchCategories()
       .then((categories): void => setCategoryOptions(categories.map((category): string => category.slug)))
       .catch((): void => setCategoryOptions([]));
+    fetchCustomizers()
+      .then((customizers): void =>
+        setCustomizerOptions(customizers.map((item): SelectOption => ({ value: item.slug, label: item.title }))),
+      )
+      .catch((): void => setCustomizerOptions([]));
   }, []);
 
   return (
@@ -68,6 +77,16 @@ export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProp
             onChange={(categories: string[]) => onChange({ categories })}
             addLabel="Add categories"
             emptyText="No categories yet."
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="customizerSlug">Customizer</Label>
+          <Select
+            id="customizerSlug"
+            options={customizerOptions}
+            placeholder="None (normal product)"
+            value={input.customizerSlug}
+            onChange={(e) => onChange({ customizerSlug: e.target.value })}
           />
         </div>
         <ListField

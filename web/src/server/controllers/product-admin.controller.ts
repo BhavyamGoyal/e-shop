@@ -13,6 +13,7 @@ import {
   type AdminProductPage,
 } from "../repositories/product-admin.repository";
 import type { ProductEditorData, ProductInput, ProductListPage, ProductListQuery } from "../types/admin.types";
+import { customizerRepository } from "../repositories/customizer.repository";
 import { tagRepository } from "../repositories/tag.repository";
 import { parseProductInput } from "../validators/product-input";
 
@@ -51,6 +52,9 @@ export const productAdminController = {
     const input: ProductInput = parseProductInput(payload);
     if (await productAdminRepository.handleTaken(input.handle, id)) {
       throw new ValidationError(`Handle "${input.handle}" is already used by another product`);
+    }
+    if (input.customizerSlug && !(await customizerRepository.slugExists(input.customizerSlug))) {
+      throw new ValidationError(`Customizer "${input.customizerSlug}" does not exist`);
     }
     const fields: Record<string, unknown> = toDocumentFields({
       ...input,

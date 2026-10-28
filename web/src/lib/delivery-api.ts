@@ -1,4 +1,5 @@
 import { request } from "@/lib/api-request";
+import { toRequestLines } from "@/lib/cart-request";
 import type { CartItem } from "@/stores/cart/Cart.types";
 import type { DeliveryEstimate, DeliveryPartnerOption } from "@/server/types/delivery.types";
 
@@ -14,6 +15,6 @@ export const fetchDeliveryEstimate = async (
     await request<{ data: DeliveryEstimate }>("POST", "/api/delivery/estimate", {
       deliveryPartner: partnerId,
       pincode,
-      items: items.map((item: CartItem) => ({ key: item.key, quantity: item.quantity })),
+      items: toRequestLines(items),
     })
   ).data;

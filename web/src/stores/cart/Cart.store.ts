@@ -25,6 +25,17 @@ export const useCartStore = create<CartState>()(
           };
         });
       },
+      replace: (oldKey, item) => {
+        set((state) => {
+          const found: boolean = state.items.some((line: CartItem): boolean => line.key === oldKey);
+          if (!found) return { items: [...state.items, { ...item, quantity: clamp(item.quantity) }] };
+          return {
+            items: state.items.map((line: CartItem): CartItem =>
+              line.key === oldKey ? { ...item, quantity: clamp(item.quantity) } : line,
+            ),
+          };
+        });
+      },
       setQuantity: (key, quantity) => {
         set((state) => ({
           items: state.items.map((line: CartItem): CartItem =>

@@ -6,6 +6,7 @@ import { ProductActions } from "./ProductActions";
 import { ProductGallery } from "./ProductGallery";
 import { StickyBuyBar } from "./StickyBuyBar";
 import { VariantSelector } from "./VariantSelector";
+import { isSingleDefault } from "@/lib/variant-title";
 import type { CartItem } from "@/stores/cart/Cart.types";
 import type { MediaItem, ProductOption, ProductVariant } from "@/server/types/product.types";
 
@@ -20,6 +21,7 @@ interface ProductViewProps {
   price: number;
   compareAtPrice: number | null;
   available: boolean;
+  customizerSlug: string | null;
 }
 
 const matches = (variant: ProductVariant, selected: string[]): boolean =>
@@ -30,11 +32,8 @@ const initialSelection = (options: ProductOption[], variants: ProductVariant[]):
   return first?.options ?? options.map((option: ProductOption): string => option.values[0] ?? "");
 };
 
-const isSingleDefault = (options: ProductOption[]): boolean =>
-  options.length === 0 || (options.length === 1 && options[0].values.length === 1);
-
 export function ProductView(props: ProductViewProps) {
-  const { handle, title, summary, breadcrumbs, images, options, variants, price, compareAtPrice, available } = props;
+  const { handle, title, summary, breadcrumbs, images, options, variants, price, compareAtPrice, available, customizerSlug } = props;
   const [selected, setSelected] = useState<string[]>(() => initialSelection(options, variants));
   const [imageIndex, setImageIndex] = useState<number>(0);
 
@@ -56,6 +55,10 @@ export function ProductView(props: ProductViewProps) {
     price: currentPrice,
     compareAtPrice: currentMrp,
   };
+
+  const customizeHref: string | null = customizerSlug
+    ? `/customize/${customizerSlug}?product=${encodeURIComponent(handle)}${variant ? `&variant=${variant.id}` : ""}`
+    : null;
 
   const handleChange = (optionIndex: number, value: string): void => {
     const next: string[] = selected.map((current: string, index: number): string =>
@@ -95,10 +98,10 @@ export function ProductView(props: ProductViewProps) {
         {!isSingleDefault(options) && (
           <VariantSelector options={options} selected={selected} onChange={handleChange} />
         )}
-        <ProductActions inStock={inStock} item={cartItem} />
+        <ProductActions inStock={inStock} item={cartItem} customizeHref={customizeHref} />
         <TrustGrid />
       </div>
-      <StickyBuyBar title={title} image={images[0]?.url ?? null} price={currentPrice} inStock={inStock} />
+      <StickyBuyBar title={title} image={images[0]?.url ?? null} price={currentPrice} inStock={inStock} item={cartItem} customizeHref={customizeHref} />
     </div>
   );
 }

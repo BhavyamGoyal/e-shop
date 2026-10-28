@@ -4,6 +4,7 @@ import type { InvoiceEntry, OrderLineRecord } from "@/server/types/order.types";
 import type { OrderDetail } from "@/server/types/order-view.types";
 import { Heading, Text } from "../atoms";
 import { Card, StatusBadge } from "../molecules";
+import { CustomizationButton } from "./CustomizationButton";
 
 const mapLink = (order: OrderDetail): string | null => {
   const point = order.shippingAddress.location;
@@ -114,6 +115,11 @@ export function OrderDetailView({ order }: { order: OrderDetail }) {
                         {line.title}
                       </Link>
                       {line.variantTitle ? <div className="text-xs text-muted-foreground">{line.variantTitle}</div> : null}
+                      {line.customization ? (
+                        <div className="mt-1">
+                          <CustomizationButton customization={line.customization} fileName={`${order.orderNumber}-${line.handle}`} />
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                 </td>

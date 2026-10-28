@@ -74,6 +74,7 @@ export const productSchema = new Schema(
     title: { type: String, required: true },
     vendor: String,
     productType: String,
+    customizerSlug: { type: String, default: null, index: true },
     tags: { type: [String], default: [] },
     collections: { type: [String], default: [], index: true },
     categories: { type: [String], default: [], index: true },

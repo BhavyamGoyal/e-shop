@@ -103,6 +103,12 @@ export function CartView() {
   const deliveryPaise: number = delivery.estimate?.serviceable ? delivery.estimate.charge : 0;
   const payablePaise: number = afterPointsPaise - couponPaise + deliveryPaise;
   const discounted: boolean = pointsUsed > 0 || couponPaise > 0 || deliveryPaise > 0;
+  const saveRow = savings > 0 && (
+    <div className="flex justify-between">
+      <dt className="font-bold text-(--pp-green)">You save</dt>
+      <dd className="font-bold text-(--pp-green)">{formatPrice(savings)}</dd>
+    </div>
+  );
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
       <div className="flex flex-col gap-8">
@@ -127,12 +133,6 @@ export function CartView() {
             <dt className="text-(--pp-muted)">Items</dt>
             <dd>{cartCount(items)}</dd>
           </div>
-          {savings > 0 && (
-            <div className="flex justify-between">
-              <dt className="font-bold text-(--pp-green)">You save</dt>
-              <dd className="font-bold text-(--pp-green)">{formatPrice(savings)}</dd>
-            </div>
-          )}
           {discounted && (
             <div className="flex justify-between">
               <dt className="text-(--pp-muted)">Subtotal</dt>
@@ -161,6 +161,7 @@ export function CartView() {
             <dt>{discounted ? "Total" : "Subtotal"}</dt>
             <dd>{formatPaise(payablePaise)}</dd>
           </div>
+          {saveRow}
         </dl>
         {partners.length > 0 && (
           <DeliveryPartnerPicker

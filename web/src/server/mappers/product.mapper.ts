@@ -62,6 +62,7 @@ export function toSummary(doc: Doc): ProductSummary {
 export function toDetail(doc: Doc): ProductDetail {
   return {
     ...toSummary(doc),
+    customizerSlug: doc.customizerSlug ?? null,
     sourceUrl: doc.sourceUrl ?? null,
     vendor: doc.vendor ?? null,
     currency: doc.currency ?? "INR",

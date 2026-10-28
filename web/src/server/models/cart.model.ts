@@ -10,6 +10,7 @@ const lineSchema = new Schema(
     price: { type: Number, required: true },
     compareAtPrice: { type: Number, default: null },
     quantity: { type: Number, required: true },
+    customization: { type: Schema.Types.Mixed, default: null },
   },
   { _id: false },
 );

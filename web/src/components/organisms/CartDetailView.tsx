@@ -2,6 +2,7 @@ import Link from "next/link";
 import { formatPrice } from "@/lib/format-price";
 import type { CartDetail, CartLineRecord } from "@/server/types/cart.types";
 import { Heading, Text } from "../atoms";
+import { CustomizationButton } from "./CustomizationButton";
 
 export function CartDetailView({ cart }: { cart: CartDetail }) {
   return (
@@ -43,6 +44,11 @@ export function CartDetailView({ cart }: { cart: CartDetail }) {
                         {line.title}
                       </Link>
                       {line.variantTitle ? <div className="text-xs text-muted-foreground">{line.variantTitle}</div> : null}
+                      {line.customization ? (
+                        <div className="mt-1">
+                          <CustomizationButton customization={line.customization} fileName={`cart-${line.handle}`} />
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                 </td>

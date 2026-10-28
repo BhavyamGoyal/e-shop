@@ -1,3 +1,4 @@
+import type { CartCustomization, ParamValues } from "@/customizers/core";
 import { requireStaff } from "../auth/guard";
 import { readSession, type Session } from "../auth/session";
 import { NotFoundError, UnauthorizedError } from "../http/errors";
@@ -11,6 +12,17 @@ const MAX_LINES = 100;
 
 const asText = (value: unknown): string => (typeof value === "string" ? value : "");
 const asNumber = (value: unknown): number => (typeof value === "number" && Number.isFinite(value) ? value : 0);
+
+function toCustomization(value: unknown): CartCustomization | null {
+  const raw: Raw = (value ?? {}) as Raw;
+  const slug: string = asText(raw.slug);
+  if (!slug || !raw.params || typeof raw.params !== "object") return null;
+  const params: ParamValues = {};
+  for (const [key, entry] of Object.entries(raw.params as Raw)) {
+    if (typeof entry === "string" || typeof entry === "number" || typeof entry === "boolean") params[key] = entry;
+  }
+  return { slug, renderer: asText(raw.renderer), version: Math.floor(asNumber(raw.version)) || 1, params };
+}
 
 function toLine(value: unknown): CartLineRecord | null {
   const raw: Raw = (value ?? {}) as Raw;
@@ -28,6 +40,7 @@ function toLine(value: unknown): CartLineRecord | null {
     price: Math.max(0, asNumber(raw.price)),
     compareAtPrice: compareAtPrice > 0 ? compareAtPrice : null,
     quantity: Math.min(99, quantity),
+    customization: toCustomization(raw.customization),
   };
 }
 

@@ -1,3 +1,4 @@
+import type { CartCustomization } from "@/customizers/core";
 import type { OrderDocument } from "../models/order.model";
 import type { PaymentDocument } from "../models/payment.model";
 import type { AddressSnapshot } from "../types/address.types";
@@ -61,6 +62,7 @@ const toLine = (line: StoredOrder["items"][number]): OrderLineRecord => ({
   image: line.image ?? null,
   unitAmount: line.unitAmount,
   quantity: line.quantity,
+  customization: (line.customization as CartCustomization | null | undefined) ?? null,
 });
 
 const toShipping = (order: StoredOrder): AddressSnapshot => {

@@ -1,3 +1,4 @@
+import { customizationSummary, customizeEditHref } from "@/lib/customization-summary";
 import { formatPrice } from "@/lib/format-price";
 import type { CartItem } from "@/stores/cart/Cart.types";
 import { QuantityStepper } from "./QuantityStepper";
@@ -26,6 +27,18 @@ export function CartLine({ item, onQuantity, onRemove }: CartLineProps) {
               {item.title}
             </a>
             {item.variantTitle && <p className="text-sm text-(--pp-muted)">{item.variantTitle}</p>}
+            {item.customization && (
+              <p className="text-sm text-(--pp-muted)">
+                <span className="font-medium text-(--pp-ink)">{customizationSummary(item.customization)}</span>
+                {" · "}
+                <a
+                  href={customizeEditHref(item.handle, item.key, item.customization)}
+                  className="font-medium text-(--pp-green) hover:underline"
+                >
+                  Edit design
+                </a>
+              </p>
+            )}
           </div>
           <span className="shrink-0 font-bold text-(--pp-green)">{formatPrice(item.price * item.quantity)}</span>
         </div>

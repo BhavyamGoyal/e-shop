@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { QuantityStepper } from "../molecules";
 import { useCartStore } from "@/stores/cart/Cart.store";
@@ -8,12 +9,13 @@ import type { CartItem } from "@/stores/cart/Cart.types";
 
 interface ProductActionsProps {
   inStock: boolean;
+  customizeHref?: string | null;
   item: Omit<CartItem, "quantity">;
 }
 
 const ADDED_MESSAGE_MS = 1800;
 
-export function ProductActions({ inStock, item }: ProductActionsProps) {
+export function ProductActions({ inStock, item, customizeHref = null }: ProductActionsProps) {
   const [quantity, setQuantity] = useState<number>(1);
   const [added, setAdded] = useState<boolean>(false);
   const add = useCartStore((state) => state.add);
@@ -29,6 +31,18 @@ export function ProductActions({ inStock, item }: ProductActionsProps) {
     add({ ...item, quantity });
     router.push("/cart");
   };
+
+  if (customizeHref) {
+    return (
+      <Link
+        href={customizeHref}
+        aria-disabled={!inStock}
+        className={`flex min-h-14 items-center justify-center rounded-[14px] border border-warning/50 bg-linear-to-b from-primary to-(--pp-green-d) text-[17px] font-bold text-primary-foreground shadow-lg transition hover:brightness-110 ${inStock ? "" : "pointer-events-none opacity-50"}`}
+      >
+        {inStock ? "Customize" : "Sold out"}
+      </Link>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-3">

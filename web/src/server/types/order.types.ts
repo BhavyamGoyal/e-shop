@@ -1,3 +1,5 @@
+import type { CartCustomization } from "@/customizers/core";
+
 export interface OrderLineRecord {
   key: string;
   handle: string;
@@ -7,6 +9,7 @@ export interface OrderLineRecord {
   image: string | null;
   unitAmount: number;
   quantity: number;
+  customization?: CartCustomization | null;
 }
 
 export const INVOICE_ENTRY_TYPES = ["charge", "discount"] as const;

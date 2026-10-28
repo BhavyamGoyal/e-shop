@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchAddresses } from "@/lib/address-api";
+import { fetchProfile } from "@/lib/profile-api";
 import type { HeaderData } from "@/lib/website-data";
 import type { AddressRecord } from "@/server/types/address.types";
 
@@ -16,7 +17,8 @@ export function HeaderLocation({ location }: HeaderLocationProps) {
   const [pincode, setPincode] = useState<string>("");
 
   useEffect((): void => {
-    fetchAddresses()
+    fetchProfile()
+      .then((profile) => (profile ? fetchAddresses() : []))
       .then((addresses: AddressRecord[]): void => setPincode(pickPincode(addresses)))
       .catch((): void => setPincode(""));
   }, []);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { fetchProfile } from "@/lib/profile-api";
 import { useWishlistStore } from "@/stores/wishlist/Wishlist.store";
 import type { WishlistItem } from "@/stores/wishlist/Wishlist.types";
 
@@ -22,6 +23,8 @@ export function WishlistSync() {
     let active: boolean = true;
     let unsubscribe: (() => void) | null = null;
     const start = async (): Promise<void> => {
+      const profile = await fetchProfile().catch(() => null);
+      if (!active || !profile) return;
       const response: Response = await fetch("/api/wishlist").catch((): Response => new Response(null, { status: 500 }));
       if (!active || !response.ok) return;
       const body: { data?: WishlistItem[] } = await response.json().catch(() => ({}));

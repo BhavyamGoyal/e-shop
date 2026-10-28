@@ -1,6 +1,9 @@
+import type { CartCustomization } from "@/customizers/core";
+import { parseCartKey, type ParsedCartKey } from "@/lib/cart-key";
 import { QueryError } from "../http/errors";
 import type { ProductDocument } from "../models/product.model";
 import { productRepository } from "../repositories/product.repository";
+import { customizerService } from "./customizer.service";
 import type { OrderLineRecord } from "../types/order.types";
 
 type Raw = Record<string, unknown>;
@@ -9,11 +12,12 @@ type Variant = NonNullable<ProductDocument["variants"]>[number];
 interface RequestedLine {
   key: string;
   quantity: number;
+  customization: RequestedCustomization | null;
 }
 
-interface ParsedKey {
-  handle: string;
-  variantId: number | null;
+interface RequestedCustomization {
+  slug: string;
+  params: unknown;
 }
 
 export interface PricedCart {
@@ -46,7 +50,7 @@ function parseRequested(payload: unknown): RequestedLine[] {
     if (typeof raw.key !== "string" || !Number.isInteger(quantity) || quantity < 1 || quantity > MAX_QUANTITY) {
       throw new QueryError(INVALID_ITEM);
     }
-    return { key: raw.key, quantity };
+    return { key: raw.key, quantity, customization: parseCustomization(raw.customization) };
   });
   if (new Set(lines.map((line: RequestedLine): string => line.key)).size !== lines.length) {
     throw new QueryError("Duplicate items in cart");
@@ -54,19 +58,37 @@ function parseRequested(payload: unknown): RequestedLine[] {
   return lines;
 }
 
-function parseKey(key: string): ParsedKey {
-  const index: number = key.lastIndexOf(":");
-  if (index < 1) throw new QueryError(INVALID_ITEM);
-  const suffix: string = key.slice(index + 1);
-  const handle: string = key.slice(0, index);
-  if (suffix === "default") return { handle, variantId: null };
-  const variantId: number = Number(suffix);
-  if (!Number.isInteger(variantId)) throw new QueryError(INVALID_ITEM);
-  return { handle, variantId };
+function parseCustomization(value: unknown): RequestedCustomization | null {
+  if (value === null || value === undefined) return null;
+  const raw: Raw = value as Raw;
+  if (typeof raw.slug !== "string" || !raw.slug) throw new QueryError(INVALID_ITEM);
+  return { slug: raw.slug, params: raw.params };
+}
+
+function parseKey(key: string): ParsedCartKey {
+  const parsed: ParsedCartKey | null = parseCartKey(key);
+  if (!parsed) throw new QueryError(INVALID_ITEM);
+  return parsed;
+}
+
+async function resolveCustomization(
+  line: RequestedLine,
+  parsed: ParsedCartKey,
+  product: ProductDocument,
+): Promise<CartCustomization | null> {
+  const customized: boolean = parsed.customizationId !== null;
+  if (!customized && !line.customization) {
+    if (product.customizerSlug) throw new QueryError(`"${product.title}" needs to be customized`);
+    return null;
+  }
+  if (!customized || !line.customization) throw new QueryError(INVALID_ITEM);
+  if (line.customization.slug !== product.customizerSlug) throw new QueryError(INVALID_ITEM);
+  return customizerService.resolve(line.customization.slug, line.customization.params);
 }
 
 async function priceLine(line: RequestedLine): Promise<PricedLine> {
-  const { handle, variantId }: ParsedKey = parseKey(line.key);
+  const parsed: ParsedCartKey = parseKey(line.key);
+  const { handle, variantId }: ParsedCartKey = parsed;
   const product: ProductDocument | null = await productRepository.findByHandle(handle);
   if (!product) throw new QueryError("A product in your cart is no longer available");
   const variant: Variant | undefined =
@@ -74,6 +96,7 @@ async function priceLine(line: RequestedLine): Promise<PricedLine> {
   if (variantId !== null && !variant) throw new QueryError(`"${product.title}" option is no longer available`);
   const inStock: boolean = variant ? variant.available !== false : product.available !== false;
   if (!inStock) throw new QueryError(`"${product.title}" is out of stock`);
+  const customization: CartCustomization | null = await resolveCustomization(line, parsed, product);
   const unitGrams: number = variant?.grams && variant.grams > 0 ? variant.grams : DEFAULT_UNIT_GRAMS;
   return {
     record: {
@@ -85,6 +108,7 @@ async function priceLine(line: RequestedLine): Promise<PricedLine> {
       image: variant?.image ?? product.featuredImage ?? product.images?.[0]?.url ?? null,
       unitAmount: Math.round((variant?.price ?? product.price) * 100),
       quantity: line.quantity,
+      customization,
     },
     manufacturingDays: product.manufacturingDays ?? DEFAULT_MANUFACTURING_DAYS,
     weightGrams: unitGrams * line.quantity,

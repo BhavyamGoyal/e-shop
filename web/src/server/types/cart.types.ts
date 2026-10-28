@@ -1,3 +1,5 @@
+import type { CartCustomization } from "@/customizers/core";
+
 export interface CartLineRecord {
   key: string;
   handle: string;
@@ -7,6 +9,7 @@ export interface CartLineRecord {
   price: number;
   compareAtPrice: number | null;
   quantity: number;
+  customization?: CartCustomization | null;
 }
 
 export interface CartSummary {
