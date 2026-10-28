@@ -3,7 +3,9 @@ import type { HeaderData } from "@/lib/website-data";
 import { CartLink } from "./CartLink";
 import { HeaderLocation } from "./HeaderLocation";
 import { MobileMenu } from "./MobileMenu";
+import { MobileSearch } from "./MobileSearch";
 import { ProfileMenu } from "./ProfileMenu";
+import { SearchBox } from "./SearchBox";
 import { WishlistLink } from "./WishlistLink";
 
 const PROFILE_HREF = "/login";
@@ -25,19 +27,11 @@ export function SiteHeader({ header }: SiteHeaderProps) {
         </a>
         <span className="hidden h-10 border-r border-border lg:block" />
         <HeaderLocation location={location} />
-        <form className="hidden max-w-[652px] flex-1 md:block">
-          <div className="relative">
-            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
-              <img src={search.icon} alt="search" width={20} height={20} />
-            </span>
-            <input
-              type="text"
-              placeholder={search.placeholder}
-              className="w-full rounded-lg border border-border bg-muted py-3 pr-4 pl-11 text-sm outline-none focus:border-ring"
-            />
-          </div>
-        </form>
+        <div className="hidden max-w-[652px] flex-1 md:block">
+          <SearchBox icon={search.icon} placeholder={search.placeholder} />
+        </div>
         <div className="flex shrink-0 items-center gap-2 text-xs md:gap-5">
+          <MobileSearch icon={search.icon} placeholder={search.placeholder} />
           {actions.map((action) =>
             action.href === PROFILE_HREF ? (
               <div key={action.href} className="hidden md:block">

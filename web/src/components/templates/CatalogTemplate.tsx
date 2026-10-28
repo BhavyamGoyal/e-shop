@@ -19,8 +19,13 @@ export function CatalogTemplate({ header, shop, catalog }: CatalogTemplateProps)
       <SiteHeader header={header} />
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-4 pt-10 pb-16 md:px-10">
         <h1 className="text-center text-3xl font-semibold md:text-4xl">{title}</h1>
-        {description && <p className="mx-auto mt-2 max-w-2xl text-center text-muted-foreground">{description}</p>}
+        {query.q ? (
+          <p className="mx-auto mt-2 max-w-2xl text-center text-muted-foreground">Results for “{query.q}”</p>
+        ) : (
+          description && <p className="mx-auto mt-2 max-w-2xl text-center text-muted-foreground">{description}</p>
+        )}
         <AutoSubmitForm key={search} action={basePath} className="mt-8">
+          {query.q && <input type="hidden" name="q" value={query.q} />}
           <div className="flex flex-wrap items-center justify-between gap-4 border-y border-border py-4">
             <CatalogFilters facets={facets} query={query} basePath={basePath} />
             <div className="flex items-center gap-5">

@@ -76,3 +76,5 @@ export { ProfileForm } from "./ProfileForm";
 export { CouponForm, type CouponFormProps } from "./CouponForm";
 export { CouponsManager } from "./CouponsManager";
 export { GuestCheckoutForm } from "./GuestCheckoutForm";
+export { SearchBox } from "./SearchBox";
+export { MobileSearch } from "./MobileSearch";
