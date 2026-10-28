@@ -1,8 +1,6 @@
 const ITEMS: string[] = [
-  "3D Printed to order",
-  "Biodegradable PLA",
   "Designed in-house",
-  "Made in India",
+  "Handcrafted in India",
 ];
 
 export function TrustGrid() {
