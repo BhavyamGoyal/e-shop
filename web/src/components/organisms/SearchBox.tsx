@@ -22,7 +22,7 @@ export function SearchBox({ icon, placeholder, autoFocus, onNavigate }: SearchBo
   const [focused, setFocused] = useState<boolean>(false);
   const value: string = draft ?? current;
   const term: string = value.trim();
-  const suggestions: ProductSummary[] = useSearchSuggestions(value);
+  const { items: suggestions, loading } = useSearchSuggestions(value);
   const showList: boolean = focused && suggestions.length > 0;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
@@ -58,8 +58,18 @@ export function SearchBox({ icon, placeholder, autoFocus, onNavigate }: SearchBo
           onChange={(event) => setDraft(event.target.value)}
           onFocus={() => setFocused(true)}
           onKeyDown={handleKeyDown}
-          className="w-full rounded-lg border border-border bg-muted py-3 pr-4 pl-11 text-sm outline-none focus:border-ring"
+          aria-busy={loading}
+          className="w-full rounded-lg border border-border bg-muted py-3 pr-11 pl-11 text-sm outline-none focus:border-ring"
         />
+        {loading && (
+          <span
+            role="status"
+            aria-label="Searching"
+            className="pointer-events-none absolute inset-y-0 right-3 flex items-center"
+          >
+            <span className="size-4 animate-spin rounded-full border-2 border-border border-t-primary" />
+          </span>
+        )}
       </form>
       {showList && (
         <ul

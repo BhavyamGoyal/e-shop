@@ -11,7 +11,12 @@ interface Loaded {
 const MIN_LENGTH = 2;
 const DEBOUNCE_MS = 250;
 
-export function useSearchSuggestions(input: string): ProductSummary[] {
+export interface SearchSuggestions {
+  items: ProductSummary[];
+  loading: boolean;
+}
+
+export function useSearchSuggestions(input: string): SearchSuggestions {
   const term: string = input.trim();
   const [loaded, setLoaded] = useState<Loaded | null>(null);
 
@@ -25,7 +30,10 @@ export function useSearchSuggestions(input: string): ProductSummary[] {
           return response.json();
         })
         .then((page: ProductPage): void => setLoaded({ term, items: page.data }))
-        .catch((): void => undefined);
+        .catch((): void => {
+          if (controller.signal.aborted) return;
+          setLoaded({ term, items: [] });
+        });
     }, DEBOUNCE_MS);
     return (): void => {
       clearTimeout(timer);
@@ -33,5 +41,7 @@ export function useSearchSuggestions(input: string): ProductSummary[] {
     };
   }, [term]);
 
-  return loaded?.term === term && term.length >= MIN_LENGTH ? loaded.items : [];
+  const active: boolean = term.length >= MIN_LENGTH;
+  const ready: boolean = active && loaded?.term === term;
+  return { items: ready && loaded ? loaded.items : [], loading: active && !ready };
 }
