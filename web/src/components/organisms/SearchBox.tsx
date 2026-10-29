@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/router";
-import { useState, type FocusEvent, type FormEvent, type KeyboardEvent } from "react";
+import { useState, type FocusEvent, type FormEvent, type KeyboardEvent, type MouseEvent } from "react";
 import { formatPrice } from "@/lib/format-price";
 import { useSearchSuggestions } from "@/lib/use-search-suggestions";
 import type { ProductSummary } from "@/server/types/product.types";
@@ -62,7 +62,10 @@ export function SearchBox({ icon, placeholder, autoFocus, onNavigate }: SearchBo
         />
       </form>
       {showList && (
-        <ul className="absolute inset-x-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-border bg-background shadow-lg">
+        <ul
+          onMouseDown={(event: MouseEvent<HTMLUListElement>): void => event.preventDefault()}
+          className="absolute inset-x-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-border bg-background shadow-lg"
+        >
           {suggestions.map((item: ProductSummary) => (
             <li key={item.handle}>
               <a href={`/product/${item.handle}`} className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-muted">
