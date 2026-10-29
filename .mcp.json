@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tinglet-products": {
+      "command": "npx",
+      "args": ["--prefix", "mcp-products", "tsx", "mcp-products/src/server.ts"]
+    }
+  }
+}

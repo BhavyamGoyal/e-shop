@@ -29,3 +29,10 @@ export function GET(request: NextRequest): Promise<Response> {
     Response.json(await productAdminController.list(parseQuery(request.nextUrl.searchParams))),
   );
 }
+
+export function POST(request: NextRequest): Promise<Response> {
+  return handleRequest(async (): Promise<Response> => {
+    const saved = await productAdminController.save(null, await request.json());
+    return Response.json(saved, { status: 201 });
+  });
+}
