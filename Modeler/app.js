@@ -346,8 +346,16 @@ function buildPartsUi() {
   allLabel.appendChild(allCb);
   allLabel.appendChild(document.createTextNode('All parts'));
   host.appendChild(allLabel);
+  const order = [];
+  const seen = new Map();
+  for (const p of parts) {
+    if (!p.group) { order.push(p); continue; }
+    if (!seen.has(p.group)) { seen.set(p.group, []); order.push(seen.get(p.group)); }
+    seen.get(p.group).push(p);
+  }
+  const ordered = order.flat();
   let lastGroup = null;
-  parts.forEach(p => {
+  ordered.forEach(p => {
     if (p.group && p.group !== lastGroup) {
       const h = document.createElement('label');
       h.className = 'g';

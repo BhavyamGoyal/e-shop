@@ -1,6 +1,8 @@
 import { THREE, makeCsg } from '../lib/geometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+import { LOGO_PATHS, LOGO_VIEW, LOGO_DOT } from '../lib/tinglet-logo.js';
 import { toCreasedNormals, mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 let QUALITY = 1;
@@ -330,6 +332,44 @@ function cutBores(geo, bores) {
     cg.translate(mid.x, mid.y, mid.z);
     b = csg.sub(b, cg);
   }
+  const out = b.geometry.index ? b.geometry.toNonIndexed() : b.geometry;
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(healTJunctions(out.attributes.position.array), 3));
+  return toCreasedNormals(g, 0.7);
+}
+
+function logoCutter(cx, cz, width, top, depth) {
+  const sc = width / LOGO_VIEW.w;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${LOGO_VIEW.w} ${LOGO_VIEW.h}">${LOGO_PATHS.map(d => `<path fill-rule="evenodd" d="${d}"/>`).join('')}</svg>`;
+  const data = new SVGLoader().parse(svg);
+  const geos = [];
+  for (const sp of data.paths) {
+    for (const shape of SVGLoader.createShapes(sp)) {
+      const g = new THREE.ExtrudeGeometry(shape, { depth: depth + 0.5, bevelEnabled: false, curveSegments: 4 });
+      g.translate(-LOGO_VIEW.w / 2, -LOGO_VIEW.h / 2, 0);
+      g.scale(sc, sc, 1);
+      g.rotateX(Math.PI / 2);
+      g.translate(cx, top + 0.5, cz);
+      geos.push(g);
+    }
+  }
+  const dot = new THREE.Shape();
+  dot.absarc(LOGO_DOT.x, LOGO_DOT.y, LOGO_DOT.r, 0, Math.PI * 2, false);
+  const dg = new THREE.ExtrudeGeometry(dot, { depth: depth + 0.5, bevelEnabled: false, curveSegments: 24 });
+  dg.translate(-LOGO_VIEW.w / 2, -LOGO_VIEW.h / 2, 0);
+  dg.scale(sc, sc, 1);
+  dg.rotateX(Math.PI / 2);
+  dg.translate(cx, top + 0.5, cz);
+  geos.push(dg);
+  return [mergeGeometries(geos)];
+}
+
+function engraveLogo(geo, cutters) {
+  const csg = makeCsg();
+  const n = geo.attributes.position.count;
+  geo.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(n * 2), 2));
+  let b = csg.brush(geo);
+  for (const c of cutters) b = csg.sub(b, c);
   const out = b.geometry.index ? b.geometry.toNonIndexed() : b.geometry;
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(healTJunctions(out.attributes.position.array), 3));
@@ -1067,7 +1107,7 @@ function makeParts() {
       }
       dn = down.clone().applyQuaternion(QTILT);
     }
-    out.push({ name, group, mb, down: dn, web: !!o.web, pegs, holes, bores });
+    out.push({ name, group, mb, down: dn, web: !!o.web, pegs, holes, bores, engrave: o.engrave });
   };
   const D = V3;
   for (const s of [1, -1]) {
@@ -1178,7 +1218,7 @@ function makeParts() {
     const ys = -1.75 * S, zc = -11.3 * S, nh = 30, yh = ys - 1, yb = yh - nh, zf = zc - 28;
     const base = new MB();
     solidBox(base, -19, 19, yb - 4, yb, zf - 20, zf + 46, [{ c: V3(0, yb, zf), r: 2.2, depth: 3.2 }], []);
-    add('Stand base', 'Stand', base, D(0, -1, 0), { mm: true, stand: true });
+    add('Stand base', 'Stand', base, D(0, -1, 0), { mm: true, stand: true, engrave: { cx: 0, cz: zf - 11.5, width: 12, top: yb, depth: 0.6 } });
 
     const neck = new MB();
     const uB = -zf, uT = -zc;
@@ -1270,11 +1310,10 @@ const DISPLAY = {
   'Pins': 'Stand & pins', 'Stand': 'Stand & pins', 'Sprue': 'Sprue'
 };
 const CARD_ORDER = ['Airframe', 'Wings & tail', 'Engines & gear', 'Weapons', 'Stand & pins', 'Sprue'];
-const CARD_W = 248;
-const FILL = new Set(['Engines & gear']);
+const CARD_W = 184;
 
 function packCard(parts, W, ray, mat) {
-  const B = 3, EDGE = 3.5, GY = 7, GX = 5, X0 = B + 3, X1 = W - B - 3;
+  const B = 3, EDGE = 3.5, GY = 5, GX = 5, X0 = B + 3, X1 = W - B - 3;
   const baseOf = n => n.replace(/\s[LR](?=\s|$)/, '');
   const baseH = new Map();
   for (const p of parts) baseH.set(baseOf(p.name), Math.max(baseH.get(baseOf(p.name)) || 0, p.size.y));
@@ -1295,7 +1334,7 @@ function packCard(parts, W, ray, mat) {
     row.h = Math.max(row.h, p.size.y);
   };
   const uw = u => u.reduce((t, p) => t + p.size.x, 0) + GX * (u.length - 1);
-  const isFill = u => FILL.has(u[0].disp) || u[0].group === 'Pins';
+  const isFill = u => !u[0].plate;
   const fillUnits = units.filter(isFill).sort((a, b) => Math.max(...b.map(p => p.size.y)) - Math.max(...a.map(p => p.size.y)) || uw(b) - uw(a));
   for (const u of units.filter(u => !isFill(u))) {
     const w = u.reduce((a, p) => a + p.size.x, 0) + GX * (u.length - 1);
@@ -1379,7 +1418,7 @@ function packCard(parts, W, ray, mat) {
             const T = th.point.z;
             if (T < 0.5) continue;
             const gap = side > 0 ? edgeY - hit.point.y : hit.point.y - edgeY;
-            cands.push({ x, side, bar, zr, hy: hit.point.y, T, score: (zr < 1 ? Math.min(T, 1.8) * 3 : 4) - gap });
+            cands.push({ x, side, bar, zr, gap, hy: hit.point.y, T, score: (zr < 1 ? Math.min(T, 1.8) * 3 : 4) - gap });
             break;
           }
         }
@@ -1387,6 +1426,8 @@ function packCard(parts, W, ray, mat) {
       cg.dispose();
       let pick = [];
       if (cands.length) {
+        const gmin = Math.min(...cands.map(c => c.gap));
+        for (let i = cands.length - 1; i >= 0; i--) if (cands[i].gap > gmin + 3) cands.splice(i, 1);
         const sc = s => cands.filter(c => c.side === s).reduce((a, c) => a + Math.max(c.score, 0), 0);
         const side = sc(1) >= sc(-1) ? 1 : -1;
         const list = cands.filter(c => c.side === side).sort((a, b) => b.score - a.score);
@@ -1403,6 +1444,7 @@ function packCard(parts, W, ray, mat) {
         boxRaw(sprue, c.x - 0.45, c.x + 0.45, Math.min(ya, yb), Math.max(ya, yb), 0, h);
       }
       p.runners = pick.length;
+      p.runGap = pick.map(c => +c.gap.toFixed(1));
       if (p.web) {
         const yc = p.cy + p.size.y / 2;
         boxRaw(sprue, p.cx + 3, p.cx + p.size.x - 3, yc - 0.4, yc + 0.4, 0, p.size.z / 2 + 0.2);
@@ -1421,6 +1463,7 @@ function buildKit(font) {
     p.raw = finish(p.mb);
     p.geo = rawToGeo(p.raw, 0.7);
     if (p.bores.length) p.geo = cutBores(p.geo, p.bores);
+    if (p.engrave) p.geo = engraveLogo(p.geo, logoCutter(p.engrave.cx, p.engrave.cz, p.engrave.width, p.engrave.top, p.engrave.depth));
     p.bad = p.raw.bad;
     p.tris = p.raw.T.length / 3;
     p.volume = geoVolume(p.geo);
@@ -1430,27 +1473,15 @@ function buildKit(font) {
     p.asmPos = p.center.clone();
   }
   const cnt = parts.length;
-  const makePlate = (line1, line2, ci) => {
-    const t1 = new TextGeometry(line1, { font, size: 5.4, height: 0.8, curveSegments: 3, bevelEnabled: false });
+  const makePlate = (line, ci) => {
+    const t1 = new TextGeometry(line, { font, size: 3.4, height: 0.8, curveSegments: 3, bevelEnabled: false });
     t1.computeBoundingBox();
-    t1.translate(-t1.boundingBox.min.x, 9.4, 0);
-    const t2 = new TextGeometry(line2, { font, size: 4.0, height: 0.8, curveSegments: 3, bevelEnabled: false });
-    t2.computeBoundingBox();
-    t2.translate(-t2.boundingBox.min.x, 2.4, 0);
-    const rail = (t, y) => {
-      t.computeBoundingBox();
-      const w = t.boundingBox.max.x - t.boundingBox.min.x;
-      const r = new THREE.BoxGeometry(w, 1.1, 0.8).toNonIndexed();
-      r.translate(t.boundingBox.min.x + w / 2, y + 0.35, 0.4);
-      return r;
-    };
-    const joinW = Math.min(t1.boundingBox.max.x, t2.boundingBox.max.x);
-    const post = (x) => {
-      const b = new THREE.BoxGeometry(1.2, 9.4 - 2.4, 0.8).toNonIndexed();
-      b.translate(x, (9.4 + 2.4) / 2 + 0.35, 0.4);
-      return b;
-    };
-    const pl = { name: 'Name plate', group: 'Sprue', geo: mergeGeometries([t1, t2, rail(t1, 9.4), rail(t2, 2.4), post(0.8), post(joinW - 0.8), post(joinW / 2)]), down: V3(0, 0, -1), plate: true, bad: 0, card: ci };
+    t1.translate(-t1.boundingBox.min.x, 0, 0);
+    t1.computeBoundingBox();
+    const w = t1.boundingBox.max.x - t1.boundingBox.min.x;
+    const rail = new THREE.BoxGeometry(w, 1.1, 0.8).toNonIndexed();
+    rail.translate(w / 2, 0.35, 0.4);
+    const pl = { name: 'Name plate', group: 'Sprue', geo: mergeGeometries([t1, rail]), down: V3(0, 0, -1), plate: true, bad: 0, card: ci };
     parts.push(pl);
     pl.tris = pl.geo.attributes.position.count / 3;
     pl.volume = geoVolume(pl.geo);
@@ -1460,7 +1491,7 @@ function buildKit(font) {
     pl.asmPos = V3(0, 0, 0);
   };
   if (font) {
-    makePlate('TINGLET  F-15E STRIKE EAGLE', '1:120 KIT  -  ' + cnt + ' PARTS  -  ONE PLATE', 0);
+    makePlate('TINGLET  1:120 KIT  -  ' + cnt + ' PARTS', 0);
   }
   for (const p of parts) {
     if (p.plate) {
