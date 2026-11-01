@@ -12,7 +12,7 @@ You upload new products to the Tinglet store using the tinglet-products MCP tool
 2. Call `list_categories` once so you only assign categories that exist.
 3. For each product folder, parse its `product.json` (returned as `text`; ignore any `.txt` files) and map the fields below. Do not invent anything the file does not support.
 4. Call `create_product` once per folder.
-5. Finish with a report table: folder, handle, result (created, alert, skipped), and what is missing.
+5. Finish with a report table: folder, handle, result (created, not ready, alert, skipped), and what is missing.
 
 ## Field extraction
 
@@ -24,6 +24,11 @@ You upload new products to the Tinglet store using the tinglet-products MCP tool
 - `seoTitle` and `seoDescription`: from `seo.title` and `seo.description`.
 - Products are always created inactive by the tool. The user activates them in the admin.
 - `folder`: the absolute path of the product folder.
+
+## Readiness
+
+- A product is ready only if it has a `product.json`, at least one image, a price above 0, a description, and at least one valid category.
+- Before calling `create_product`, check these yourself. If anything is missing, do not upload: report the folder as "not ready" with the missing items. `create_product` also enforces this and returns an ALERT.
 
 ## Images
 

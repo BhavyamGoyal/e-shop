@@ -72,13 +72,19 @@ server.registerTool(
     const handle: string = slugify(input.title);
     if (!handle) return alert("Title produces an empty handle");
 
+    const folder: ProductFolder = await readProductFolder(input.folder);
+    const missing: string[] = [];
+    if (!folder.textFile) missing.push("product.json");
+    if (folder.images.length === 0) missing.push("images");
+    if (input.price <= 0) missing.push("price");
+    if (!input.descriptionHtml.trim()) missing.push("description");
+    if (input.categories.length === 0) missing.push("categories");
+    if (missing.length > 0) return alert(`Product "${input.title}" is not ready to upload, missing: ${missing.join(", ")}`);
+
     const existing: ApiResult<unknown> = await api<unknown>(`/api/product/${handle}`);
     if (existing.ok) return alert(`A product with handle "${handle}" already exists on the store`);
     if (existing.status !== 404) return alert(`Could not verify handle "${handle}" (status ${existing.status})`);
     if (await stagedFolderExists(handle)) return alert(`web/public/products/${handle} already exists locally`);
-
-    const folder: ProductFolder = await readProductFolder(input.folder);
-    if (folder.images.length === 0) return alert("The product folder has no images");
 
     const staged: StagedImage[] = await stageImages(handle, folder.images);
     const created: ApiResult<{ id?: string; error?: string }> = await api("/api/admin/products", "POST", {
