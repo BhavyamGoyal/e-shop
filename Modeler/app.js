@@ -196,9 +196,6 @@ function buildRulers(box) {
   const V = lib.V;
   const off = 10;
   const o = V(0, 0, 0);
-  const ball = new THREE.Mesh(new THREE.SphereGeometry(step * 0.45, 24, 16), new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false }));
-  ball.renderOrder = 11;
-  rulerGroup.add(ball);
   ruler(o, V(1, 0, 0), V(0, 0, 1), up(size.x + off), step, V(0, 0, step * 1.4), 'X width', 'x');
   ruler(o, V(0, 0, -1), V(-1, 0, 0), up(size.z + off), step, V(-step * 1.4, 0, 0), 'Y depth', 'y');
   ruler(o, V(0, 1, 0), V(-1, 0, 0), up(size.y), step, V(-step * 1.4, 0, 0), 'Z height', 'z');

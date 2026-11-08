@@ -11,6 +11,12 @@ The full guide is `HOW-TO-CREATE-A-MODEL.md`. Read it before writing a model. Th
 - Start from `models/_template.js`. Study `models/desk-bot.js` (CSG shell, explode, print orientations) and `models/f15-card-kit.js` (sprue cards, custom exports) for larger examples.
 - Files starting with `_` in `models/` are ignored by the dropdown.
 
+## Printer and filament
+
+- Printer nozzle is 0.4 mm. Keep walls at least 1.2 mm (2.0 mm preferred), rods and rigging at least 1.2 mm thick, and relief details at least 0.8 mm wide.
+- Filament colours available: red, blue, green, white, black, brown, orange, yellow, grey. There is only one brown. Colour every part with one of these (use yellow or orange for gold) and keep all wood parts the same brown.
+- Models are fixed-size with proportional dimensions unless the user asks for sliders.
+
 ## Run and check
 
 - `start.bat` or `node server.mjs`, then http://localhost:5174. Opening `index.html` as a file does not work.

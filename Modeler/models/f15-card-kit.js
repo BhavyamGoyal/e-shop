@@ -534,6 +534,8 @@ const CANOPY_STATIONS = [4.6, 7.8];
 const INTAKE_STATIONS = [8.0, 9.0];
 const POD_STATIONS = [-12.5, -16.2];
 const HOOK_STATION = 16.5;
+const NOSE_GEAR_STATION = 3.9;
+const MISSILE_RACK_Y = -1.35;
 const PEG_SLACK = 0.27;
 const CFT_STATIONS = [10.9, 12.9, 14.9];
 const CFT_TAB = [[9.5, 1.15, 2.0, -0.85, 0.05], [10.5, 1.15, 2.05, -0.92, 0.1], [13, 1.15, 2.05, -0.92, 0.12], [15, 1.15, 1.95, -0.88, 0.1], [16.0, 1.15, 1.6, -0.62, -0.05]];
@@ -670,6 +672,7 @@ function fuselage(side) {
     const cy = cftMidY(d);
     bore(mb, V3(side * hullSideX(d, cy), cy, -d), V3(-side, 0, 0), 0.07 + SOCKET_EXTRA, 0.3);
   }
+  bore(mb, V3(0, hullPt(NOSE_GEAR_STATION, Math.PI, 1).y, -NOSE_GEAR_STATION), V3(0, 1, 0), 0.07 + SOCKET_EXTRA, 0.25, 0.5);
   bore(mb, V3(0, hullPt(HOOK_STATION, Math.PI, 1).y, -HOOK_STATION), V3(0, 1, 0), 0.05 + SOCKET_EXTRA, 0.25, 0.5);
   const pinHoles = [2.6, 5.6, 8.6, 11.6, 14.6].map(d => ({ c: V3(0, (hullPt(d, 0, side).y + hullPt(d, Math.PI, side).y) / 2, -d), r: 0.12, depth: 0.274 }));
   const arc = [], deep = [];
@@ -969,7 +972,7 @@ function canopy() {
 function nozzle(side) {
   const mb = new MB();
   const prof = [[0, 0], [0.62, 0], [0.62, 0.55], [0.60, 1.0], [0.65, 1.12], [0.64, 1.3], [0.60, 1.5], [0.58, 1.75], [0.60, 2.05], [0.63, 2.43],
-    [0.54, 2.43], [0.50, 2.1], [0.46, 1.85], [0.47, 1.6], [0.3, 1.6], [0.22, 1.85], [0.1, 2.0], [0, 2.05]];
+    [0.54, 2.43], [0.50, 2.1], [0.46, 1.85], [0.47, 1.6], [0, 1.6]];
   const xf = new THREE.Matrix4().makeRotationY(Math.PI);
   xf.setPosition(side * 0.75, -0.17, -17.0);
   revolve(mb, prof, 96, xf, (r, a, ph) => {
@@ -1116,15 +1119,15 @@ function makeParts() {
     add('Air intake ' + k, 'Intakes', intake(s), D(s, 0, 0));
     add('Wing ' + k, 'Wings & tail', wing(s), D(0, -1, 0));
     add('Stabilator ' + k, 'Wings & tail', stabilator(s), D(0, -1, 0));
-    add('Vertical fin ' + k, 'Wings & tail', fin(s), D(-s, 0, 0));
+    add('Vertical fin ' + k, 'Wings & tail', fin(s), D(0, -1, 0));
     add('Engine nozzle ' + k, 'Engines', (() => {
       const nz = nozzle(s);
       for (const dy of [-0.22, 0.22]) peg(nz, V3(s * 0.3, -0.17 + dy, -17.0), V3(0, 0, 1), 0.065, 0.28, 0.1);
       return nz;
-    })(), D(0, -1, 0), { flat: 0.9 });
+    })(), D(0, 0, -1), { flat: 0.9 });
     add('Conformal fuel tank ' + k, 'Conformal tanks', (() => {
       const cm = cft(s);
-      for (const dn of AIM120_STATIONS) solidBox(cm, Math.min(s * 1.59, s * 1.89), Math.max(s * 1.59, s * 1.89), -1.55, -0.85, -(dn + 1.12), -(dn + 0.428), [], [dn + 0.588, dn + 0.96].map(d => ({ c: V3(s * 1.74, -1.55, -d), r: 0.078, depth: 0.288 })));
+      for (const dn of AIM120_STATIONS) solidBox(cm, Math.min(s * 1.59, s * 1.89), Math.max(s * 1.59, s * 1.89), MISSILE_RACK_Y, -0.85, -(dn + 1.12), -(dn + 0.428), [], [dn + 0.588, dn + 0.96].map(d => ({ c: V3(s * 1.74, MISSILE_RACK_Y, -d), r: 0.078, depth: 0.288 })));
       const pad = (xa, xb, y0, y1, d0, d1) => solidBox(cm, Math.min(s * xa, s * xb), Math.max(s * xa, s * xb), y0, y1, -d1, -d0, [], []);
       for (const d of [10.6, 12.4]) pad(1.57, 1.91, -0.3, 0.15 - FIT, d - 0.17, d + 0.17);
       for (const d of [14.6, 15.3]) pad(1.57, 1.91, -0.4, 0.13 - FIT, d - 0.17, d + 0.17);
@@ -1172,9 +1175,11 @@ function makeParts() {
   add('Tail stinger', 'Engines', stinger(), D(0, -1, 0), { flat: 0.4 });
   add('Nose gear leg', 'Landing gear', (() => {
     const mb = new MB();
-    cyl(mb, V3(0, -0.7, -3.9), V3(0, -1.75, -3.9), 0.09, 0.08, 16);
-    cyl(mb, V3(-0.3, -1.75, -3.9), V3(0.3, -1.75, -3.9), 0.055, 0.055, 12);
-    box(mb, -0.07, 0.07, -1.2, -0.7, -4.25, -3.9);
+    const by = hullPt(NOSE_GEAR_STATION, Math.PI, 1).y - FIT;
+    cyl(mb, V3(0, by, -NOSE_GEAR_STATION), V3(0, -1.75, -NOSE_GEAR_STATION), 0.09, 0.08, 16);
+    peg(mb, V3(0, by, -NOSE_GEAR_STATION), V3(0, 1, 0), 0.07, FIT + 0.23, 0.05);
+    cyl(mb, V3(-0.3, -1.75, -NOSE_GEAR_STATION), V3(0.3, -1.75, -NOSE_GEAR_STATION), 0.055, 0.055, 12);
+    box(mb, -0.07, 0.07, -1.2, by, -4.25, -NOSE_GEAR_STATION);
     return mb;
   })(), D(0, -1, 0), { flat: 0.5 });
   for (const s of [1, -1]) {
@@ -1201,7 +1206,7 @@ function makeParts() {
     }
     for (const dn of AIM120_STATIONS) {
       const mb = aim120();
-      moveMB(mb, s * 1.74 * S, -1.55 * S - 0.95, -dn * S);
+      moveMB(mb, s * 1.74 * S, MISSILE_RACK_Y * S - 0.95, -dn * S);
       add('AIM-120 ' + k + (dn < 11 ? ' fwd' : ' aft'), 'AIM-120', mb, D(0, -1, 0), { mm: true, web: true });
     }
     {
@@ -1311,6 +1316,8 @@ const DISPLAY = {
 };
 const CARD_ORDER = ['Airframe', 'Wings & tail', 'Engines & gear', 'Weapons', 'Stand & pins', 'Sprue'];
 const CARD_W = 184;
+const COLOR_ORDER = [0x8a9099, 0x16181c, 0xf2f0e6, 0x1e66d0, 0xd32f2f, 0xf28a1a, 0x2e9e4f, 0xf2c200];
+const colorKey = q => q.ckey || (q.group === 'Landing gear' && /wheel/i.test(q.name) ? 'Tires' : q.group);
 
 function packCard(parts, W, ray, mat) {
   const B = 3, EDGE = 3.5, GY = 5, GX = 5, X0 = B + 3, X1 = W - B - 3;
@@ -1482,32 +1489,51 @@ function buildKit(font) {
     const rail = new THREE.BoxGeometry(w, 1.1, 0.8).toNonIndexed();
     rail.translate(w / 2, 0.35, 0.4);
     const pl = { name: 'Name plate', group: 'Sprue', geo: mergeGeometries([t1, rail]), down: V3(0, 0, -1), plate: true, bad: 0, card: ci };
-    parts.push(pl);
     pl.tris = pl.geo.attributes.position.count / 3;
     pl.volume = geoVolume(pl.geo);
     pl.geo.computeBoundingBox();
     pl.center = pl.geo.boundingBox.getCenter(V3(0, 0, 0));
     pl.geo.translate(-pl.center.x, -pl.center.y, -pl.center.z);
     pl.asmPos = V3(0, 0, 0);
+    parts.push(pl);
+    return pl;
   };
-  if (font) {
-    makePlate('TINGLET  1:120 KIT  -  ' + cnt + ' PARTS', 0);
-  }
-  for (const p of parts) {
-    if (p.plate) {
-      p.q = new THREE.Quaternion();
-      p.geo.computeBoundingBox();
-      p.bmin = p.geo.boundingBox.min.clone();
-      p.bmax = p.geo.boundingBox.max.clone();
-      p.size = p.bmax.clone().sub(p.bmin);
-    } else orientPart(p);
-  }
+  for (const p of parts) if (!p.plate) orientPart(p);
 
   const ray = new THREE.Raycaster();
   const mat = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
   for (const p of parts) p.disp = DISPLAY[p.group] || p.group;
-  const cards = [packCard(parts, CARD_W, ray, mat)];
-  const total = CARD_W;
+  const hexOrder = [];
+  for (const p of parts) {
+    const hx = COLORS[colorKey(p)];
+    if (!hexOrder.includes(hx)) hexOrder.push(hx);
+  }
+  hexOrder.sort((x, y) => COLOR_ORDER.indexOf(x) - COLOR_ORDER.indexOf(y));
+  const cards = [];
+  hexOrder.forEach((hx, ci) => {
+    const group = parts.filter(p => COLORS[colorKey(p)] === hx);
+    const name = Object.keys(FILAMENT).find(k => FILAMENT[k] === hx).toUpperCase();
+    if (font && ci === 0) {
+      const pl = makePlate('TINGLET  1:120 KIT  -  ' + cnt + ' PARTS', ci);
+      pl.ckey = colorKey(group[0]);
+      pl.disp = 'Sprue';
+      pl.q = new THREE.Quaternion();
+      pl.geo.computeBoundingBox();
+      pl.bmin = pl.geo.boundingBox.min.clone();
+      pl.bmax = pl.geo.boundingBox.max.clone();
+      pl.size = pl.bmax.clone().sub(pl.bmin);
+      group.push(pl);
+    }
+    const area = group.reduce((t, p) => t + (p.size.x + 5) * (p.size.y + 5), 0);
+    const widest = Math.max(...group.map(p => p.size.x));
+    const cw = clamp(Math.ceil(Math.max(widest + 14, Math.sqrt(area * 1.5) + 14)), 50, CARD_W);
+    const card = packCard(group, cw, ray, mat);
+    card.color = hx;
+    card.name = name;
+    for (const p of group) p.ci = ci;
+    cards.push(card);
+  });
+  const total = cards.reduce((t, c) => t + c.W, 0);
   let ox = -total / 2;
   for (const c of cards) {
     c.ox = ox;
@@ -1522,10 +1548,12 @@ function buildKit(font) {
   return { parts, cards, total, FLOOR };
 }
 
+const FILAMENT = { red: 0xd32f2f, blue: 0x1e66d0, green: 0x2e9e4f, white: 0xf2f0e6, black: 0x16181c, brown: 0x5a3a20, orange: 0xf28a1a, yellow: 0xf2c200, grey: 0x8a9099 };
+
 const COLORS = {
-  'Fuselage': 0x9aa4b2, 'Intakes': 0x8793a3, 'Wings & tail': 0xaab3bf, 'Engines': 0x5a616b, 'Cockpit': 0x7fb6e6,
-  'Landing gear': 0xc9ced6, 'Pylons': 0x8d96a3, 'AIM-120': 0xe8ebef, 'AIM-9X': 0xf0e9cf, 'Fuel tank': 0x8a9a7a, 'Pins': 0xd9b44a, 'Stand': 0xb8c0cc, 'Sprue': 0xd7dbe0,
-  'Conformal tanks': 0x93a0b0, 'GBU-12': 0x9fa58a, 'Pods': 0x6f7885
+  'Fuselage': FILAMENT.grey, 'Intakes': FILAMENT.grey, 'Wings & tail': FILAMENT.grey, 'Engines': FILAMENT.black, 'Cockpit': FILAMENT.blue,
+  'Landing gear': FILAMENT.white, 'Tires': FILAMENT.black, 'Pylons': FILAMENT.grey, 'AIM-120': FILAMENT.white, 'AIM-9X': FILAMENT.orange, 'Fuel tank': FILAMENT.green, 'Pins': FILAMENT.grey, 'Stand': FILAMENT.black, 'Sprue': FILAMENT.white,
+  'Conformal tanks': FILAMENT.grey, 'GBU-12': FILAMENT.red, 'Pods': FILAMENT.black
 };
 
 function loadFont() {
@@ -1602,11 +1630,11 @@ export default {
       }
       return mats.get(g);
     };
-    const monoMat = track(new THREE.MeshPhysicalMaterial({ color: 0xd7dbe0, roughness: 0.55, metalness: 0.0, clearcoat: 0.2, side: THREE.DoubleSide }));
-    const sprueMat = track(new THREE.MeshStandardMaterial({ color: 0xd7dbe0, roughness: 0.6, metalness: 0.0, transparent: true }));
+    const monoMat = track(new THREE.MeshPhysicalMaterial({ color: FILAMENT.white, roughness: 0.55, metalness: 0.0, clearcoat: 0.2, side: THREE.DoubleSide }));
+    const sprueMats = cards.map(c => track(new THREE.MeshStandardMaterial({ color: c.color, roughness: 0.6, metalness: 0.0, transparent: true })));
 
-    const sprues = cards.map(c => {
-      const m = new THREE.Mesh(c.sprueGeo, sprueMat);
+    const sprues = cards.map((c, i) => {
+      const m = new THREE.Mesh(c.sprueGeo, sprueMats[i]);
       m.applyMatrix4(c.shift);
       m.position.y += cardDy;
       m.castShadow = m.receiveShadow = true;
@@ -1614,9 +1642,10 @@ export default {
     });
 
     const subOf = new Map(kp.map(q => [q.name, q.group]));
+    const keyOf = new Map(kp.map(q => [q.name, colorKey(q)]));
     const out = [];
     for (const p of kp) {
-      const mesh = new THREE.Mesh(p.geo, p.plate ? sprueMat : matFor(p.group));
+      const mesh = new THREE.Mesh(p.geo, p.plate ? sprueMats[p.ci] : matFor(colorKey(p)));
       mesh.castShadow = mesh.receiveShadow = true;
       const dir = p.plate ? V3(0, 0, 0) : (() => {
         const d = p.asmPos.clone().sub(AIRCRAFT_CENTER);
@@ -1631,7 +1660,7 @@ export default {
         object: mesh,
         base: p.asmPos.clone().add(V3(0, asmDy, 0)),
         explode: dir.multiplyScalar(30),
-        color: COLORS[p.group],
+        color: COLORS[colorKey(p)],
         print: !p.plate,
         assembled: !(p.plate || p.group === 'Pins'),
         cardOnly: !!p.plate,
@@ -1653,7 +1682,7 @@ export default {
     const real = kp.filter(p => !p.plate);
     const solid = kp.reduce((a, p) => a + p.volume, 0) / 1000;
     const bad = kp.filter(p => p.bad).length;
-    const info = `<b>${real.length}</b> parts · one plate <b>${cards[0].W} × ${cards[0].H}</b> mm (P1S bed 256 × 256)${cards[0].H > 254 ? ' <span style="color:#ff9a8a">too tall</span>' : ''}<br>` +
+    const info = `<b>${real.length}</b> parts · <b>${cards.length}</b> colour cards: ${cards.map(c => `${c.name.toLowerCase()} <b>${c.W} × ${c.H}</b>`).join(', ')} mm (P1S bed 256 × 256)${cards.some(c => c.H > 254) ? ' <span style="color:#ff9a8a">too tall</span>' : ''}<br>` +
       `Aircraft on stand <b>${acDims}</b> mm, nose up ${Math.round(PITCH * 180 / Math.PI)}°<br>` +
       `Solid volume <b>${solid.toFixed(1)}</b> cm³ · est. PLA <b>${(solid * 1.24 * 0.5).toFixed(0)}</b> g<br>` +
       (bad ? `<span style="color:#ff9a8a">${bad} part(s) with open edges</span>` : `<span style="color:#8fe3a6">All parts watertight</span>`);
@@ -1678,7 +1707,7 @@ export default {
       info,
       notes: ['Bambu P1S, 0.4 mm nozzle, 0.12–0.2 mm layers, 2–3 walls, no supports. Details ≥ 0.5 mm wide, 0.2 mm high; pegs 1.0 mm, sockets +0.17 mm clearance; runners 0.9 mm.'],
       exports: [
-        { label: 'Card 3MF', file: 'f15e-kit-card.3mf', format: '3mf', build: () => cardTris(0, true) }
+        ...cards.map((c, i) => ({ label: `Card ${i + 1} ${c.name} 3MF`, file: `f15e-kit-card-${i + 1}-${c.name.toLowerCase()}.3mf`, format: '3mf', build: () => cardTris(i, true) }))
       ],
       update({ blend, toggles, parts: vp }) {
         for (const p of vp) {
@@ -1690,11 +1719,12 @@ export default {
           if (p.cardOnly && blend >= 0.98) hide = true;
           if (sub === 'Pins' && blend >= 0.5) hide = true;
           p.hide = hide;
-          if (!p.cardOnly) p.object.material = toggles.mono ? monoMat : matFor(sub);
+          if (!p.cardOnly) p.object.material = toggles.mono ? monoMat : matFor(keyOf.get(p.name));
         }
-        for (const m of [...mats.values(), monoMat, sprueMat]) m.wireframe = toggles.wire;
-        sprueMat.opacity = 1 - clamp(blend / 0.35, 0, 1);
-        for (const m of sprues) m.visible = sprueMat.opacity > 0.01;
+        for (const m of [...mats.values(), monoMat, ...sprueMats]) m.wireframe = toggles.wire;
+        const fade = 1 - clamp(blend / 0.35, 0, 1);
+        for (const m of sprueMats) m.opacity = fade;
+        for (const m of sprues) m.visible = fade > 0.01;
       }
     };
   }
