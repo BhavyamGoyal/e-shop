@@ -9,7 +9,8 @@ export interface RenderResult {
 export interface IModelExporter {
   readonly label: string;
   readonly extension: string;
-  export(params: ParamValues, fileName: string): Promise<Blob>;
+  readonly parts?: readonly string[];
+  export(params: ParamValues, fileName: string, part?: string): Promise<Blob>;
 }
 
 export interface ICustomizerRenderer {

@@ -14,7 +14,7 @@ export interface Layer {
   z1: number;
 }
 
-export type LayerName = "Base" | "Text";
+export type LayerName = "Base" | "Text" | "Letter" | "Name";
 
 export interface MeshData {
   positions: number[];

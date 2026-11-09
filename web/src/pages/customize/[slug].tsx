@@ -6,6 +6,8 @@ import { ContentTemplate } from "@/components/templates";
 import { buildCustomizePage, type CustomizePageData } from "@/lib/customize-page";
 import { NOINDEX } from "@/lib/seo/seo-meta";
 import { loadSiteChrome, type SiteChrome } from "@/lib/site-chrome";
+import { isAdminToken } from "@/server/auth/admin-token";
+import { SESSION_COOKIE } from "@/server/auth/session-token";
 
 const CustomizerStudio = dynamic(
   () => import("@/customizers/components/CustomizerStudio").then((module) => module.CustomizerStudio),
@@ -16,10 +18,11 @@ type CustomizeProps = CustomizePageData & SiteChrome;
 
 const first = (value: string | string[] | undefined): string => (Array.isArray(value) ? (value[0] ?? "") : (value ?? ""));
 
-export const getServerSideProps: GetServerSideProps<CustomizeProps> = async ({ params, query }) => {
+export const getServerSideProps: GetServerSideProps<CustomizeProps> = async ({ params, query, req }) => {
   const variant: number = Number(first(query.variant));
+  const isAdmin: boolean = await isAdminToken(req.cookies[SESSION_COOKIE]);
   const [page, chrome] = await Promise.all([
-    buildCustomizePage(first(params?.slug), first(query.product), Number.isInteger(variant) ? variant : null),
+    buildCustomizePage(first(params?.slug), first(query.product), Number.isInteger(variant) ? variant : null, isAdmin),
     loadSiteChrome(),
   ]);
   if (!page) return { notFound: true };
@@ -31,7 +34,7 @@ export default function CustomizePage({ header, shop, customizer, product }: Cus
   const edit: string = first(router.query.edit);
   return (
     <>
-      <Seo title={`Customize ${product.title}`} robots={NOINDEX} />
+      <Seo title={`Customize ${product?.title ?? customizer.title}`} robots={NOINDEX} />
       <ContentTemplate header={header} shop={shop} widthClass="max-w-[1200px]" paddingClass="pt-6 pb-12">
         <CustomizerStudio customizer={customizer} product={product} editKey={edit || null} />
       </ContentTemplate>

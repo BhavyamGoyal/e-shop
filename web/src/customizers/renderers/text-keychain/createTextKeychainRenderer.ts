@@ -1,4 +1,5 @@
 import type { ICustomizerRenderer } from "../../rendering/ICustomizerRenderer";
+import { ThreeMfWriter } from "../shared/ThreeMfWriter";
 import { CdnFontProvider, type IFontProvider } from "./FontProvider";
 import { KeychainModelBuilder } from "./KeychainModelBuilder";
 import { TextKeychainRenderer } from "./TextKeychainRenderer";
@@ -9,5 +10,5 @@ const fonts: IFontProvider = new CdnFontProvider();
 
 export function createTextKeychainRenderer(): ICustomizerRenderer {
   const models: KeychainModelBuilder = new KeychainModelBuilder();
-  return new TextKeychainRenderer(new ThreeSceneAdapter(), models, fonts, new ThreeMfExporter(models, fonts));
+  return new TextKeychainRenderer(new ThreeSceneAdapter(), models, fonts, new ThreeMfExporter(models, fonts, new ThreeMfWriter()));
 }

@@ -18,7 +18,7 @@ export interface CustomizeProduct {
 
 export interface CustomizePageData {
   customizer: CustomizerRecord;
-  product: CustomizeProduct;
+  product: CustomizeProduct | null;
 }
 
 function pickVariant(product: ProductDetail, variantId: number | null): ProductVariant | undefined {
@@ -30,9 +30,11 @@ export async function buildCustomizePage(
   slug: string,
   handle: string,
   variantId: number | null,
+  isAdmin: boolean,
 ): Promise<CustomizePageData | null> {
   const customizer: CustomizerRecord | null = await customizerService.findActive(slug);
-  if (!customizer || !handle) return null;
+  if (!customizer) return null;
+  if (!handle) return isAdmin ? { customizer, product: null } : null;
   let product: ProductDetail;
   try {
     product = await productController.findByHandle(handle);
