@@ -56,11 +56,12 @@ export function RendererHost({ rendererKey, params, downloadName, heightClass = 
   const exporter = renderer?.exporter ?? null;
   const ready: boolean = renderer !== null;
 
-  const download = async (): Promise<void> => {
+  const download = async (part?: string): Promise<void> => {
     if (!exporter || !downloadName) return;
     setExporting(true);
     try {
-      downloadBlob(await exporter.export(params, downloadName), `${downloadName}.${exporter.extension}`);
+      const suffix: string = part ? `-${part.toLowerCase()}` : "";
+      downloadBlob(await exporter.export(params, downloadName, part), `${downloadName}${suffix}.${exporter.extension}`);
     } catch (error: unknown) {
       setResult({ ok: false, message: error instanceof Error ? error.message : "Export failed", stats: [] });
     } finally {
@@ -93,9 +94,16 @@ export function RendererHost({ rendererKey, params, downloadName, heightClass = 
         </ul>
       )}
       {exporter && downloadName && (
-        <Button onClick={download} disabled={exporting || !ready}>
-          {exporting ? "Preparing…" : exporter.label}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={(): Promise<void> => download()} disabled={exporting || !ready}>
+            {exporting ? "Preparing…" : exporter.label}
+          </Button>
+          {exporter.parts?.map((part: string) => (
+            <Button key={part} variant="outline" onClick={(): Promise<void> => download(part)} disabled={exporting || !ready}>
+              {`${exporter.label} (${part})`}
+            </Button>
+          ))}
+        </div>
       )}
     </div>
   );

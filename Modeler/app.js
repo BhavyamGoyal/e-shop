@@ -277,11 +277,24 @@ function buildParamsUi(def, values) {
       wrap.innerHTML = `<label><span>${p.label}</span><select class="p">${p.options.map(o => `<option ${o === values[p.key] ? 'selected' : ''}>${o}</option>`).join('')}</select></label>`;
       wrap.querySelector('select').addEventListener('change', ev => { values[p.key] = ev.target.value; rebuild(); });
     } else {
-      wrap.innerHTML = `<label><span>${p.label}</span><span class="v">${values[p.key]}${p.unit ?? ''}</span></label><input type="range" min="${p.min}" max="${p.max}" step="${p.step ?? 1}" value="${values[p.key]}">`;
-      const input = wrap.querySelector('input');
-      const out = wrap.querySelector('.v');
-      input.addEventListener('input', () => { out.textContent = input.value + (p.unit ?? ''); });
+      const step = p.step ?? 1;
+      wrap.innerHTML = `<label><span>${p.label}</span><span class="nv"><input type="number" class="num" min="${p.min}" max="${p.max}" step="${step}" value="${values[p.key]}">${p.unit ? `<span class="u">${p.unit}</span>` : ''}</span></label><input type="range" min="${p.min}" max="${p.max}" step="${step}" value="${values[p.key]}">`;
+      const input = wrap.querySelector('input[type=range]');
+      const num = wrap.querySelector('input.num');
+      const decimals = (String(step).split('.')[1] ?? '').length;
+      input.addEventListener('input', () => { num.value = input.value; });
       input.addEventListener('change', () => { values[p.key] = Number(input.value); rebuild(); });
+      num.addEventListener('change', () => {
+        let v = Number(num.value);
+        if (!Number.isFinite(v)) v = values[p.key];
+        v = Math.min(p.max, Math.max(p.min, v));
+        v = Number((Math.round((v - p.min) / step) * step + p.min).toFixed(decimals));
+        num.value = v;
+        input.value = v;
+        values[p.key] = v;
+        rebuild();
+      });
+      num.addEventListener('keydown', ev => { if (ev.key === 'Enter') num.blur(); });
     }
     host.appendChild(wrap);
   }

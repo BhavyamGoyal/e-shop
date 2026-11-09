@@ -17,7 +17,7 @@ import { RendererHost } from "./RendererHost";
 
 interface CustomizerStudioProps {
   customizer: CustomizerRecord;
-  product: CustomizeProduct;
+  product: CustomizeProduct | null;
   editKey: string | null;
 }
 
@@ -40,6 +40,7 @@ export function CustomizerStudio({ customizer, product, editKey }: CustomizerStu
   const change = (key: string, value: ParamValue): void => setParams((current: ParamValues) => ({ ...current, [key]: value }));
 
   const submit = async (): Promise<void> => {
+    if (!product) return;
     setSaving(true);
     setError("");
     try {
@@ -68,26 +69,28 @@ export function CustomizerStudio({ customizer, product, editKey }: CustomizerStu
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
       <div className="lg:order-2 lg:sticky lg:top-24">
-        <RendererHost rendererKey={customizer.renderer} params={params} />
+        <RendererHost rendererKey={customizer.renderer} params={params} downloadName={product ? undefined : customizer.slug} />
       </div>
       <div className="flex flex-col gap-6 lg:order-1">
         <div className="flex flex-col gap-1">
-          <p className="text-sm text-muted-foreground">{customizer.title}</p>
-          <h1 className="text-3xl font-semibold">{product.title}</h1>
-          {product.variantTitle && <p className="text-sm text-muted-foreground">{product.variantTitle}</p>}
-          <p className="text-xl font-bold text-primary">{formatPrice(product.price)}</p>
+          <p className="text-sm text-muted-foreground">{product ? customizer.title : "Admin preview"}</p>
+          <h1 className="text-3xl font-semibold">{product?.title ?? customizer.title}</h1>
+          {product?.variantTitle && <p className="text-sm text-muted-foreground">{product.variantTitle}</p>}
+          {product && <p className="text-xl font-bold text-primary">{formatPrice(product.price)}</p>}
         </div>
         {editable ? (
           <ParamForm definitions={customizer.params} values={params} onChange={change} />
         ) : (
           <p className="text-sm text-muted-foreground">This product has no options to change.</p>
         )}
-        <div className="flex items-stretch gap-3">
-          <QuantityStepper value={quantity} onChange={setQuantity} />
-          <Button size="lg" className="flex-1" disabled={!product.inStock || saving} onClick={submit}>
-            {!product.inStock ? "Sold out" : saving ? "Saving…" : editing ? "Update cart" : "Add to cart"}
-          </Button>
-        </div>
+        {product && (
+          <div className="flex items-stretch gap-3">
+            <QuantityStepper value={quantity} onChange={setQuantity} />
+            <Button size="lg" className="flex-1" disabled={!product.inStock || saving} onClick={submit}>
+              {!product.inStock ? "Sold out" : saving ? "Saving…" : editing ? "Update cart" : "Add to cart"}
+            </Button>
+          </div>
+        )}
         {error && <p className="text-sm text-danger">{error}</p>}
       </div>
     </div>

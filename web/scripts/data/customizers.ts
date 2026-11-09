@@ -114,4 +114,39 @@ export const NAME_KEYCHAIN: CustomizerInput = {
   ],
 };
 
-export const CUSTOMIZERS: CustomizerInput[] = [NAME_KEYCHAIN];
+const LETTER_FONTS: [string, string][] = [
+  ["stix-two-math:400", "STIX Two Math"],
+  ["stix-two-text:700", "STIX Two Text Bold"],
+  ["playfair-display:700", "Playfair Display Bold"],
+  ["cormorant-garamond:700", "Cormorant Garamond Bold"],
+  ["libre-baskerville:700", "Libre Baskerville Bold"],
+  ["lora:700", "Lora Bold"],
+  ["eb-garamond:700", "EB Garamond Bold"],
+  ["cinzel:700", "Cinzel Bold"],
+  ["bodoni-moda:700", "Bodoni Moda Bold"],
+  ["abril-fatface:400", "Abril Fatface"],
+  ["dm-serif-display:400", "DM Serif Display"],
+];
+
+const letterFontOptions: ParamOption[] = LETTER_FONTS.map(([value, label]: [string, string]): ParamOption => ({ value, label }));
+
+export const LETTER_NAME: CustomizerInput = {
+  slug: "letter-name",
+  title: "Letter with name",
+  renderer: "letter-name",
+  active: true,
+  params: [
+    { key: "name", type: "text", label: "Name", group: "Text", default: "Nicole", mutable: true, maxLength: 20 },
+    { key: "letterFont", type: "font", label: "Letter font", group: "Text", default: "stix-two-math:400", mutable: true, options: letterFontOptions },
+    { key: "nameFont", type: "font", label: "Name font", group: "Text", default: "pacifico:400", mutable: true, options: fontOptions },
+    slider("letterSize", "Letter cap height", "Depth", 138.5, 40, 200, 0.5, "mm", false),
+    slider("nameFit", "Name width vs letter", "Depth", 0.66, 0.3, 1, 0.01, "×", false),
+    slider("nameFirstScale", "First letter scale", "Depth", 1.3, 1, 2, 0.05, "×", false),
+    slider("letterH", "Letter height", "Depth", 25, 2, 40, 0.5, "mm", false),
+    slider("nameH", "Name raise", "Depth", 5, 0, 20, 0.5, "mm", false),
+    color("letterColor", "Letter color", "Colors", "#e6e6e6"),
+    color("nameColor", "Name color", "Colors", "#425d72"),
+  ],
+};
+
+export const CUSTOMIZERS: CustomizerInput[] = [NAME_KEYCHAIN, LETTER_NAME];
