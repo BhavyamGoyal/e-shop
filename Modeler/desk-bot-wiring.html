@@ -87,22 +87,24 @@ svg .m{fill:#8b93a3}
 <path d="M270 525 H344 V404 H380" fill="none" stroke="var(--o)" stroke-width="3"/>
 
 <rect x="730" y="60" width="240" height="120" rx="8" fill="#0d1a38" stroke="#1f3f8a" stroke-width="2"/>
-<text class="t" x="850" y="86" text-anchor="middle">C-type charger</text>
-<text class="m" x="850" y="104" text-anchor="middle">USB-C, right foot</text>
+<text class="t" x="850" y="86" text-anchor="middle">TP4056 charger module</text>
+<text class="m" x="850" y="104" text-anchor="middle">USB-C in, right foot · 1 A</text>
 <text x="746" y="134">OUT+</text><text x="746" y="154">OUT−</text>
 <text x="880" y="170" text-anchor="middle">B+</text><text x="940" y="170" text-anchor="middle">B−</text>
 <path d="M730 130 H650 V296 H620" fill="none" stroke="var(--r)" stroke-width="3"/>
 <path d="M730 150 H672 V360 H620" fill="none" stroke="var(--k)" stroke-width="3"/>
 
 <rect x="730" y="240" width="240" height="90" rx="8" fill="#0d1a38" stroke="#4b6fd1" stroke-width="2"/>
-<text class="t" x="850" y="268" text-anchor="middle">Battery · LiPo cell</text>
-<text class="m" x="850" y="288" text-anchor="middle">torso / head, right</text>
+<text class="t" x="850" y="268" text-anchor="middle">Battery · IS-NO-IS 16046</text>
+<text class="m" x="850" y="288" text-anchor="middle">3.6 V · 900 mAh · head, right</text>
 <text x="746" y="314">+ red</text><text x="860" y="314">− black</text>
 <path d="M880 240 V180" fill="none" stroke="var(--r)" stroke-width="3"/>
 <path d="M940 240 V180" fill="none" stroke="var(--k)" stroke-width="3"/>
 
 <path d="M450 450 V500" fill="none" stroke="var(--r)" stroke-width="3" marker-end="url(#a)"/>
 <path d="M550 450 V500" fill="none" stroke="var(--k)" stroke-width="3" marker-end="url(#a)"/>
+<text class="m" x="790" y="400" text-anchor="middle">OUT+ goes through a 5 V boost</text>
+<text class="m" x="790" y="418" text-anchor="middle">module before ESP32 VIN</text>
 <text class="m" x="450" y="520" text-anchor="middle">3V3 to every</text>
 <text class="m" x="450" y="536" text-anchor="middle">module VCC</text>
 <text class="m" x="550" y="520" text-anchor="middle">GND to every</text>
@@ -145,12 +147,81 @@ svg .m{fill:#8b93a3}
 <div class="card">
 <table>
 <tr><th>From</th><th>To</th><th>Notes</th></tr>
-<tr><td>USB-C port (right foot)</td><td>Charger board</td><td>Port is on the charger PCB, window cut in the right foot</td></tr>
-<tr><td>Charger <code>B+</code> / <code>B−</code></td><td>Battery <code>+</code> / <code>−</code></td><td>Battery sits in the head, right side</td></tr>
-<tr><td>Charger <code>OUT+</code></td><td>ESP32 <code>VIN</code> / <code>5V</code></td><td>Feeds the on-board regulator</td></tr>
-<tr><td>Charger <code>OUT−</code></td><td>ESP32 <code>GND</code></td><td>Common ground for every module</td></tr>
+<tr><td>USB-C port (right foot)</td><td>TP4056 board <code>IN+</code> / <code>IN−</code></td><td>Port is on the TP4056 PCB (USB-C version), window cut in the right foot. If your board has only a micro-USB port, use that instead.</td></tr>
+<tr><td>TP4056 <code>B+</code> / <code>B−</code></td><td>Battery <code>+</code> / <code>−</code></td><td>IS-NO-IS 16046, 3.6 V 900 mAh, sits in the head, right side. Charge current is 1 A by default, which is above 1C for a 900 mAh cell: change the <code>RPROG</code> resistor to 2 kΩ (about 580 mA) or 3 kΩ (about 400 mA).</td></tr>
+<tr><td>TP4056 <code>OUT+</code> / <code>OUT−</code></td><td>5 V boost module <code>IN+</code> / <code>IN−</code></td><td>Only on TP4056 boards with the DW01 protection chip (6 pads: IN, OUT, B). OUT is 3.0 to 4.2 V, not 5 V.</td></tr>
+<tr><td>Boost <code>OUT+</code></td><td>ESP32 <code>VIN</code> / <code>5V</code></td><td>Feeds the on-board regulator. Set the boost to 5.0 V before connecting the ESP32.</td></tr>
+<tr><td>Boost <code>OUT−</code></td><td>ESP32 <code>GND</code></td><td>Common ground for every module</td></tr>
 </table>
-<div class="note">The firmware has no battery or charger code, so this path is the usual arrangement and is not confirmed by the repo. Check it against your actual charger board before soldering.</div>
+<div class="note">The firmware has no battery or charger code, so this path is the usual arrangement and is not confirmed by the repo. Check it against your actual boards before soldering.</div>
+<div class="note">Check the battery label: the TP4056 charges to 4.2 V and only suits a rechargeable Li-ion cell. A 3.6 V cell can also be a non-rechargeable lithium thionyl chloride cell, and charging that one is dangerous.</div>
+<div class="note">Feeding the battery straight into ESP32 <code>VIN</code> is not reliable: the on-board regulator needs about 4.5 V in to hold 3.3 V, and a 3.6 to 4.2 V cell falls short, which causes brown-outs. Use a small boost (MT3608 or similar) set to 5 V. Use the TP4056 <code>OUT</code> pads, not <code>B</code>, so the protection chip guards against over-discharge. The ESP32 draws about 80 to 240 mA with Wi-Fi, so expect roughly 3 to 5 hours of runtime from 900 mAh through the boost.</div>
+</div>
+
+<h2>Power wiring, working version <span class="tag">use this</span></h2>
+<div class="card">
+<svg viewBox="0 0 1000 350" role="img" aria-label="Power wiring diagram">
+<rect x="30" y="40" width="150" height="80" rx="8" fill="#0d1a38" stroke="#1f3f8a" stroke-width="2"/>
+<text class="t" x="105" y="74" text-anchor="middle">USB-C cable</text>
+<text class="m" x="105" y="94" text-anchor="middle">laptop or 5 V charger</text>
+
+<rect x="250" y="30" width="210" height="180" rx="8" fill="#0d1a38" stroke="#4b6fd1" stroke-width="2"/>
+<text x="262" y="66">IN+</text><text x="262" y="86">IN−</text>
+<text x="448" y="66" text-anchor="end">OUT+</text><text x="448" y="86" text-anchor="end">OUT−</text>
+<text class="t" x="355" y="130" text-anchor="middle">TP4056 module</text>
+<text class="m" x="355" y="148" text-anchor="middle">6 pads · protection chip</text>
+<text class="m" x="355" y="166" text-anchor="middle">RPROG 2 kΩ = 580 mA</text>
+<text x="300" y="198" text-anchor="middle">B+</text><text x="410" y="198" text-anchor="middle">B−</text>
+<path d="M180 62 H250" fill="none" stroke="var(--r)" stroke-width="3"/>
+<path d="M180 82 H250" fill="none" stroke="var(--k)" stroke-width="3"/>
+
+<rect x="250" y="260" width="210" height="70" rx="8" fill="#0d1a38" stroke="#4b6fd1" stroke-width="2"/>
+<text x="300" y="278" text-anchor="middle">+</text><text x="410" y="278" text-anchor="middle">−</text>
+<text class="t" x="355" y="298" text-anchor="middle">Battery · IS-NO-IS 16046</text>
+<text class="m" x="355" y="316" text-anchor="middle">3.6 V · 900 mAh</text>
+<path d="M300 260 V210" fill="none" stroke="var(--r)" stroke-width="3"/>
+<path d="M410 260 V210" fill="none" stroke="var(--k)" stroke-width="3"/>
+
+<rect x="520" y="30" width="110" height="44" rx="6" fill="#201a0a" stroke="#d9a21c" stroke-width="2"/>
+<text class="m" x="575" y="22" text-anchor="middle">slide switch (SPST)</text>
+<circle cx="540" cy="62" r="4" fill="#e6e9ef"/><circle cx="610" cy="62" r="4" fill="#e6e9ef"/>
+<path d="M540 62 L602 48" stroke="#e6e9ef" stroke-width="3" fill="none"/>
+<path d="M460 62 H520" fill="none" stroke="var(--r)" stroke-width="3"/>
+<path d="M630 62 H690" fill="none" stroke="var(--r)" stroke-width="3"/>
+<path d="M460 82 H690" fill="none" stroke="var(--k)" stroke-width="3"/>
+
+<rect x="690" y="30" width="200" height="180" rx="8" fill="#14101f" stroke="#7a2fb0" stroke-width="2"/>
+<text x="702" y="66">IN+</text><text x="702" y="86">IN−</text>
+<text class="t" x="790" y="124" text-anchor="middle">5 V boost</text>
+<text class="m" x="790" y="142" text-anchor="middle">MT3608 or similar</text>
+<text class="m" x="790" y="160" text-anchor="middle">trimmer set to 5.0 V</text>
+<text x="760" y="198" text-anchor="middle">OUT+</text><text x="820" y="198" text-anchor="middle">OUT−</text>
+
+<rect x="690" y="260" width="200" height="70" rx="8" fill="#14171f" stroke="#3a3f4d" stroke-width="2"/>
+<text x="760" y="278" text-anchor="middle">VIN / 5V</text><text x="820" y="278" text-anchor="middle">GND</text>
+<text class="t" x="790" y="306" text-anchor="middle">ESP32 DevKit</text>
+<path d="M760 210 V260" fill="none" stroke="var(--r)" stroke-width="3"/>
+<path d="M820 210 V260" fill="none" stroke="var(--k)" stroke-width="3"/>
+<text class="m" x="905" y="240">optional 220 µF cap</text>
+<text class="m" x="905" y="256">across OUT+ / OUT−</text>
+</svg>
+<div class="legend">
+<span><span class="dot" style="background:var(--r)"></span>positive</span>
+<span><span class="dot" style="background:var(--k)"></span>negative / ground</span>
+</div>
+</div>
+
+<div class="card">
+<table>
+<tr><th>Step</th><th>Do this</th></tr>
+<tr><td>1</td><td>Solder the battery to the TP4056 <code>B+</code> / <code>B−</code>. Check polarity first.</td></tr>
+<tr><td>2</td><td>Solder TP4056 <code>OUT+</code> to one side of the slide switch, and the other side of the switch to boost <code>IN+</code>. Solder TP4056 <code>OUT−</code> straight to boost <code>IN−</code>.</td></tr>
+<tr><td>3</td><td>With the switch on and nothing on the boost output, turn the boost trimmer until a multimeter reads <b>5.0 V</b> across boost <code>OUT+</code> / <code>OUT−</code>.</td></tr>
+<tr><td>4</td><td>Solder boost <code>OUT+</code> to ESP32 <code>VIN</code> and boost <code>OUT−</code> to ESP32 <code>GND</code>. Add the capacitor across the boost output if you have one (long leg to <code>OUT+</code>).</td></tr>
+<tr><td>5</td><td>Plug USB-C into the TP4056 to charge. The bot runs from the battery with the switch on, and can charge while running.</td></tr>
+</table>
+<div class="note">Join the ESP32 <code>GND</code> to the shared module ground (the bus from the first diagram), so the screen, touch and vibration modules all sit on the same ground as the boost.</div>
+<div class="note">Do not connect USB to the ESP32 at the same time as the boost output is on <code>VIN</code> without a diode, or the two 5 V sources can back-feed each other. Use the TP4056 port for charging and power, and unplug the boost output from <code>VIN</code> while flashing over the ESP32's own USB port.</div>
 </div>
 
 <h2>Wire bundles in the model</h2>
@@ -161,8 +232,8 @@ svg .m{fill:#8b93a3}
 <tr><td>Accelerometer</td><td>Head top to ESP32</td><td>red 3V3, black GND, yellow SCL, green SDA</td></tr>
 <tr><td>Touch L / Touch R</td><td>Torso, up the neck, to ESP32</td><td>red 3V3, black GND, yellow SIG, one spare</td></tr>
 <tr><td>Vibration</td><td>Left foot, up the neck, to ESP32</td><td>red 3V3, black GND, orange signal</td></tr>
-<tr><td>Charger</td><td>Right foot, up the neck, to ESP32</td><td>red OUT+, black OUT−</td></tr>
-<tr><td>Charger to battery</td><td>Head, right side</td><td>red, black</td></tr>
+<tr><td>TP4056 to boost to ESP32</td><td>Right foot, up the neck, to ESP32</td><td>red OUT+, black OUT−</td></tr>
+<tr><td>TP4056 to battery</td><td>Head, right side</td><td>red B+, black B−</td></tr>
 </table>
 <div class="note">The model draws four wires per module. The neck carries 16 wires and each foot passage carries 4. The ESP32 end takes 24 wires, but only 3V3 and GND need sharing: join them with a splice or a small bus so the ESP32's few 3V3 and GND pins are not overloaded.</div>
 </div>

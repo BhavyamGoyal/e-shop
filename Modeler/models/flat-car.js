@@ -1,4 +1,4 @@
-import { THREE, V, mesh, makeCsg } from '../lib/geometry.js';
+import { THREE, V, mesh } from '../lib/geometry.js';
 
 const PX_X0 = 68;
 const PX_X1 = 240;
@@ -41,6 +41,16 @@ export default {
     const tx = x => (x - PX_CX) * sx;
     const ty = y => -(y - PX_CY) * sy;
 
+    const arc = (cx, cy, r, from, to, n) => {
+      const out = [];
+      for (let k = 1; k <= n; k++) {
+        const a = from + ((to - from) * k) / n;
+        out.push(['L', cx + Math.cos(a) * r, cy + Math.sin(a) * r]);
+      }
+      return out;
+    };
+
+    const [w1, w2] = WHEELS;
     const shape = pathOf(THREE.Shape, tx, ty, [
       ['M', 74, 148],
       ['L', 70, 144],
@@ -50,28 +60,32 @@ export default {
       ['C', 180, 58, 198, 72, 206, 98],
       ['C', 215, 110, 236, 110, 239, 124],
       ['L', 240, 142],
-      ['L', 236, 148]
+      ['L', 236, 148],
+      ['L', w2.x + w2.r, 148],
+      ...arc(w2.x, 148, w2.r, 0, Math.PI, 48),
+      ['L', w1.x + w1.r, 148],
+      ...arc(w1.x, 148, w1.r, 0, Math.PI, 48),
+      ['L', 74, 148]
     ]);
 
     [
-      [['M', 109, 104], ['C', 109, 90, 114, 78, 122, 72], ['C', 130, 68, 140, 68, 147, 69], ['L', 147, 104]],
-      [['M', 158, 69], ['C', 170, 69, 182, 74, 188, 82], ['C', 194, 90, 198, 98, 200, 104], ['L', 158, 104]]
+      [['M', 109, 106], ['C', 109, 90, 114, 78, 122, 72], ['C', 130, 68, 140, 68, 147, 69], ['L', 147, 106]],
+      [['M', 158, 69], ['C', 170, 69, 182, 74, 188, 82], ['C', 194, 90, 198, 99, 200, 107], ['L', 158, 107]]
     ].forEach(ops => shape.holes.push(pathOf(THREE.Path, tx, ty, ops)));
 
-    const extrude = s => new THREE.ExtrudeGeometry(s, { depth: height, bevelEnabled: false, curveSegments: 24 });
-
-    const csg = makeCsg();
-    let result = csg.brush(extrude(shape));
-
     WHEELS.forEach(w => {
-      const ws = new THREE.Shape();
-      ws.absarc(tx(w.x), ty(w.y), w.r * sx, 0, Math.PI * 2, false);
-      const hub = new THREE.Path();
-      hub.absarc(tx(w.x), ty(w.y), 11 * sx, 0, Math.PI * 2, true);
-      ws.holes.push(hub);
-      const g = new THREE.ExtrudeGeometry(ws, { depth: height, bevelEnabled: false, curveSegments: 48 });
-      result = csg.union(result, g);
+      const hr = 11;
+      shape.holes.push(pathOf(THREE.Path, tx, ty, [
+        ['M', w.x + hr, w === w1 ? 147.4 : 147.1],
+        ...arc(w.x, w === w1 ? 147.4 : 147.1, hr, 0, Math.PI, 32)
+      ]));
     });
+
+    const fix = (pts, wantCw) => (THREE.ShapeUtils.isClockWise(pts) === wantCw ? pts : pts.slice().reverse());
+    const fixedShape = new THREE.Shape(fix(shape.getPoints(24), false));
+    shape.holes.forEach(h => fixedShape.holes.push(new THREE.Path(fix(h.getPoints(24), true))));
+
+    const result = { geometry: new THREE.ExtrudeGeometry(fixedShape, { depth: height, bevelEnabled: false, curveSegments: 24 }) };
 
     const geo = result.geometry;
     geo.rotateX(-Math.PI / 2);

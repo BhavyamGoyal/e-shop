@@ -6,6 +6,7 @@ import type { Bounds, Contour, ContourGroup, Layer, Point } from "../text-keycha
 import type { LetterNameParams } from "./letter-types";
 
 const MIN_CLOSE = 0.03;
+const DEFAULT_CAP_RATIO = 0.7;
 
 export class LetterNameGeometry {
   constructor(
@@ -27,12 +28,18 @@ export class LetterNameGeometry {
   private letterPaths(font: Font, params: LetterNameParams): Paths {
     if (!params.letter) return [];
     const laid: LaidText = this.layout.layout(font, params.letter, {
-      size: params.letterSize,
+      size: params.letterSize / this.capRatio(font),
       spacing: 0,
       lineHeight: 1,
       align: "center",
     });
     return this.union(this.layout.center(laid.groups));
+  }
+
+  private capRatio(font: Font): number {
+    const os2: { sCapHeight?: number } | undefined = (font.tables as { os2?: { sCapHeight?: number } }).os2;
+    const cap: number = os2?.sCapHeight ?? 0;
+    return cap > 0 ? cap / font.unitsPerEm : DEFAULT_CAP_RATIO;
   }
 
   private namePaths(font: Font, params: LetterNameParams, letter: Paths): Paths {

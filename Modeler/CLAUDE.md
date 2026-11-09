@@ -66,3 +66,20 @@ export default {
 ## Before finishing a model
 
 Open it in the viewer, confirm there is no error box, check each part's print size and orientation, and check the overall X/Y/Z size against the intended size. The checklist is in section 12 of the guide.
+
+## Watertight geometry (slicer errors)
+
+Bambu Studio reported open or non-manifold edges and filled holes on `flat-car.js`. Avoid these in every model, especially flat extruded outlines.
+
+- Do not merge coplanar pieces with `csg.union`. Two extrusions with the same top and bottom faces leave broken edges. Build one 2D outline (wheels, bumps, tabs included) and extrude it once.
+- Put holes in the `THREE.Shape` as `shape.holes`, not as CSG cuts, when the part is a flat extrusion.
+- Never leave collinear vertices from different contours on the same line. A hole edge, a window edge or an outline edge that share an exact y (or x) value make earcut emit zero-area triangles and unmatched edges. Offset such edges by 0.1 to 0.5 units (different holes by different amounts).
+- Fix winding before `ExtrudeGeometry`. `ExtrudeGeometry` only reverses holes when the outer outline is counter-clockwise. If the outline is clockwise (for example after flipping Y for image coordinates) holes keep the wrong winding and the slicer fills them. Rebuild the shape from points: outer counter-clockwise, every hole clockwise.
+
+```js
+const fix = (pts, wantCw) => (THREE.ShapeUtils.isClockWise(pts) === wantCw ? pts : pts.slice().reverse());
+const fixed = new THREE.Shape(fix(shape.getPoints(24), false));
+shape.holes.forEach(h => fixed.holes.push(new THREE.Path(fix(h.getPoints(24), true))));
+```
+
+- Check before telling the user it is done. Install `three` in the scratchpad, import the model with the `../lib/geometry.js` import stubbed, call `build`, then count edges. Every undirected edge must be used exactly twice (0 open, 0 non-manifold) and every directed edge must have its reverse (0 unpaired). A hole-winding bug shows as unpaired directed edges even when the undirected count is clean. The signed volume must drop when holes are cut.
