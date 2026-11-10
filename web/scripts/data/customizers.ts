@@ -134,6 +134,7 @@ const LETTER_FONTS: [string, string][] = [
   ["bodoni-moda:700", "Bodoni Moda Bold"],
   ["abril-fatface:400", "Abril Fatface"],
   ["dm-serif-display:400", "DM Serif Display"],
+  ["archivo:700", "Archivo Bold"],
 ];
 
 const letterFontOptions: ParamOption[] = LETTER_FONTS.map(([value, label]: [string, string]): ParamOption => ({ value, label }));
@@ -148,7 +149,7 @@ export const LETTER_NAME: CustomizerInput = {
     { key: "letterFont", type: "font", label: "Letter font", group: "Text", default: "stix-two-math:400", mutable: true, options: letterFontOptions },
     { key: "nameFont", type: "font", label: "Name font", group: "Text", default: "pacifico:400", mutable: true, options: fontOptions },
     slider("letterSize", "Letter cap height", "Depth", 138.5, 40, 200, 0.5, "mm", false),
-    slider("nameFit", "Name width vs letter", "Depth", 0.66, 0.3, 1, 0.01, "×", false),
+    slider("nameFit", "Name width vs letter", "Depth", 0.85, 0.3, 1, 0.01, "×", false),
     slider("nameFirstScale", "First letter scale", "Depth", 1.3, 1, 2, 0.05, "×", false),
     slider("letterH", "Letter height", "Depth", 25, 2, 40, 0.5, "mm", false),
     slider("nameH", "Name raise", "Depth", 5, 0, 20, 0.5, "mm", false),

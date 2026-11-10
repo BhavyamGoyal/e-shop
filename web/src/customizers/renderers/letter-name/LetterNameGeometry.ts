@@ -50,7 +50,8 @@ export class LetterNameGeometry {
   }
 
   private nameGroups(font: Font, params: LetterNameParams): ContourGroup[] {
-    const first: LaidText = this.run(font, params.nameFirst, params.letterSize * params.nameFirstScale);
+    const firstSize: number = params.letterSize * params.nameFirstScale;
+    const first: LaidText = this.run(font, params.nameFirst, firstSize);
     const rest: LaidText = params.nameRest ? this.run(font, params.nameRest, params.letterSize) : { groups: [], width: 0 };
     return [...this.shifted(first, 0), ...this.shifted(rest, first.width)];
   }

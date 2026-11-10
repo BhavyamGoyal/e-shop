@@ -8,7 +8,7 @@ export function toLetterNameParams(values: ParamValues): LetterNameParams {
   const [first = "", ...rest]: string[] = Array.from(text(values, "name").trim());
   return {
     letter: first.toUpperCase(),
-    nameFirst: first.toUpperCase(),
+    nameFirst: first.toLowerCase(),
     nameRest: rest.join("").toLowerCase(),
     letterFont: text(values, "letterFont"),
     nameFont: text(values, "nameFont"),
