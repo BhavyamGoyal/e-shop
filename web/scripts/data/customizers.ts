@@ -1,5 +1,6 @@
 import type { CustomizerInput } from "../../src/server/types/customizer.types";
 import type { ParamDefinition, ParamOption } from "../../src/customizers/core";
+import { ADMIN_NAME_KEYCHAIN_SLUG } from "../../src/customizers/admin-slugs";
 
 const FONTS: [string, string, number][] = [
   ["pacifico", "Pacifico (script)", 400],
@@ -114,6 +115,13 @@ export const NAME_KEYCHAIN: CustomizerInput = {
   ],
 };
 
+export const ADMIN_NAME_KEYCHAIN: CustomizerInput = {
+  ...NAME_KEYCHAIN,
+  slug: ADMIN_NAME_KEYCHAIN_SLUG,
+  title: "Name keychain (admin)",
+  params: NAME_KEYCHAIN.params.map((definition: ParamDefinition): ParamDefinition => ({ ...definition, mutable: true })),
+};
+
 const LETTER_FONTS: [string, string][] = [
   ["stix-two-math:400", "STIX Two Math"],
   ["stix-two-text:700", "STIX Two Text Bold"],
@@ -149,4 +157,4 @@ export const LETTER_NAME: CustomizerInput = {
   ],
 };
 
-export const CUSTOMIZERS: CustomizerInput[] = [NAME_KEYCHAIN, LETTER_NAME];
+export const CUSTOMIZERS: CustomizerInput[] = [NAME_KEYCHAIN, ADMIN_NAME_KEYCHAIN, LETTER_NAME];

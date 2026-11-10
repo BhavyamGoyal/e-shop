@@ -3,6 +3,7 @@ import { NotFoundError } from "@/server/http/errors";
 import { customizerService } from "@/server/services/customizer.service";
 import type { CustomizerRecord } from "@/server/types/customizer.types";
 import type { ProductDetail, ProductVariant } from "@/server/types/product.types";
+import { ADMIN_ONLY_SLUGS } from "@/customizers/admin-slugs";
 import { isSingleDefault } from "@/lib/variant-title";
 
 export interface CustomizeProduct {
@@ -32,6 +33,7 @@ export async function buildCustomizePage(
   variantId: number | null,
   isAdmin: boolean,
 ): Promise<CustomizePageData | null> {
+  if (!isAdmin && ADMIN_ONLY_SLUGS.includes(slug)) return null;
   const customizer: CustomizerRecord | null = await customizerService.findActive(slug);
   if (!customizer) return null;
   if (!handle) return isAdmin ? { customizer, product: null } : null;

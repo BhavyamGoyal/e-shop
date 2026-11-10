@@ -10,6 +10,7 @@ const SECTIONS: { href: string; title: string; text: string }[] = [
   { href: "/admin/blogs", title: "Blogs", text: "Write, edit, publish and delete blog posts." },
   { href: "/admin/faqs", title: "FAQs", text: "Add, edit and remove FAQs, optionally linked to a blog post." },
   { href: "/admin/customizers", title: "Customizers", text: "Define customizable options (name keychains and more) and attach them to products." },
+  { href: "/admin/keychain-studio", title: "Keychain studio", text: "Design a name keychain with every setting editable and download the model." },
   { href: "/admin/pages", title: "Pages", text: "Edit About, Privacy Policy and any other text page in Markdown." },
   { href: "/admin/images", title: "Images", text: "Upload and delete images stored in Vercel Blob." },
   { href: "/admin/queries", title: "Queries", text: "Read and manage customer queries." },

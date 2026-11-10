@@ -2,12 +2,13 @@ import type { ParamValues } from "../../core";
 import type { Align, KeychainParams, RingPosition } from "./geometry/types";
 
 const text = (values: ParamValues, key: string): string => String(values[key] ?? "");
+const capitalizeFirst = (value: string): string => value.charAt(0).toUpperCase() + value.slice(1);
 const num = (values: ParamValues, key: string): number => Number(values[key] ?? 0);
 const flag = (values: ParamValues, key: string): boolean => values[key] === true;
 
 export function toKeychainParams(values: ParamValues): KeychainParams {
   return {
-    text: text(values, "text"),
+    text: capitalizeFirst(text(values, "text")),
     font: text(values, "font"),
     size: num(values, "size"),
     spacing: num(values, "spacing"),
