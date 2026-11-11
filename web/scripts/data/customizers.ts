@@ -5,7 +5,8 @@ import { ADMIN_NAME_KEYCHAIN_SLUG } from "../../src/customizers/admin-slugs";
 const FONTS: [string, string, number][] = [
   ["pacifico", "Pacifico (script)", 400],
   ["lobster", "Lobster (script)", 400],
-  ["satisfy", "Satisfy (script)", 400],
+  ["lobster-two", "Lobster Two (script)", 700],
+  ["satisfy","Satisfy (script)", 400],
   ["dancing-script", "Dancing Script (script)", 700],
   ["kaushan-script", "Kaushan Script (brush)", 400],
   ["permanent-marker", "Permanent Marker", 400],
