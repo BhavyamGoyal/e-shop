@@ -3,6 +3,7 @@ import type { ParamDefinition, ParamOption } from "../../src/customizers/core";
 import { ADMIN_NAME_KEYCHAIN_SLUG } from "../../src/customizers/admin-slugs";
 
 const FONTS: [string, string, number][] = [
+  ["tinglet-script", "Tinglet Script (cursive)", 400],
   ["pacifico", "Pacifico (script)", 400],
   ["lobster", "Lobster (script)", 400],
   ["lobster-two", "Lobster Two (script)", 700],
@@ -83,7 +84,7 @@ export const NAME_KEYCHAIN: CustomizerInput = {
   active: true,
   params: [
     { key: "text", type: "textarea", label: "Your text", group: "Text", default: "Name", mutable: true, maxLength: 40 },
-    { key: "font", type: "font", label: "Font", group: "Text", default: "pacifico:400", mutable: true, options: fontOptions },
+    { key: "font", type: "font", label: "Font", group: "Text", default: "tinglet-script:400", mutable: true, options: fontOptions },
     slider("size", "Font size", "Text", 16, 6, 60, 0.5, "mm", true),
     slider("spacing", "Letter spacing", "Text", 0, -4, 10, 0.1, "mm", false),
     slider("lineHeight", "Line height", "Text", 1.1, 0.7, 2, 0.05, "×", false),

@@ -6,7 +6,9 @@ import { RingBuilder, type RingShape } from "./RingShape";
 import type { ContourGroup, KeychainParams, Layer, Polygon } from "./types";
 
 const MIN_CLOSE = 0.03;
-const MIN_TEXT_HEIGHT = 0.4;
+const MIN_TEXT_HEIGHT = 5;
+const BRIDGE_GAP = 0.2;
+const BRIDGE_MARGIN = 0.3;
 
 export class KeychainGeometry {
   constructor(
@@ -28,14 +30,22 @@ export class KeychainGeometry {
     const groupPaths: Paths[] = groups.map((group: ContourGroup): Paths =>
       this.ops.closing(this.ops.union(this.ops.toPaths(group)), MIN_CLOSE),
     );
-    const textPaths: Paths = this.ops.union(groupPaths.flat());
+    const hasBase: boolean = params.useBase && params.baseH > 0;
+    let textPaths: Paths = this.ops.union(groupPaths.flat());
     if (!textPaths.length) return [];
+    if (!hasBase) {
+      const bridges: Paths = [];
+      for (let i = 0; i + 1 < groupPaths.length; i++) {
+        bridges.push(...this.ops.bridge(groupPaths[i], groupPaths[i + 1], params.size * BRIDGE_GAP, BRIDGE_MARGIN));
+      }
+      textPaths = this.ops.union(textPaths, bridges);
+    }
 
     const joined: Paths = this.ops.closing(textPaths, Math.max(params.join, MIN_CLOSE));
-    const hasBase: boolean = params.useBase && params.baseH > 0;
     const anchor: Paths = hasBase ? this.ops.offset(joined, params.outline) : joined;
     const ring: RingShape | null = params.ring === "none" ? null : this.rings.build(params, this.ops.bounds(anchor));
-    const textPolys = (withRing: boolean): Polygon[] => this.textPolygons(params, joined, groupPaths, ring, withRing);
+    const merged: KeychainParams = hasBase ? params : { ...params, merge: true };
+    const textPolys = (withRing: boolean): Polygon[] => this.textPolygons(merged, joined, groupPaths, ring, withRing);
 
     const layers: Layer[] = [];
     if (hasBase) {

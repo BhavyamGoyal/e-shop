@@ -5,6 +5,8 @@ const SCALE = 1000;
 const ARC_TOLERANCE = 10;
 const MIN_POINTS = 3;
 const EPSILON = 1e-6;
+const MIN_AREA = 0.05;
+const LOCAL_REACH = 0.6;
 
 export class PathOps {
   toPaths(contours: Contour[]): Paths {
@@ -33,6 +35,33 @@ export class PathOps {
   closing(paths: Paths, amount: number): Paths {
     if (amount <= 0 || !paths.length) return paths;
     return this.union(this.offset(this.offset(paths, amount), -amount));
+  }
+
+  bridge(a: Paths, b: Paths, maxGap: number, margin: number): Paths {
+    if (!a.length || !b.length) return [];
+    if (this.union(a, b).length < a.length + b.length) return [];
+    let best = Infinity;
+    let mx = 0;
+    let my = 0;
+    for (const pa of a) {
+      for (const p of pa) {
+        for (const pb of b) {
+          for (const q of pb) {
+            const d: number = Math.hypot(p.X - q.X, p.Y - q.Y);
+            if (d < best) {
+              best = d;
+              mx = (p.X + q.X) / 2 / SCALE;
+              my = (p.Y + q.Y) / 2 / SCALE;
+            }
+          }
+        }
+      }
+    }
+    const gap: number = best / SCALE;
+    if (gap > maxGap) return [];
+    const closed: Paths = this.closing(this.union(a, b), gap / 2 + margin);
+    const zone: Paths = [this.circle(mx, my, gap / 2 + margin + LOCAL_REACH)];
+    return this.difference(zone, this.difference(zone, closed));
   }
 
   circle(cx: number, cy: number, radius: number): Path {
@@ -131,7 +160,7 @@ export class PathOps {
       if (child.IsHole()) continue;
       const outer: Contour = this.contourToPoints(child.Contour());
       const holes: Contour[] = child.Childs().map((hole: PolyNode): Contour => this.contourToPoints(hole.Contour()));
-      if (outer.length >= MIN_POINTS) {
+      if (outer.length >= MIN_POINTS && Math.abs(this.signedArea(outer)) >= MIN_AREA) {
         out.push({
           outer: this.orient(outer, true),
           holes: holes

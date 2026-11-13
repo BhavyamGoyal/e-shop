@@ -1,42 +1,21 @@
 import { THREE, V, mesh } from '../lib/geometry.js';
+import { collectTris, toZUp, bounds, translate } from '../lib/export.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const CX = 345;
 const BASE = 1076;
 const PX_H = 568;
+const K = 0.38;
+const LEAF_L = 36.76;
+const MIN_LEAF = 37;
+const MIN_FLOWER = 22;
+const S0 = 140 / 568;
+const DAISY_R = 3.707;
+const DAISY_Z0 = 0.327;
 
-const G_OPS = [
-  ['M', 462, 692],
-  ['L', 556, 672],
-  ['C', 556, 610, 500, 510, 410, 508],
-  ['C', 230, 500, 126, 620, 126, 790],
-  ['C', 126, 960, 200, 1076, 290, 1076],
-  ['L', 565, 1076],
-  ['L', 565, 760],
-  ['L', 372, 760],
-  ['L', 372, 805],
-  ['L', 447, 805],
-  ['L', 447, 925],
-  ['C', 447, 960, 400, 978, 340, 978],
-  ['C', 285, 978, 252, 900, 252, 800],
-  ['C', 252, 690, 290, 608, 370, 608],
-  ['C', 420, 608, 455, 640, 462, 692]
-];
+const sh = (x, y) => [565 + (x - 485) * K, 1076 + (y - 498) * K];
 
-const TEXT_STROKES = [
-  [[306, 782, 3], [296, 790, 4], [276, 828, 6], [250, 838, 8], [228, 815, 10], [226, 775, 11], [243, 732, 10], [272, 716, 6], [300, 730, 3]],
-  [[296, 742, 4], [290, 790, 8], [280, 835, 9], [262, 872, 7], [238, 888, 5], [224, 880, 4]],
-  [[306, 782, 3], [314, 775, 3], [318, 810, 8], [332, 832, 9], [350, 818, 7], [356, 775, 4]],
-  [[356, 775, 4], [354, 815, 9], [362, 836, 6], [372, 822, 4]],
-  [[374, 776, 4], [372, 820, 9], [366, 870, 9], [362, 892, 5], [354, 884, 3]],
-  [[368, 812, 4], [388, 775, 6], [414, 772, 8], [430, 792, 8], [422, 825, 7], [398, 838, 5], [372, 828, 3]],
-  [[452, 725, 3], [450, 775, 8], [448, 820, 8], [458, 836, 6], [472, 826, 4], [484, 822, 3]],
-  [[418, 774, 3], [455, 768, 4], [485, 764, 3]],
-  [[528, 780, 4], [505, 775, 6], [490, 800, 8], [496, 830, 8], [515, 836, 6], [530, 815, 6], [534, 775, 5]],
-  [[534, 775, 5], [532, 820, 8], [540, 836, 5], [556, 818, 3]]
-];
-
-const FLOWERS = [
+const FLOWERS_OLD = [
   { x: 253, y: 545, r: 33, t: 'w' },
   { x: 295, y: 565, r: 20, t: 'w' },
   { x: 335, y: 577, r: 20, t: 'w' },
@@ -50,16 +29,17 @@ const FLOWERS = [
   { x: 180, y: 897, r: 19, t: 'w' },
   { x: 216, y: 978, r: 25, t: 'w' },
   { x: 180, y: 948, r: 14, t: 'b' },
-  { x: 259, y: 1000, r: 19, t: 'b' },
-  { x: 512, y: 960, r: 30, t: 'w' },
-  { x: 555, y: 935, r: 26, t: 'w' },
-  { x: 430, y: 1042, r: 28, t: 'w' },
-  { x: 503, y: 1037, r: 32, t: 'w' },
-  { x: 472, y: 1003, r: 35, t: 'b' },
-  { x: 537, y: 1013, r: 25, t: 'b' }
+  { x: 259, y: 1000, r: 19, t: 'b' }
 ];
 
-const LEAVES = [
+const FLOWERS_SHOT = [
+  [315, 376, 103, 'w'],
+  [427, 243, 80, 'b'],
+  [172, 428, 48, 'b'],
+  [443, 414, 34, 'w']
+];
+
+const LEAVES_OLD = [
   [296, 545, -80, 38, 14],
   [340, 545, -35, 40, 14],
   [385, 540, -15, 38, 13],
@@ -68,69 +48,78 @@ const LEAVES = [
   [172, 672, 55, 40, 13],
   [185, 910, 170, 32, 12],
   [192, 915, 60, 32, 11],
-  [455, 1015, 200, 38, 14],
-  [410, 1050, 180, 45, 13],
-  [415, 1052, 150, 26, 10],
-  [455, 1050, 70, 32, 12],
-  [555, 905, -60, 34, 11],
-  [575, 880, -15, 34, 11],
-  [580, 865, -60, 28, 10],
-  [545, 1000, -20, 38, 12],
-  [545, 1015, 10, 36, 12],
   [215, 1005, 120, 30, 11],
   [235, 1010, 40, 30, 11]
 ];
 
-const STEMS = [
-  [[160, 725, 3], [165, 700, 3], [180, 675, 3]],
-  [[190, 575, 3], [197, 545, 3], [205, 525, 3]],
-  [[545, 925, 3], [565, 895, 3], [590, 850, 3]],
-  [[345, 1048, 3], [380, 1050, 3], [420, 1040, 3]],
-  [[420, 560, 3], [432, 548, 3]]
+const LEAVES_SHOT = [
+  [235, 378, 207, 105],
+  [255, 430, 128, 85],
+  [128, 430, 112, 78],
+  [36, 434, 178, 42],
+  [468, 172, -105, 120],
+  [505, 86, -98, 55],
+  [452, 332, -20, 90],
+  [445, 346, 15, 85]
 ];
 
-const BERRIES = [
-  [205, 524], [213, 534], [196, 534], [433, 547], [441, 541], [592, 848], [583, 858], [600, 860]
+const STEMS_SHOT = [
+  [[400, 355, 6], [435, 338, 6], [458, 300, 5.5], [466, 230, 5], [470, 175, 5], [495, 115, 4.5], [520, 60, 4], [538, 12, 3.5]],
+  [[466, 200, 4], [500, 185, 3.6], [535, 172, 3.2]],
+  [[463, 262, 4], [490, 252, 3.6], [518, 236, 3.2], [540, 228, 3]],
+  [[498, 112, 3.6], [520, 100, 3.2], [546, 90, 3]],
+  [[0, 440, 5], [35, 434, 5], [80, 426, 4.5], [125, 424, 4.2], [152, 426, 4]],
+  [[35, 434, 3.6], [33, 418, 3.2], [38, 404, 3]],
+  [[45, 434, 3.6], [45, 452, 3.2], [46, 470, 3]],
+  [[85, 424, 3.6], [92, 405, 3.2], [96, 390, 3]],
+  [[110, 424, 3.6], [105, 408, 3.2], [100, 398, 3]]
 ];
 
-function sampleOutline(ops) {
-  const pts = [];
-  let cur = null;
-  ops.forEach(op => {
-    if (op[0] === 'M') {
-      cur = [op[1], op[2]];
-      pts.push(cur);
-    } else if (op[0] === 'L') {
-      cur = [op[1], op[2]];
-      pts.push(cur);
-    } else {
-      const c = new THREE.CubicBezierCurve(
-        new THREE.Vector2(cur[0], cur[1]),
-        new THREE.Vector2(op[1], op[2]),
-        new THREE.Vector2(op[3], op[4]),
-        new THREE.Vector2(op[5], op[6])
-      );
-      const n = 28;
-      for (let i = 1; i <= n; i++) {
-        const p = c.getPoint(i / n);
-        pts.push([p.x, p.y]);
-      }
-      cur = [op[5], op[6]];
-    }
-  });
-  const first = pts[0];
-  const last = pts[pts.length - 1];
-  if (Math.abs(first[0] - last[0]) < 1e-6 && Math.abs(first[1] - last[1]) < 1e-6) pts.pop();
-  return pts;
+const STEMS_TOP = [
+  [[176, 672, 3.2], [168, 690, 3], [160, 708, 3], [153, 726, 2.8]],
+  [[170, 684, 2.8], [154, 690, 2.8], [140, 696, 2.8]],
+  [[224, 546, 3], [208, 542, 3], [196, 536, 2.8], [188, 530, 2.8]],
+  [[206, 541, 2.8], [201, 525, 2.8]],
+  [[456, 568, 3], [462, 548, 3], [459, 530, 2.8], [450, 516, 2.8]],
+  [[461, 540, 2.8], [476, 534, 2.8], [488, 524, 2.8]]
+];
+
+const LETTER_EDGE = [
+  [290, 1070], [225, 1020], [182, 965], [160, 925], [140, 880], [127, 820], [128, 770], [130, 730], [137, 695], [148, 660], [165, 625], [190, 590], [220, 560], [255, 538], [295, 522], [335, 512],
+  [375, 508], [420, 508], [455, 518], [490, 535]
+];
+
+const BUDS_SHOT = [
+  [548, 88, 16], [541, 226, 17], [517, 10, 12], [549, 36, 11], [565, 160, 8], [532, 153, 8], [507, 155, 8],
+  [517, 280, 9], [549, 269, 7], [38, 404, 9], [46, 470, 12], [96, 389, 9], [100, 398, 8], [30, 400, 8]
+];
+
+async function loadTemplate(name) {
+  const res = await fetch(new URL('../assets/' + name, import.meta.url));
+  const buf = await res.arrayBuffer();
+  const head = new Uint32Array(buf, 0, 2);
+  const verts = new Float32Array(buf, 8, head[0] * 3);
+  const tri = new Uint32Array(buf, 8 + head[0] * 12, head[1]);
+  return { verts, tri };
 }
 
-function clean(g) {
-  const src = g.index ? g.toNonIndexed() : g;
-  const out = new THREE.BufferGeometry();
-  out.setAttribute('position', new THREE.BufferAttribute(new Float32Array(src.getAttribute('position').array), 3));
-  out.computeVertexNormals();
-  out.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(src.getAttribute('position').count * 2), 2));
-  return out;
+function placeTemplate(tpl, cx, cy, sxy, rot) {
+  const out = new Float32Array(tpl.tri.length * 3);
+  const cs = Math.cos(rot);
+  const sn = Math.sin(rot);
+  for (let i = 0; i < tpl.tri.length; i++) {
+    const k = tpl.tri[i] * 3;
+    const x = tpl.verts[k];
+    const y = tpl.verts[k + 1];
+    const z = tpl.verts[k + 2];
+    out[i * 3] = cx + (x * cs - y * sn) * sxy;
+    out[i * 3 + 1] = cy + (x * sn + y * cs) * sxy;
+    out[i * 3 + 2] = (z + DAISY_Z0) * sxy;
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(out, 3));
+  g.computeVertexNormals();
+  return g;
 }
 
 function extrudePoly(points, depth, z0) {
@@ -138,7 +127,10 @@ function extrudePoly(points, depth, z0) {
   const pts = THREE.ShapeUtils.isClockWise(v) ? v.slice().reverse() : v;
   const g = new THREE.ExtrudeGeometry(new THREE.Shape(pts), { depth, bevelEnabled: false });
   g.translate(0, 0, z0);
-  return clean(g);
+  const out = new THREE.BufferGeometry();
+  out.setAttribute('position', new THREE.BufferAttribute(new Float32Array(g.getAttribute('position').array), 3));
+  out.computeVertexNormals();
+  return out;
 }
 
 function circlePoints(cx, cy, r, n) {
@@ -146,19 +138,6 @@ function circlePoints(cx, cy, r, n) {
   for (let i = 0; i < n; i++) {
     const a = (Math.PI * 2 * i) / n;
     out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
-  }
-  return out;
-}
-
-function ellipsePoints(cx, cy, a, b, rot, n) {
-  const out = [];
-  const c = Math.cos(rot);
-  const s = Math.sin(rot);
-  for (let i = 0; i < n; i++) {
-    const t = (Math.PI * 2 * i) / n;
-    const ex = a * Math.cos(t);
-    const ey = b * Math.sin(t);
-    out.push([cx + ex * c - ey * s, cy + ex * s + ey * c]);
   }
   return out;
 }
@@ -189,143 +168,274 @@ function capsule(a, ra, b, rb, depth, z0) {
 
 export default {
   title: "Gupta's name plate",
-  description: 'Red capital G with white script name and white and blue daisies, yellow centres and green leaves. Six parts, one per filament colour, all printed flat.',
+  description: 'White and blue daisies, mint leaves, stems and buds. Five parts, all lying flat on the ground.',
   params: [
-    { key: 'height', label: 'Letter height (Y)', min: 90, max: 200, step: 1, value: 140, unit: ' mm' },
-    { key: 'depth', label: 'Letter thickness (Z)', min: 6, max: 25, step: 0.5, value: 12, unit: ' mm' },
-    { key: 'script', label: 'Script thickness', min: 2, max: 6, step: 0.2, value: 3, unit: ' mm' }
+    { key: 'height', label: 'Letter height (Y)', min: 90, max: 200, step: 1, value: 140, unit: ' mm' }
   ],
   toggles: [],
-  build({ body, params }) {
-    const { height, depth, script } = params;
+  async build({ body, params }) {
+    const { height } = params;
     const s = height / PX_H;
-    const zf = depth / 2;
+    const zf = 0;
+    const zs = s / S0;
     const mx = x => (x - CX) * s;
     const my = y => (BASE - y) * s;
     const mp = p => [mx(p[0]), my(p[1])];
 
-    const gGeo = extrudePoly(sampleOutline(G_OPS).map(mp), depth, -zf);
+    const FLOWERS = FLOWERS_OLD.concat(FLOWERS_SHOT.map(f => {
+      const c = sh(f[0], f[1]);
+      return { x: c[0], y: c[1], r: f[2] * K, t: f[3] };
+    }));
 
-    const strokeGeos = (pts, d, z0) => {
-      const out = [];
-      const spline = new THREE.SplineCurve(pts.map(p => new THREE.Vector2(p[0], p[1])));
+    const radii = FLOWERS.map((f, i) => Math.max(MIN_FLOWER, f.r * 0.9 * (0.7 + 0.95 * ((i * 0.618034) % 1))));
+    const pos = FLOWERS.map(f => [f.x, f.y]);
+    const GAP = 6;
+    const CENTER = [330, 800];
+    const separate = pull => {
+      let moved = false;
+      for (let i = 0; i < FLOWERS.length; i++) {
+        for (let j = i + 1; j < FLOWERS.length; j++) {
+          const dx = pos[j][0] - pos[i][0];
+          const dy = pos[j][1] - pos[i][1];
+          const d = Math.hypot(dx, dy) || 0.01;
+          const need = radii[i] + radii[j] + GAP;
+          if (d < need) {
+            const push = (need - d) / 2 + 0.01;
+            const ux = dx / d;
+            const uy = dy / d;
+            pos[i][0] -= ux * push;
+            pos[i][1] -= uy * push;
+            pos[j][0] += ux * push;
+            pos[j][1] += uy * push;
+            moved = true;
+          }
+        }
+      }
+      return moved;
+    };
+    for (let pass = 0; pass < 400; pass++) {
+      pos.forEach(p => {
+        p[0] += (CENTER[0] - p[0]) * 0.05;
+        p[1] += (CENTER[1] - p[1]) * 0.05;
+      });
+      separate();
+    }
+    for (let pass = 0; pass < 3000; pass++) if (!separate()) break;
+
+    const [daisyTpl, leafTpl] = await Promise.all([loadTemplate('daisy-full.bin'), loadTemplate('leaf.bin')]);
+    const whiteGeos = [];
+    const blueGeos = [];
+
+    FLOWERS.forEach((f, idx) => {
+      const c = mp(pos[idx]);
+      const sxy = (radii[idx] * s) / DAISY_R;
+      const rot = idx * 0.83;
+      (f.t === 'b' ? blueGeos : whiteGeos).push(placeTemplate(daisyTpl, c[0], c[1], sxy, rot));
+    });
+
+    const placeLeaf = (tpl, bx, by, dx, dy, f, sg) => {
+      const n = tpl.tri.length;
+      const out = new Float32Array(n * 3);
+      for (let i = 0; i < n; i++) {
+        const tri = Math.floor(i / 3);
+        const corner = i % 3;
+        const slot = sg === 1 && corner > 0 ? 3 - corner : corner;
+        const k = tpl.tri[tri * 3 + slot] * 3;
+        const u = tpl.verts[k] * f;
+        const v = tpl.verts[k + 1] * f * sg;
+        const q = mp([bx + u * dx - v * dy, by + u * dy + v * dx]);
+        out[i * 3] = q[0];
+        out[i * 3 + 1] = q[1];
+        out[i * 3 + 2] = tpl.verts[k + 2] * f * s;
+      }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.BufferAttribute(out, 3));
+      g.computeVertexNormals();
+      return g;
+    };
+
+    const cen = [pos.reduce((t, p) => t + p[0], 0) / pos.length, pos.reduce((t, p) => t + p[1], 0) / pos.length];
+    const leafDefs = Array.from({ length: 18 }, (_, i) => [cen[0], cen[1], i * 20 + 8, MIN_LEAF]);
+
+    const FLOWER_GAP = 3.5;
+    const flowerCircles = FLOWERS.map((f, i) => ({ x: pos[i][0], y: pos[i][1], r: radii[i] * 0.97 }));
+    const flowerKeepOut = FLOWERS.map((f, i) => ({ x: pos[i][0], y: pos[i][1], r: radii[i] + FLOWER_GAP }));
+
+    const stemGeos = [];
+    const stemDiscs = [];
+    const leftStems = [];
+    const leftBuds = [];
+    STEMS_SHOT.map(st => st.map(q => {
+      const c = sh(q[0], q[1]);
+      return [c[0], c[1], Math.max(2.8, q[2] * K * 1.1)];
+    })).concat(STEMS_TOP, leftStems).forEach(pts => {
+      const spline = new THREE.SplineCurve(pts.map(q => new THREE.Vector2(q[0], q[1])));
       const n = pts.length - 1;
-      const total = n * 10;
+      const total = Math.max(n * 10, Math.ceil(spline.getLength() / 1.2));
       const radiusAt = t => {
         const f = Math.min(n - 1e-9, t * n);
         const i = Math.floor(f);
-        const k = f - i;
-        return pts[i][2] + (pts[i + 1][2] - pts[i][2]) * k;
+        return pts[i][2] + (pts[i + 1][2] - pts[i][2]) * (f - i);
       };
+      const hitsFlower = (p, r) => flowerKeepOut.some(c => Math.hypot(p.x - c.x, p.y - c.y) < c.r + r);
       for (let j = 0; j < total; j++) {
         const t0 = j / total;
         const t1 = (j + 1) / total;
         const p0 = spline.getPoint(t0);
         const p1 = spline.getPoint(t1);
         if (p0.distanceTo(p1) < 0.01) continue;
-        out.push(capsule(mp([p0.x, p0.y]), radiusAt(t0) * s, mp([p1.x, p1.y]), radiusAt(t1) * s, d, z0));
+        const r0 = radiusAt(t0);
+        const r1 = radiusAt(t1);
+        if (hitsFlower(p0, r0) || hitsFlower(p1, r1)) continue;
+        stemDiscs.push({ x: p0.x, y: p0.y, r: r0 });
+        stemDiscs.push({ x: p1.x, y: p1.y, r: r1 });
+        stemGeos.push(capsule(mp([p0.x, p0.y]), r0 * s, mp([p1.x, p1.y]), r1 * s, 1.6 * zs, zf));
       }
-      return out;
-    };
+    });
 
-    const textGeos = [];
-    TEXT_STROKES.forEach(st => textGeos.push(...strokeGeos(st, script, zf)));
+    const budList = BUDS_SHOT.map(b => {
+      const c = sh(b[0], b[1]);
+      return { x: c[0], y: c[1], r: Math.max(1.0 * zs / s, b[2] * K) };
+    }).concat(leftBuds).filter(b => !flowerKeepOut.some(c => Math.hypot(b.x - c.x, b.y - c.y) < c.r + b.r));
 
-    const radii = FLOWERS.map(f => f.r);
-    for (let pass = 0; pass < 4; pass++) {
-      for (let i = 0; i < FLOWERS.length; i++) {
-        for (let j = i + 1; j < FLOWERS.length; j++) {
-          const d = Math.hypot(FLOWERS[i].x - FLOWERS[j].x, FLOWERS[i].y - FLOWERS[j].y);
-          const need = (radii[i] + radii[j]) * 0.88;
-          if (d < need) {
-            const k = d / need;
-            radii[i] *= k;
-            radii[j] *= k;
-          }
-        }
+    const daisyH = FLOWERS.map((f, i) => 2 * DAISY_Z0 * (radii[i] * s) / DAISY_R);
+    const budDepth = Math.min(2.2 * zs, Math.min.apply(null, daisyH));
+
+    const budGeos = budList.map(b => {
+      const m = mp([b.x, b.y]);
+      return extrudePoly(circlePoints(m[0], m[1], b.r * s, 18), budDepth, zf);
+    });
+
+    const NB = 12;
+    const UL = 36.8;
+    const prof = [];
+    {
+      const mn = new Array(NB).fill(1e9);
+      const mxv = new Array(NB).fill(-1e9);
+      for (let i = 0; i < leafTpl.verts.length; i += 3) {
+        const b = Math.min(NB - 1, Math.max(0, Math.floor((leafTpl.verts[i] / UL) * NB)));
+        mn[b] = Math.min(mn[b], leafTpl.verts[i + 1]);
+        mxv[b] = Math.max(mxv[b], leafTpl.verts[i + 1]);
+      }
+      for (let b = 0; b < NB; b++) {
+        if (mn[b] > mxv[b]) continue;
+        prof.push({ u: ((b + 0.5) * UL) / NB, v: (mn[b] + mxv[b]) / 2, r: Math.hypot((mxv[b] - mn[b]) / 2, UL / NB / 2) });
       }
     }
 
-    const whiteGeos = [];
-    const blueGeos = [];
-    const yellowGeos = [];
-
-    FLOWERS.forEach((f, idx) => {
-      const rPx = radii[idx];
-      const R = rPx * s;
-      const c = mp([f.x, f.y]);
-      const blue = f.t === 'b';
-      const N = blue ? (rPx >= 28 ? 18 : rPx >= 20 ? 14 : 11) : rPx >= 26 ? 12 : rPx >= 18 ? 10 : 8;
-      const h1 = blue ? 2.2 : 2.0;
-      const h2 = h1 + 0.8;
-      const target = blue ? blueGeos : whiteGeos;
-      const hw = Math.max(0.45, ((Math.PI * 2 * 0.6 * R) / N) * (blue ? 0.58 : 0.62));
-      for (let i = 0; i < N; i++) {
-        const ang = (Math.PI * 2 * i) / N;
-        target.push(extrudePoly(ellipsePoints(c[0] + Math.cos(ang) * R * 0.5, c[1] + Math.sin(ang) * R * 0.5, R * 0.5, hw, ang, 18), h1, zf));
-        const ang2 = ang + Math.PI / N;
-        target.push(extrudePoly(ellipsePoints(c[0] + Math.cos(ang2) * R * 0.39, c[1] + Math.sin(ang2) * R * 0.39, R * 0.39, hw * 0.9, ang2, 18), h2, zf));
-      }
-      target.push(extrudePoly(circlePoints(c[0], c[1], R * 0.42, 28), h2, zf));
-      yellowGeos.push(extrudePoly(circlePoints(c[0], c[1], R * 0.3, 24), 1.0, zf + h2));
-    });
-
-    const leafGeo = (bx, by, deg, L, W) => {
-      const a = (deg * Math.PI) / 180;
+    const LEAF_GAP = 3.5;
+    const obstacles = stemDiscs.concat(budList.map(b => ({ x: b.x, y: b.y, r: b.r })));
+    const leafDiscs = (bx, by, a, f, sg) => {
       const dx = Math.cos(a);
       const dy = Math.sin(a);
-      const map = (u, v) => mp([bx + u * dx - v * dy, by + u * dy + v * dx]);
-      const up = new THREE.CubicBezierCurve(new THREE.Vector2(0, 0), new THREE.Vector2(L * 0.25, W), new THREE.Vector2(L * 0.7, W * 0.8), new THREE.Vector2(L, 0)).getPoints(12);
-      const lo = new THREE.CubicBezierCurve(new THREE.Vector2(L, 0), new THREE.Vector2(L * 0.7, -W * 0.8), new THREE.Vector2(L * 0.25, -W), new THREE.Vector2(0, 0)).getPoints(12);
-      const pts = up.concat(lo.slice(1, -1)).map(p => map(p.x, p.y));
-      return pts;
+      return prof.map(p => {
+        const u = p.u * f;
+        const v = p.v * f * sg;
+        return { x: bx + u * dx - v * dy, y: by + u * dy + v * dx, r: p.r * f };
+      });
+    };
+    const distSeg = (px, py, a, b) => {
+      const vx = b[0] - a[0];
+      const vy = b[1] - a[1];
+      const t = Math.max(0, Math.min(1, ((px - a[0]) * vx + (py - a[1]) * vy) / (vx * vx + vy * vy)));
+      return Math.hypot(px - a[0] - t * vx, py - a[1] - t * vy);
+    };
+    const insideLetter = d => {
+      const poly = LETTER_EDGE.concat([[520, 540], [520, 1100], [290, 1100]]);
+      let c = false;
+      for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        if (poly[i][1] > d.y !== poly[j][1] > d.y && d.x < ((poly[j][0] - poly[i][0]) * (d.y - poly[i][1])) / (poly[j][1] - poly[i][1]) + poly[i][0]) c = !c;
+      }
+      if (!c) return false;
+      for (let i = 0; i < LETTER_EDGE.length - 1; i++) if (distSeg(d.x, d.y, LETTER_EDGE[i], LETTER_EDGE[i + 1]) < d.r * 0.6) return false;
+      return true;
+    };
+    const leafClear = discs => discs.every(d => obstacles.every(o => Math.hypot(d.x - o.x, d.y - o.y) >= d.r + o.r + LEAF_GAP));
+
+        const leafGeos = [];
+    leafDefs.forEach((l, li) => {
+      const [bx, by, deg, L0] = l;
+      const sg = li % 2 ? 1 : -1;
+      const top = false;
+      const sizes = [Math.max(L0, MIN_LEAF)];
+      const maxDa = 25;
+      const maxU = 300;
+      let best = null;
+      let bestF = 0;
+      for (const sz of sizes) {
+        const f = sz / LEAF_L;
+        for (let da = 0; da <= maxDa; da += 5) {
+          for (const sgn of da === 0 ? [1] : [1, -1]) {
+            const a = ((deg + da * sgn) * Math.PI) / 180;
+            const dx = Math.cos(a);
+            const dy = Math.sin(a);
+            for (let u = 0; u <= maxU; u += 1) {
+              const cost = u + da * 0.6;
+              if (best && cost >= best.cost) break;
+              const px = bx + u * dx;
+              const py = by + u * dy;
+              const discs = leafDiscs(px, py, a, f, sg);
+              if ((!top || discs.every(insideLetter)) && leafClear(discs)) {
+                best = { cost, px, py, dx, dy, discs };
+                bestF = f;
+                break;
+              }
+            }
+          }
+        }
+        if (best) break;
+      }
+      if (!best) return;
+      best.discs.forEach(d => obstacles.push(d));
+      leafGeos.push(placeLeaf(leafTpl, best.px, best.py, best.dx, best.dy, bestF, sg));
+    });
+
+    const make = (name, geos, color, explodeY, info) => {
+      const g = mergeGeometries(geos);
+      g.rotateX(-Math.PI / 2);
+      return {
+        name,
+        object: mesh(g, body),
+        base: V(0, 0, 0),
+        explode: V(0, explodeY, 0),
+        color,
+        print: true,
+        info
+      };
     };
 
-    const greenGeos = [];
-    const flowerCircles = FLOWERS.map((f, i) => ({ x: f.x, y: f.y, r: radii[i] * 0.97 }));
-    LEAVES.forEach(l => {
-      const [bx, by, deg, L0, W] = l;
-      const a = (deg * Math.PI) / 180;
-      const dx = Math.cos(a);
-      const dy = Math.sin(a);
-      let u = 0;
-      const inside = uu => flowerCircles.some(c => Math.hypot(bx + uu * dx - c.x, by + uu * dy - c.y) < c.r);
-      while (u < L0 && inside(u)) u += 0.5;
-      const L = L0 - u;
-      if (L < 14) return;
-      const k = L / L0;
-      greenGeos.push(extrudePoly(leafGeo(bx + u * dx, by + u * dy, deg, L, W * Math.max(0.7, k)), 1.6, zf));
-    });
-    STEMS.forEach(st => greenGeos.push(...strokeGeos(st, 1.6, zf)));
-    BERRIES.forEach(b => {
-      const c = mp(b);
-      greenGeos.push(extrudePoly(circlePoints(c[0], c[1], 0.95, 14), 2.2, zf));
-    });
+    const parts = [
+      make('1 Green leaves', leafGeos, 0x2fa62f, 14, 'Mint leaves from the leaf_models file, printed flat with veins and a stalk. Shortened where a flower sits over them.'),
+      make('2 Green stems', stemGeos, 0x2fa62f, 20, 'Stems of the bottom right arrangement: one main stem with side stems, and a short stem at the left.'),
+      make('3 Green buds', budGeos, 0x2fa62f, 26, 'Small round buds at the stem tips. Leave this part out if you do not want buds.'),
+      make('4 White daisy petals', whiteGeos, 0xffffff, 40, 'White daisies from the margherita model. Print separately in white.'),
+      make('5 Blue flower petals', blueGeos, 0x1f4fd8, 40, 'Blue flowers from the margherita model. Print separately in blue.')
+    ];
 
-    const make = (name, geos, color, explodeZ, info) => ({
-      name,
-      object: mesh(mergeGeometries(geos), body),
-      base: V(0, 0, 0),
-      explode: V(0, 0, explodeZ),
-      color,
-      print: true,
-      printRotate: [-Math.PI / 2, 0, 0],
-      info
+    const single = (label, file, part) => ({
+      label,
+      file,
+      build: () => {
+        const tris = toZUp(collectTris(part.object));
+        const b = bounds(tris);
+        translate(tris, 125 - (b.min[0] + b.max[0]) / 2, 125 - (b.min[1] + b.max[1]) / 2, -b.min[2]);
+        return [{ name: part.name, tris }];
+      }
     });
 
     return {
-      parts: [
-        make('1 Red G', [gGeo], 0xd0021b, 0, 'Print first. Flat on its back, no supports.'),
-        make('2 White Gupta script', textGeos, 0xffffff, 28, 'Glue onto the front of the G. Its left end rests on the G stroke and the crossbar.'),
-        make('3 Green leaves and stems', greenGeos, 0x2fa62f, 14, 'Leaves are trimmed where flowers sit on top.'),
-        make('4 White daisy petals', whiteGeos, 0xffffff, 40, 'White daisies, two petal rings and a core.'),
-        make('5 Blue flower petals', blueGeos, 0x1f4fd8, 40, 'Blue asters, two petal rings and a core.'),
-        make('6 Yellow flower centres', yellowGeos, 0xffd400, 56, 'Small discs that sit on top of every flower core.')
+      parts,
+      exports: [
+        single('White flowers 3MF', 'gupta-white-flowers.3mf', parts[3]),
+        single('Blue flowers 3MF', 'gupta-blue-flowers.3mf', parts[4]),
+        single('Green leaves 3MF', 'gupta-green-leaves.3mf', parts[0]),
+        single('Green stems 3MF', 'gupta-green-stems.3mf', parts[1]),
+        single('Green buds 3MF', 'gupta-green-buds.3mf', parts[2])
       ],
       notes: [
-        'Six parts, one per filament colour: red, white (script), green, white (daisies), blue, yellow.',
-        'All parts print flat with the front face up and need no supports.',
-        'The G has a flat bottom edge so it stands on a desk. Add a small base if you want extra stability.'
+        'White and blue flowers are separate parts and separate 3MF files, so each prints on its own.',
+        'Leaves, stems and buds are separate from the flowers, so each can be printed and coloured on its own.',
+        'All parts lie flat on the ground and print with no supports.'
       ]
     };
   }

@@ -16,6 +16,7 @@ import {
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import type { Part } from "./geometry/types";
+import { buildRulers, disposeRulers } from "./RulerBuilder";
 
 const BACKGROUND = 0xf1f3f5;
 const MIN_FRAME_SIZE = 30;
@@ -24,6 +25,7 @@ export class ThreeSceneAdapter {
   private readonly scene: Scene = new Scene();
   private readonly camera: PerspectiveCamera = new PerspectiveCamera(40, 1, 0.1, 3000);
   private readonly group: Group = new Group();
+  private readonly rulers: Group = new Group();
   private renderer: WebGLRenderer | null = null;
   private controls: OrbitControls | null = null;
   private observer: ResizeObserver | null = null;
@@ -44,6 +46,7 @@ export class ThreeSceneAdapter {
     grid.position.z = -0.02;
     this.scene.add(grid);
     this.scene.add(this.group);
+    this.scene.add(this.rulers);
   }
 
   mount(container: HTMLElement): void {
@@ -75,6 +78,7 @@ export class ThreeSceneAdapter {
       });
       this.group.add(new Mesh(geometry, material));
     }
+    this.refreshRulers();
     if (!this.framed && parts.length) {
       this.framed = true;
       this.frame();
@@ -102,6 +106,7 @@ export class ThreeSceneAdapter {
     this.observer?.disconnect();
     this.controls?.dispose();
     this.clear();
+    disposeRulers(this.rulers);
     if (this.renderer) {
       this.renderer.dispose();
       this.renderer.domElement.remove();
@@ -110,6 +115,14 @@ export class ThreeSceneAdapter {
     this.controls = null;
     this.observer = null;
     this.container = null;
+  }
+
+  private refreshRulers(): void {
+    disposeRulers(this.rulers);
+    const box: Box3 = new Box3().setFromObject(this.group);
+    if (box.isEmpty()) return;
+    const built: Group = buildRulers(box);
+    this.rulers.add(...built.children);
   }
 
   private clear(): void {

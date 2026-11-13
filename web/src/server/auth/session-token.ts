@@ -12,7 +12,7 @@ interface SessionPayload extends Session {
 }
 
 export const SESSION_COOKIE = "tinglet_session";
-export const SESSION_SECONDS = 60 * 60 * 24 * 7;
+export const SESSION_SECONDS = 60 * 60 * 24 * 30;
 
 function secret(): string {
   const value: string | undefined = process.env.AUTH_SECRET;

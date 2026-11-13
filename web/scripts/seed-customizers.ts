@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { CUSTOMIZERS } from "./data/customizers";
 
-const REFRESH_SLUGS: string[] = ["letter-name"];
+const REFRESH_SLUGS: string[] = ["letter-name", "name-keychain"];
 
 async function main(): Promise<void> {
   if (!process.env.MONGODB_URI) throw new Error("MONGODB_URI is not set");
