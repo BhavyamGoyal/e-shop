@@ -74,8 +74,8 @@ export const promoBannerSection: HomeSectionData = {
       tiles: [
         {
           href: "/#contact-us",
-          image: "/banner-home.jpg",
-          mobileImage: "/banner-home-mobile.jpg",
+          image: "/banner-home.webp",
+          mobileImage: "/banner-home-mobile.webp",
           mobileHeight: 40,
           alt: "Custom gift hamper being personalised",
           aspectRatio: 1024 / 318,

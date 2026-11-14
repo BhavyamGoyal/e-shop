@@ -4,7 +4,7 @@ export const SITE_TITLE: string =
 export const SITE_DESCRIPTION: string =
   "Shop thoughtful lamps, planters and desk organisers, or contact us to get your gifts customised for birthdays, anniversaries and housewarmings. Tinglet.";
 
-export const SOCIAL_IMAGE: string = "/logo_v2.jpeg";
+export const SOCIAL_IMAGE: string = "/logo_v2.webp";
 export const LOGO_PATH: string = "/logo_v1.svg";
 export const INSTAGRAM_URL: string = "https://www.instagram.com/tinglet_gifts/";
 
