@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { ProductPrice, TrustGrid } from "../molecules";
+import { ProductPrice, ProductSpecs, TrustGrid, type ProductSpecsProps } from "../molecules";
 import { ProductActions } from "./ProductActions";
 import { ProductGallery } from "./ProductGallery";
 import { StickyBuyBar } from "./StickyBuyBar";
@@ -22,6 +22,7 @@ interface ProductViewProps {
   compareAtPrice: number | null;
   available: boolean;
   customizerSlug: string | null;
+  specs: ProductSpecsProps;
 }
 
 const matches = (variant: ProductVariant, selected: string[]): boolean =>
@@ -33,7 +34,7 @@ const initialSelection = (options: ProductOption[], variants: ProductVariant[]):
 };
 
 export function ProductView(props: ProductViewProps) {
-  const { handle, title, summary, breadcrumbs, images, options, variants, price, compareAtPrice, available, customizerSlug } = props;
+  const { handle, title, summary, breadcrumbs, images, options, variants, price, compareAtPrice, available, customizerSlug, specs } = props;
   const [selected, setSelected] = useState<string[]>(() => initialSelection(options, variants));
   const [imageIndex, setImageIndex] = useState<number>(0);
 
@@ -95,6 +96,7 @@ export function ProductView(props: ProductViewProps) {
             </a>
           </p>
         )}
+        <ProductSpecs {...specs} />
         {!isSingleDefault(options) && (
           <VariantSelector options={options} selected={selected} onChange={handleChange} />
         )}

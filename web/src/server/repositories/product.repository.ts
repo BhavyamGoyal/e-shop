@@ -106,9 +106,9 @@ export const productRepository = {
     return { items, total };
   },
 
-  async findByHandle(handle: string): Promise<ProductDocument | null> {
+  async findByHandle(handle: string): Promise<ProductDocument & { _id: { toString(): string } } | null> {
     await connectDb();
-    return ProductModel.findOne({ handle, ...ACTIVE_PRODUCT }).lean<ProductDocument>();
+    return ProductModel.findOne({ handle, ...ACTIVE_PRODUCT }).lean<ProductDocument & { _id: { toString(): string } }>();
   },
 
   async sitemapEntries(): Promise<ProductSitemapEntry[]> {

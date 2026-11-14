@@ -119,10 +119,16 @@ export interface ProductVariant {
 }
 
 export interface ProductDetail extends ProductSummary {
+  adminId: string;
   customizerSlug: string | null;
   sourceUrl: string | null;
   vendor: string | null;
   currency: string;
+  length: number | null;
+  width: number | null;
+  height: number | null;
+  weight: number | null;
+  material: string | null;
   descriptionHtml: string;
   descriptionText: string;
   options: ProductOption[];

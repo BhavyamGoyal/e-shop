@@ -112,6 +112,11 @@ export interface ProductInput {
   price: number;
   compareAtPrice: number | null;
   manufacturingDays: number;
+  length: number | null;
+  width: number | null;
+  height: number | null;
+  weight: number | null;
+  material: string;
   available: boolean;
   active: boolean;
   images: ImageInput[];

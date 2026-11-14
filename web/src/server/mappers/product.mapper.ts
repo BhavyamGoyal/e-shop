@@ -8,6 +8,7 @@ import type {
 } from "../types/product.types";
 
 type Doc = ProductDocument;
+type DetailDoc = Doc & { _id: { toString(): string } };
 type DocMedia = NonNullable<Doc["images"]>[number];
 type DocVideo = NonNullable<Doc["videos"]>[number];
 type DocVariant = NonNullable<Doc["variants"]>[number];
@@ -59,13 +60,19 @@ export function toSummary(doc: Doc): ProductSummary {
   };
 }
 
-export function toDetail(doc: Doc): ProductDetail {
+export function toDetail(doc: DetailDoc): ProductDetail {
   return {
     ...toSummary(doc),
+    adminId: doc._id.toString(),
     customizerSlug: doc.customizerSlug ?? null,
     sourceUrl: doc.sourceUrl ?? null,
     vendor: doc.vendor ?? null,
     currency: doc.currency ?? "INR",
+    length: doc.length ?? null,
+    width: doc.width ?? null,
+    height: doc.height ?? null,
+    weight: doc.weight ?? null,
+    material: doc.material || null,
     descriptionHtml: doc.descriptionHtml ?? "",
     descriptionText: doc.descriptionText ?? "",
     options: (doc.options ?? []).map((option) => ({

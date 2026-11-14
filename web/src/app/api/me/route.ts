@@ -12,6 +12,7 @@ export function GET(): Promise<Response> {
     const session: Session | null = await readSession();
     return Response.json({
       data: await currentProfile(session),
+      isAdmin: session?.role === "admin",
       landing: session ? (isStaff(session.role) ? "/admin" : "/") : null,
     });
   });

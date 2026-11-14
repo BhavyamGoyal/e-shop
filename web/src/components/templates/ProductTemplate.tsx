@@ -1,4 +1,4 @@
-import { Breadcrumbs, type Crumb } from "../molecules";
+import { AdminEditLink, Breadcrumbs, type Crumb } from "../molecules";
 import { ProductRail, ProductStory, ProductView, SiteFooter, SiteHeader } from "../organisms";
 import { outfit } from "@/lib/fonts";
 import type { ProductDetail } from "@/server/types/product.types";
@@ -48,6 +48,13 @@ export function ProductTemplate({ header, shop, product, related, collection }: 
           compareAtPrice={product.compareAtPrice}
           available={product.available}
           customizerSlug={product.customizerSlug}
+          specs={{
+            length: product.length,
+            width: product.width,
+            height: product.height,
+            weight: product.weight,
+            material: product.material,
+          }}
         />
         {product.descriptionHtml && <ProductStory html={product.descriptionHtml} />}
         {related.length > 0 && (
@@ -58,6 +65,7 @@ export function ProductTemplate({ header, shop, product, related, collection }: 
         )}
       </main>
       <SiteFooter shop={shop} />
+      <AdminEditLink productId={product.adminId} />
     </div>
   );
 }

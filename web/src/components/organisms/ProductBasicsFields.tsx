@@ -16,6 +16,15 @@ export interface ProductBasicsFieldsProps {
   onChange: (patch: Partial<ProductInput>) => void;
 }
 
+type DimensionKey = "length" | "width" | "height" | "weight";
+
+const DIMENSION_FIELDS: { key: DimensionKey; label: string }[] = [
+  { key: "length", label: "Length (cm)" },
+  { key: "width", label: "Width (cm)" },
+  { key: "height", label: "Height (cm)" },
+  { key: "weight", label: "Weight (g)" },
+];
+
 export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProps) {
   const [tagOptions, setTagOptions] = useState<string[]>([]);
   const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
@@ -76,6 +85,19 @@ export function ProductBasicsFields({ input, onChange }: ProductBasicsFieldsProp
           hint="Days to make the product before it ships; used for the delivery date"
           onChange={(e) => onChange({ manufacturingDays: Number(e.target.value) })}
         />
+        {DIMENSION_FIELDS.map(({ key, label }) => (
+          <FormField
+            key={key}
+            id={key}
+            label={label}
+            type="number"
+            min={0}
+            step="any"
+            value={input[key] ?? ""}
+            onChange={(e) => onChange({ [key]: e.target.value === "" ? null : Number(e.target.value) })}
+          />
+        ))}
+        <FormField id="material" label="Material" value={input.material ?? ""}onChange={(e) => onChange({ material: e.target.value })} />
         <div className="flex flex-col gap-1.5">
           <Label>Tags</Label>
           <TagPicker options={tagOptions} selected={input.tags} onChange={(tags: string[]) => onChange({ tags })} />

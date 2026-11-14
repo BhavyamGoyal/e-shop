@@ -12,3 +12,4 @@ export { CopyIcon } from "@/components/atoms/Icons/CopyIcon";
 export { CheckIcon } from "@/components/atoms/Icons/CheckIcon";
 export { UploadIcon } from "@/components/atoms/Icons/UploadIcon";
 export { XIcon } from "@/components/atoms/Icons/XIcon";
+export { PencilIcon } from "@/components/atoms/Icons/PencilIcon";

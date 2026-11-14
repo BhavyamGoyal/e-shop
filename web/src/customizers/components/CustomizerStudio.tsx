@@ -7,7 +7,6 @@ import { QuantityStepper } from "@/components/molecules";
 import { buildCartKey, newCustomizationId, parseCartKey, type ParsedCartKey } from "@/lib/cart-key";
 import { resolveCustomization } from "@/lib/customizer-api";
 import type { CustomizeProduct } from "@/lib/customize-page";
-import { formatPrice } from "@/lib/format-price";
 import type { CustomizerRecord } from "@/server/types/customizer.types";
 import { useCartStore } from "@/stores/cart/Cart.store";
 import type { CartItem } from "@/stores/cart/Cart.types";
@@ -72,12 +71,7 @@ export function CustomizerStudio({ customizer, product, editKey }: CustomizerStu
         <RendererHost rendererKey={customizer.renderer} params={params} downloadName={product ? undefined : customizer.slug} />
       </div>
       <div className="flex flex-col gap-6 lg:order-1">
-        <div className="flex flex-col gap-1">
-          <p className="text-sm text-muted-foreground">{product ? customizer.title : "Admin preview"}</p>
-          <h1 className="text-3xl font-semibold">{product?.title ?? customizer.title}</h1>
-          {product?.variantTitle && <p className="text-sm text-muted-foreground">{product.variantTitle}</p>}
-          {product && <p className="text-xl font-bold text-primary">{formatPrice(product.price)}</p>}
-        </div>
+        <h1 className="text-3xl font-semibold">{product?.title ?? customizer.title}</h1>
         {editable ? (
           <ParamForm definitions={customizer.params} values={params} onChange={change} />
         ) : (
